@@ -8,6 +8,5 @@ function App() {
       <StudentDashboard/>
     </div>
   )
-}
 
 export default App
