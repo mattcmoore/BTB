@@ -6,9 +6,11 @@ import './App.css'
 
 const App = () => {
   return (
-    <LoginForm />
-    <AdminDashboard />
-    <StudentDashboard />
+    <>
+      <LoginForm />
+      <AdminDashboard />
+      <StudentDashboard />
+    </>
   )
 
 }
