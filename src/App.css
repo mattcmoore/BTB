@@ -1,8 +1,32 @@
+@import url('https://fonts.cdnfonts.com/css/proxima-nova-2?styles=44818,44817,44816,44820');
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+
+}
+
+/* midnight for primary headings  */
+/* charcoal for sub-headings */
+/* dove-gray for small, secondary sub-headings */
+/* silver for non-backgrounds */
+/* light-gray is for page background (non-header) */
+/* blue-gray is for sidebar backgrounds */
+
+:root {
+  --black: #000000;
+  --white: #FFFFFF;
+  --gray: #E8E8E8;
+  --silver: #D8D8D8;
+  --light-gray: #FAFAFA;
+  --dove-gray: #737373;
+  --midnight: #212529;
+  --teal: #00808C;
+  --charcoal: #333333;
+  --blue-gray: #343940;
+  font-family: 'Proxima Nova', sans-serif;
 }
 
 .logo {
@@ -40,3 +64,4 @@
 .read-the-docs {
   color: #888;
 }
+
