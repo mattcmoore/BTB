@@ -2,12 +2,6 @@ import './App.css'
 import StudentDashboard from "./components/StudentDashboard/StudentDashboard"
 
 function App() {
-<<<<<<< HEAD
-
-
-  return (
-  <AdminNavbar />
-=======
 
   return (
     <>
@@ -15,7 +9,6 @@ function App() {
       <AdminDashboard />
       <StudentDashboard />
     </>
->>>>>>> Developer_Branch
   )
 
 }
