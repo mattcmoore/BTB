@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
+import AdminDashboard from './components/AdminDashboard.tsx'
 import './App.css'
 
-function App() {
-
-
+const App = () => {
   return (
-  <AdminNavbar />
+    
+    <AdminDashboard />
   )
 
+}
 export default App
