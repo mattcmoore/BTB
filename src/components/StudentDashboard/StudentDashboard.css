@@ -1,0 +1,72 @@
+@import url('https://fonts.cdnfonts.com/css/proxima-nova-2?styles=44818,44817,44816,44820');
+
+.main-container {
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+}
+
+.outprocessing-container {
+    position: relative;
+    font-weight: proxima-nova, sans-serif;
+    width: 50%;
+    /* display:flex; */
+    /* flex-direction: column; */
+    text-align: left;
+    /* padding-left: 25px; */
+    /* padding-right: 15px; */
+    left: 2rem;
+    
+}
+
+.column-title {
+    font-family: proxima-nova, sans-serif;
+    font-weight: 600;
+    color: midnight;
+}
+
+.student-section {
+    border-bottom: 1px solid rgba(1, 1, 1);
+    width: 60%;
+    padding-bottom: 25px;
+}
+
+.student-info {
+    font-weight: 300;
+    color: rgb(54,69,79);
+    margin: 0px 0;
+
+}
+
+
+.checklist-container {
+    /* display: flex; */
+    /* flex-direction: column; */
+    width: 100%;
+}
+
+.task {
+    display: inline;
+    /* display:flex; */
+    /* flex-direction: column; */
+    text-align: left;
+    width: 100%;
+    list-style-type: armenian;
+}
+
+.task-item {
+    color: black;
+    margin: 10px 0;
+}
+
+.notes-container {
+    font-weight: proxima-nova, sans-serif;
+    width: 50%;
+    text-align: left;
+    padding-left: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
