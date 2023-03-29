@@ -3,11 +3,9 @@ import StudentDashboard from "./components/StudentDashboard/StudentDashboard"
 
 function App() {
 
+
   return (
-    <div className="App">
-      <StudentDashboard/>
-    </div>
+  <AdminNavbar />
   )
-}
 
 export default App
