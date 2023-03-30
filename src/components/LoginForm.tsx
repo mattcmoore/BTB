@@ -2,6 +2,7 @@
 import React, { useState, FormEvent } from 'react';
 import './LoginForm.css'
 import BTBlogo from '../assets/blue-ocean-logo-2.png'
+import { Link } from 'react-router-dom';
 
 // Define the interface for the form state
 interface FormState {
@@ -75,7 +76,7 @@ const LoginForm: React.FC = () => {
             <button type="submit" className='loginBtn'>Log In</button>
           </div>
           <div className='newStuCont'>
-            <a className='newStuLink'>New Student?</a>
+            <Link to='/signup'className='newStuLink'>New Student?</Link>
           </div>
           <div className='forgCont'>
             <a className="forgLink">Forgot Password?</a>
