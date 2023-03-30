@@ -1,15 +1,13 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import AdminDashboard from './components/AdminDashboard.tsx'
 import './App.css'
+import AdminDashboard from './components/AdminDashboard/AdminDashboard.tsx'
+import { useState } from 'react'
 
 const App = () => {
   return (
     <>
-      <LoginForm />
+      {/* <LoginForm /> */}
       <AdminDashboard />
-      <StudentDashboard />
+      {/* <StudentDashboard /> */}
     </>
   )
 
