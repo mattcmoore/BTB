@@ -11,7 +11,7 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-          <Route exact path='/' element={
+          <Route exact={true} path='/' element={
             <LoginForm/>
           }/>
           <Route path='/admin' element={

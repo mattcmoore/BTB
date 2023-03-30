@@ -481,3 +481,12 @@
     justify-items: center;
     padding-top: 13%;
 }
+
+#logoCont{
+        display: flex;
+        justify-content: center;
+}
+
+.loginLogo{
+        height: 90px;
+}
