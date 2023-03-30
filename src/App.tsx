@@ -1,15 +1,23 @@
 import './App.css'
-import StudentDashboard from "./components/StudentDashboard/StudentDashboard"
-import AdminDashboard from './components/AdminDashboard/AdminDashboard.tsx'
-import { useState } from 'react'
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
+import LoginForm from './components/LoginForm'
+import AdminDashboard from './components/AdminDashboard/AdminDashboard'
+
 function App() {
 
   return (
-    <>
-      {/* <LoginForm /> */}
-      <AdminDashboard />
-      {/* <StudentDashboard /> */}
-    </>
+    <div className="App">
+      <Router>
+        <Routes>
+          <Route exact path='/' element={
+            <LoginForm/>
+          }/>
+          <Route path='/admin' element={
+            <AdminDashboard/>
+          }/>
+        </Routes>
+      </Router>
+    </div>
   )
 
 }
