@@ -38,8 +38,8 @@ const LoginForm: React.FC = () => {
     <div className='loginAndTitle'>
       <div id='logoCont'>
       <img src={BTBlogo}  className='loginLogo'></img>
-
       </div>
+      <h3 className='slogan'>Charting the Path to Your Next Mission</h3>
       <form onSubmit={handleSubmit} className='loginForm'>
         <div className='loginCont'>
           <div className='emailCont'>

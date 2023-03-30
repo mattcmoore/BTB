@@ -1,3 +1,6 @@
+
+  @import url('https://fonts.googleapis.com/css2?family=Raleway+Dots&display=swap');
+
 .loginForm{
 	font-size: 16px;
 	font-weight: 400;
@@ -488,4 +491,9 @@
 
 .loginLogo{
         height: 90px;
+}
+.slogan{
+        font-family: 'Raleway Dots', cursive;
+        text-align: center;
+        font-weight: 900;
 }
