@@ -473,13 +473,13 @@
     color: #02448c;
 }
 .containerLogin{
-    display: grid;
-    height: auto; 
+    display: flex;
+    height: 100vh; 
     justify-content: center;
     align-content: center;
     align-items: center;
     justify-items: center;
-    padding-top: 13%;
+    justify-self: center;
 }
 
 #logoCont{
