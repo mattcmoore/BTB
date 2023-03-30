@@ -1,6 +1,7 @@
 import './App.css'
-import LoginForm from './components/LoginForm'
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
+import LoginForm from './components/LoginForm'
+import AdminDashboard from './components/AdminDashboard/AdminDashboard'
 
 function App() {
 
@@ -10,6 +11,9 @@ function App() {
         <Routes>
           <Route exact path='/' element={
             <LoginForm/>
+          }/>
+          <Route path='/admin' element={
+            <AdminDashboard/>
           }/>
         </Routes>
       </Router>

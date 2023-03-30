@@ -1,0 +1,10 @@
+.admin-dashboard-container{
+    height: 100%;
+    width: 100%;
+}
+
+.admin-dashboard-container-body{
+    position: relative;
+    min-height: 100%;
+    width: 100%;
+}
