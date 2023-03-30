@@ -2,11 +2,10 @@
 	font-size: 16px;
 	font-weight: 400;
 	background-attachment: scroll;
-	background-color: var(--white);
+	background-color: var(--light-gray);
 	height: 386.5px;
 	width: 475px;
 	padding: 30px;
-    box-shadow: black 10px;
 }
 .loginCont{
 	/* Font & Text */
@@ -92,7 +91,7 @@
         overflow: visible;
         cursor: pointer;
         visibility: visible;
-    
+        color: var(--white);
         /* Effects */
         transform: none;
         transition: 0.5 ease-in-out;
@@ -134,7 +133,7 @@
         background-image: none;
         background-position: 0% 0%;
         background-repeat: repeat;
-        color: rgb(62, 67, 72);
+        color: var(--white);
     
         /* Box */
         height: 46px;
