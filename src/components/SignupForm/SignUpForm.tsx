@@ -42,11 +42,11 @@ const SignUpForm: React.FC = () => {
   };
 
   return (
-    <div >
-    {/* <img src={BTBlogo}/> */}
+    <div id='contCont'>
     <form onSubmit={handleSubmit} className='signCont'>
+    <img src={BTBlogo} id='imgSign'/>
       <label htmlFor="code">Code:</label>
-      <input type="text" name="code" value={formData.code} onChange={handleChange} required/>
+      <input type="text" name="code" value={formData.code} onChange={handleChange} className='inputSign' required/>
       <br />
       
       <label htmlFor="name">Name:</label>
@@ -65,7 +65,7 @@ const SignUpForm: React.FC = () => {
         <br />
 
         <label htmlFor="branch">Branch:</label>
-        <select name="branch" value={formData.branch} onChange={handleChange}>
+        <select name="branch" value={formData.branch} className='inputSign' onChange={handleChange}>
             <option value="">--Select a branch--</option>
             <option value="army">Army</option>
             <option value="navy">Navy</option>

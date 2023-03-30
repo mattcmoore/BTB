@@ -4,8 +4,26 @@
     align-items: center;
     flex-direction: column;
     align-content: center;
-    width: fit-content;
-    
+    width: 400px;
+    height: 750px;
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+    align-self: center;
+    justify-self: center;
+    padding-bottom: 10px;
+}
+#contCont{
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    padding-top: 20px;
+}
+#imgSign{
+    padding-top: 10px;
+    height: 30px;
+    width: 90px;
 }
 .signCont label{
         /* Font & Text */
@@ -16,10 +34,11 @@
         letter-spacing: normal;
         line-height: 25.5px;
         align-self: start;
+        padding-left: 15px;
 
 }
-.signCont input{
-    font-size: 20px;
+.inputSign{
+    font-size: 16px;
 	font-style: normal;
 	font-variant: normal;
 	font-weight: 400;
@@ -28,8 +47,8 @@
 	text-decoration: none solid rgb(62, 67, 72);
 	text-align: start;
 	
-	height: 48px;
-	width: 415px;
+	height: 40px;
+	width: 350px;
 	border: 1px solid rgb(172, 172, 173);
 	border-top: 1px solid rgb(172, 172, 173);
 	border-right: 1px solid rgb(172, 172, 173);
