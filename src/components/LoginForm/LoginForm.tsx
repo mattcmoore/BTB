@@ -1,6 +1,8 @@
 // src/LoginForm.tsx
 import React, { useState, FormEvent } from 'react';
 import './LoginForm.css'
+import BTBlogo from '../../assets/blue-ocean-logo-2.png'
+import { Link } from 'react-router-dom';
 
 // Define the interface for the form state
 interface FormState {
@@ -34,7 +36,10 @@ const LoginForm: React.FC = () => {
   return (
     <div className="containerLogin">
     <div className='loginAndTitle'>
-      <h3 id='title'>Welcome To B2B</h3>
+      <div id='logoCont'>
+      <img src={BTBlogo}  className='loginLogo'></img>
+
+      </div>
       <form onSubmit={handleSubmit} className='loginForm'>
         <div className='loginCont'>
           <div className='emailCont'>
@@ -71,7 +76,7 @@ const LoginForm: React.FC = () => {
             <button type="submit" className='loginBtn'>Log In</button>
           </div>
           <div className='newStuCont'>
-            <a className='newStuLink'>New Student?</a>
+            <Link to='/signup'className='newStuLink'>New Student?</Link>
           </div>
           <div className='forgCont'>
             <a className="forgLink">Forgot Password?</a>
