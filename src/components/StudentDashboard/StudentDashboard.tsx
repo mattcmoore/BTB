@@ -1,12 +1,12 @@
 import "./StudentDashboard.css";
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export function StudentChecklist () {
 
     const checkList = ["Get separation orders", "Turn in gear", "Separation physical", "Separation brief", "Pick up DD214", "Clear installation", "Clear unit"];
-    const [checked, setChecked] = useState([]); 
-    const handleCheck = (e) => {
-        let updatedList = [...checked];
+    const [checked, setChecked]: Array<any> = useState([]); 
+    const handleCheck = (e: React.FormEvent<HTMLInputElement>) => {
+        let updatedList: Array<any> = [...checked];
         if (e.target.checked) {
             updatedList = [...checked, e.target.value]
         } else {
