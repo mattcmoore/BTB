@@ -21,17 +21,8 @@ const AdminNavbar = () => {
                 <div className="admin-dropdown-btn" onMouseEnter={()=>setMouseover(true)}>
                     <p className="admin-dropdown-avatar">AA</p>
                     <p>ADMIN-NAME</p>
-                        <svg id="triangle" viewBox="0 0 232.72 86.82">
-                            <defs>
-                                <style>
-                                    .cls-1 {
-                                        fill: #231f20;
-                                        stroke: #fff;
-                                        stroke-miterlimit: 10;
-                                    }
-                                </style>
-                            </defs>
-                        <path class="cls-1" d="M116.36,86.19L1.51,.5H231.21L116.36,86.19Z"/>
+                        <svg className="triangle" viewBox="0 0 232.72 86.82">
+                            <path d="M116.02,120.76L1.17,.5H230.88L116.02,120.76Z"/>
                         </svg>
                 </div>
                 <div className={mouseover ? 'admin-dropdown-account' : 'hidden' }>
