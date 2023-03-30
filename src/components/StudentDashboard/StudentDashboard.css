@@ -59,6 +59,17 @@
 .task-item {
     color: black;
     margin: 10px 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.due-date {
+    display: flex;
+    padding: 0 15px;
+}
+
+.calendar-container {
+    padding-left: 10px;
 }
 
 .notes-container {
