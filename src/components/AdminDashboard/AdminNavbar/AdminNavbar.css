@@ -1,0 +1,99 @@
+.hidden{
+    display: none;
+}
+.admin-navbar-container{
+    position: relative;
+    top: 30px;
+    left: 0;
+    height: 48px;
+    width: 100%;
+}
+
+.admin-navbar-buttons{
+    position: relative;
+    height: 100%;
+    width: 50%;
+    left: 40px;
+    display: flex;
+    justify-items: flex-start;
+    gap: 20px;
+}
+
+.admin-navbar-logo{
+   height: 90%;
+   margin-right: 5px;
+}
+
+.admin-navbar-buttons div{
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
+.admin-navbar-buttons div span{
+    position: relative;
+    display: block;
+    font-size: 20px;
+    font-weight: 250;
+    cursor: pointer;
+    padding: 10px; 
+}
+ 
+.admin-navbar-buttons span:hover{
+    position: relative;
+    border-bottom: 2px solid var(--gray);
+    bottom: 2px;
+}
+
+.admin-dropdown.mouseover{
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.2); 
+}
+
+.admin-dropdown{
+    position: absolute;
+    top: -30px;
+    width: 250px;
+    right: 30px;
+}
+
+.admin-dropdown div{
+    height: 48px;
+    padding: 0px 10px;
+    cursor: pointer;
+}
+
+.admin-dropdown-btn{
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 300;
+}
+
+.admin-dropdown-avatar{
+    background-color: gray;
+    padding: 4px;
+    height: 20px;
+    width: 20px;
+    border-radius: 25px;
+    font-size: 15px;
+    color: white;
+}
+
+.admin-dropdown-account {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 10px 0;
+}
+
+.admin-dropdown p{
+    margin: 0;
+}
+
+.admin-dropdown-sign-out {
+    border-top: 1px solid var(--gray);
+    display: flex;
+    align-items: center;
+}
+
