@@ -22,7 +22,7 @@ const AdminNavbar = () => {
                     <p className="admin-dropdown-avatar">AA</p>
                     <p>ADMIN-NAME</p>
                         <svg className="triangle" viewBox="0 0 232.72 86.82">
-                            <path d="M116.02,120.76L1.17,.5H230.88L116.02,120.76Z"/>
+                            <path class="cls-1" d="M116.02,120.76L1.17,.5H230.88L116.02,120.76Z"/>
                         </svg>
                 </div>
                 <div className={mouseover ? 'admin-dropdown-account' : 'hidden' }>
