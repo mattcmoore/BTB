@@ -1,0 +1,25 @@
+
+
+/* text hierachry */
+/* midnight for primary headings (h1) 
+charcoal for sub-headings  (h2)
+dove-gray for small, (h3) secondary sub-headings */
+
+/* other patterns */
+/* silver for component non-backgrounds
+light-gray is for page background (non-header)
+blue-gray is for sidebar backgrounds */
+
+:root {
+  --black: #000000;
+  --white: #FFFFFF;
+  --gray: #E8E8E8;
+  --silver: #D8D8D8;
+  --light-gray: #FAFAFA;
+  --dove-gray: #737373;
+  --midnight: #212529;
+  --teal: #00808C;
+  --charcoal: #333333;
+  --blue-gray: #343940;
+  font-family: 'Proxima Nova', sans-serif;
+}
