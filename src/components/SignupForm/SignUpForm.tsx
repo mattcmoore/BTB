@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import './SignUpForm.css'
+import BTBlogo from '../../assets/blue-ocean-logo-2.png'
+
 
 type FormData = {
   code: string;
@@ -39,24 +42,26 @@ const SignUpForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div >
+    {/* <img src={BTBlogo}/> */}
+    <form onSubmit={handleSubmit} className='signCont'>
       <label htmlFor="code">Code:</label>
       <input type="text" name="code" value={formData.code} onChange={handleChange} required/>
       <br />
       
       <label htmlFor="name">Name:</label>
-      <input type="text" name="name" value={formData.name} onChange={handleChange} required/>
+      <input type="text" name="name" value={formData.name} onChange={handleChange} className='inputSign' required/>
       <br />
       <label htmlFor="email">Email:</label>
-        <input type="email" name="email" value={formData.email} onChange={handleChange} required/>
+        <input type="email" name="email" value={formData.email} onChange={handleChange} className='inputSign' required/>
         <br />
 
         <label htmlFor="password">Password:</label>
-        <input type="password" name="password" value={formData.password} onChange={handleChange} required/>
+        <input type="password" name="password" value={formData.password} onChange={handleChange} className='inputSign' required/>
         <br />
 
         <label htmlFor="separationDate">Separation Date:</label>
-        <input type="date" name="separationDate" value={formData.separationDate} onChange={handleChange} required/>
+        <input type="date" name="separationDate" value={formData.separationDate} onChange={handleChange}  className='inputSign' required/>
         <br />
 
         <label htmlFor="branch">Branch:</label>
@@ -91,6 +96,7 @@ const SignUpForm: React.FC = () => {
 
         <button type="submit">Submit</button>
         </form>
+        </div>
   )
 }
 export default SignUpForm
