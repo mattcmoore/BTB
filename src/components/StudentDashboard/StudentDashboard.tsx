@@ -1,12 +1,14 @@
 import "./StudentDashboard.css";
-import { useState } from 'react';
+import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export function StudentChecklist () {
-
     const checkList = ["Get separation orders", "Turn in gear", "Separation physical", "Separation brief", "Pick up DD214", "Clear installation", "Clear unit"];
-    const [checked, setChecked] = useState([]); 
-    const handleCheck = (e) => {
-        let updatedList = [...checked];
+    const [startDate, setStartDate] = useState(new Date());
+    const [checked, setChecked]: Array<any> = useState([]); 
+    const handleCheck = (e: React.FormEvent<HTMLInputElement>) => {
+        let updatedList: Array<any> = [...checked];
         if (e.target.checked) {
             updatedList = [...checked, e.target.value]
         } else {
@@ -42,11 +44,18 @@ export function StudentChecklist () {
                     </h3>
                 </div>
                 <div className="checklist-container">
+                    {/* <DatePicker selected={startDate} onChange={(date) => setStartDate(date)}/> */}
                     <ul className="task">
                        {checkList.map((item, index) => (
                         <div className="task-item" key={index}>
                             <input value={item} type="checkbox" onChange={handleCheck} />
                             <span>{item}</span>
+                            <div className="due-date">
+                                Date due:
+                                <div className="calendar-container">
+                                    <DatePicker selected={startDate} onChange={(date) => setStartDate(date)}/>
+                                </div>
+                            </div>
                         </div>
                        ))}
                     </ul>

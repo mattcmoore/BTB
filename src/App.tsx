@@ -1,16 +1,31 @@
 import './App.css'
-import StudentDashboard from "./components/StudentDashboard/StudentDashboard"
-import AdminDashboard from './components/AdminDashboard/AdminDashboard.tsx'
-import { useState } from 'react'
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
+import LoginForm from './components/LoginForm'
+import AdminDashboard from './components/AdminDashboard/AdminDashboard'
+import StudentDashboard from './components/StudentDashboard/StudentDashboard'
+import SignUpForm from './components/SignupForm/SignUpForm'
+
 function App() {
 
   return (
-    <>
-      {/* <LoginForm /> */}
-      <AdminDashboard />
-      {/* <StudentDashboard /> */}
-    </>
+    <div className="App">
+      <Router>
+        <Routes>
+          <Route exact={true} path='/' element={
+            <LoginForm/>
+          }/>
+          <Route path='/admin' element={
+            <AdminDashboard/>
+          }/>
+          <Route path='/student' element={
+            <StudentDashboard/>
+          }/>
+          <Route path='/signup' element={
+            <SignUpForm/>
+          }/>
+        </Routes>
+      </Router>
+    </div>
   )
-
 }
 export default App
