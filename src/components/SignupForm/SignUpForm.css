@@ -10,6 +10,7 @@
     align-self: center;
     justify-self: center;
     padding-bottom: 10px;
+    background-color: var(--white);
 }
 #contCont{
     display: flex;
