@@ -5,20 +5,21 @@
     flex-direction: column;
     align-content: center;
     width: 400px;
-    height: 750px;
+    height: 690px;
+    min-height: 690px;
     box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
     align-self: center;
     justify-self: center;
     padding-bottom: 10px;
+    background-color: var(--white);
 }
 #contCont{
     display: flex;
     justify-content: center;
     justify-items: center;
     flex-direction: column;
-    height: 100%;
+    height: 100vh;
     width: 100%;
-    padding-top: 20px;
 }
 #imgSign{
     padding-top: 10px;
@@ -93,8 +94,22 @@
         border-top-right-radius: 24px;
         border-bottom-left-radius: 24px;
         border-bottom-right-radius: 24px;
+        color: var(--white);
 }
 .signCont button:hover{
     background-color: var(--teal);
     background-image: none;
+}
+
+.signCheck{
+
+    height: 20px;
+    width: 20px;
+}
+#checkFlex{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: row;
+    
 }
