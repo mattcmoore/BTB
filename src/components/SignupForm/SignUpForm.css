@@ -5,7 +5,8 @@
     flex-direction: column;
     align-content: center;
     width: 400px;
-    height: 700px;
+    height: 690px;
+    min-height: 690px;
     box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
     align-self: center;
     justify-self: center;
@@ -92,6 +93,7 @@
         border-top-right-radius: 24px;
         border-bottom-left-radius: 24px;
         border-bottom-right-radius: 24px;
+        color: var(--white);
 }
 .signCont button:hover{
     background-color: var(--teal);
@@ -99,5 +101,14 @@
 }
 
 .signCheck{
-    justify-self: flex-start;
+
+    height: 20px;
+    width: 20px;
+}
+#checkFlex{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: row;
+    
 }

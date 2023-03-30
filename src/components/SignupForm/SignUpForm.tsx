@@ -44,7 +44,7 @@ const SignUpForm: React.FC = () => {
   return (
     <div id='contCont'>
     <form onSubmit={handleSubmit} className='signCont'>
-    <img src={BTBlogo} id='imgSign'/>
+        <img src={BTBlogo} id='imgSign'/>
       <label htmlFor="code">Code:</label>
       <input type="text" name="code" value={formData.code} onChange={handleChange} className='inputSign' required/>
       <br />
@@ -75,13 +75,14 @@ const SignUpForm: React.FC = () => {
             <option value="spaceforce">Space Force</option>
         </select>
         <br />
-
+        <div id='checkFlex'>
         <label htmlFor="hasFamily">Has Family:</label>
         <input
             type="checkbox"
             name="hasFamily"
             checked={formData.hasFamily}
             onChange={handleCheckboxChange}
+            className='signCheck'
         />
         <br />
 
@@ -91,9 +92,10 @@ const SignUpForm: React.FC = () => {
             name="livesInBarracks"
             checked={formData.livesInBarracks}
             onChange={handleCheckboxChange}
+            className='signCheck'
         />
+        </div>
         <br />
-
         <button type="submit">Submit</button>
         </form>
         </div>
