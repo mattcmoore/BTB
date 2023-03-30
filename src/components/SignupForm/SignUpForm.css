@@ -98,3 +98,7 @@
     background-color: var(--teal);
     background-image: none;
 }
+
+.signCheck{
+    justify-self: flex-start;
+}
