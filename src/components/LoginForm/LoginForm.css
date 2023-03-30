@@ -32,7 +32,7 @@
 }
 .loginInput{
 	/* Font & Text */
-	font-size: 16px;
+	font-size: 20px;
 	font-style: normal;
 	font-variant: normal;
 	font-weight: 400;
@@ -480,4 +480,13 @@
     align-items: center;
     justify-items: center;
     padding-top: 13%;
+}
+
+#logoCont{
+        display: flex;
+        justify-content: center;
+}
+
+.loginLogo{
+        height: 90px;
 }

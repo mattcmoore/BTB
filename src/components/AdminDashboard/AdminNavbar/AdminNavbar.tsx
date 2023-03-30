@@ -5,10 +5,6 @@ import {useState, useEffect} from 'react'
 const AdminNavbar = () => {
     const [mouseover, setMouseover] = useState(false)
 
-    // useEffect( ()=>{
-    //     setMouseover(false)
-    // },[])
-
     const handleMouseover = () => {
         setMouseover(false)
     }
@@ -24,7 +20,10 @@ const AdminNavbar = () => {
             <div className={`admin-dropdown ${mouseover ? 'mouseover' : ''}`}>
                 <div className="admin-dropdown-btn" onMouseEnter={()=>setMouseover(true)}>
                     <p className="admin-dropdown-avatar">AA</p>
-                    <p>ADMIN-NAME</p><p>triangle</p>
+                    <p>ADMIN-NAME</p>
+                        <svg className="triangle" viewBox="0 0 232.72 86.82">
+                            <path class="cls-1" d="M116.02,120.76L1.17,.5H230.88L116.02,120.76Z"/>
+                        </svg>
                 </div>
                 <div className={mouseover ? 'admin-dropdown-account' : 'hidden' }>
                     <p>MY ACCOUNT</p>
