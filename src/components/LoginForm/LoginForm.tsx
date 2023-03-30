@@ -1,7 +1,7 @@
 // src/LoginForm.tsx
 import React, { useState, FormEvent } from 'react';
 import './LoginForm.css'
-import BTBlogo from '../assets/blue-ocean-logo-2.png'
+import BTBlogo from '../../assets/blue-ocean-logo-2.png'
 import { Link } from 'react-router-dom';
 
 // Define the interface for the form state

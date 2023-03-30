@@ -1,6 +1,6 @@
 import './App.css'
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
-import LoginForm from './components/LoginForm'
+import LoginForm from './components/LoginForm/LoginForm.tsx'
 import AdminDashboard from './components/AdminDashboard/AdminDashboard'
 import StudentDashboard from './components/StudentDashboard/StudentDashboard'
 import SignUpForm from './components/SignupForm/SignUpForm'
