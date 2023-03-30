@@ -50,3 +50,5 @@ ALTER TABLE
     "tasks" ADD CONSTRAINT "tasks_user_foreign" FOREIGN KEY("user") REFERENCES "users"("id");
 ALTER TABLE
     "users" ADD CONSTRAINT "users_mcsp_foreign" FOREIGN KEY("mcsp") REFERENCES "mcsps"("id");
+
+INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('jrives@gmail.com', 'password123', 'Jullian Rives', true, 2500);
