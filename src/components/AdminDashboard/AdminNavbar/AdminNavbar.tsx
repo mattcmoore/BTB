@@ -5,10 +5,6 @@ import {useState, useEffect} from 'react'
 const AdminNavbar = () => {
     const [mouseover, setMouseover] = useState(false)
 
-    // useEffect( ()=>{
-    //     setMouseover(false)
-    // },[])
-
     const handleMouseover = () => {
         setMouseover(false)
     }
