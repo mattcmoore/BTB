@@ -1,7 +1,8 @@
 import './App.css'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import AdminDashboard from '.components/AdminDashboard/AdminDashboard'
-import StudentDashboard from "./components/StudentDashboard/StudentDashboard"
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
+import LoginForm from './components/LoginForm'
+import AdminDashboard from './components/AdminDashboard/AdminDashboard'
+import StudentDashboard from './components/StudentDashboard/StudentDashboard'
 
 function App() {
 
@@ -11,7 +12,7 @@ function App() {
         <Routes>
           <Route exact path='/' element={
             <LoginForm/>
-          }>
+          }/>
           <Route path='/admin' element={
             <AdminDashboard/>
           }/>
@@ -20,9 +21,6 @@ function App() {
           }/>
         </Routes>
       </Router>
-      {/* <LoginForm /> */}
-      {/* <AdminDashboard /> */}
-      <StudentDashboard />
     </div>
   )
 }
