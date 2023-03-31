@@ -42,17 +42,54 @@ app.post('/makeStudent', async (req,res)=>{
             if(err){
                 res.status(500).json({msg:'Error hashing password'})
             } else {
-                const userId = await sql`
+                const data = await sql`
                 INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks)
                 VALUES (${email}, ${hash}, ${name}, false, ${classId}, ${separationDate}, ${branch}, ${hasFamily}, ${livesInBarracks}) returning id
                 `
-                console.log(userId)
+                const userId = data[0].id
+                res.json({msg:`User created with the id of ${userId}`})
             }
         })
    } else{
       res.json({msg: 'Invalid code'})
    }
 })
+
+app.post('/login', async(req,res)=>{
+   const {email, password} = req.body
+   const emails = await sql`
+   SELECT email, password, admin, id, name FROM users
+   `
+   let exists = false
+   let hash = ''
+   let admin = null
+   let name = ''
+   emails.forEach(mail=>{
+      if(mail.email === email){
+         exists = true
+         hash = mail.password
+         admin = mail.admin
+         userId = mail.id
+         name = mail.name
+      }
+   })
+   console.log(admin, hash)
+   if(exists){
+      const match = await bcrypt.compare(password, hash)
+      if(match){
+         const payload = {name: name, userId: userId, admin: admin}
+         const token = jwt.sign(payload, secretKey, {expiresIn: '1h'})
+         res.cookie('jwt', token, {httpOnly: true })
+         res.json({msg:'logged in', ...payload})
+      } else {
+         res.json({msg: 'Email or password does not exist'})
+      }
+   }else{
+      res.json({msg: 'Email or password does not exist'})
+   }
+})
+
+app.get('/checkToken', async(req, res))
 
 app.get('/test', (req, res) => {
    res.send('working')
