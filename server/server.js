@@ -39,11 +39,11 @@ app.get('/messages/:to/:from', async (req, res) => {
     let { to, from } = req.params
 
     try {
-        const data = await sql`
-            SELECT * FROM messages
+        const data = await sql
+            `SELECT * FROM messages
             WHERE (to_user = ${to} AND from_user = ${from}) 
             OR (to_user = ${from} AND from_user = ${to})
-            `
+            ORDER BY date ASC`
         res.json(data)
     } catch (error) {
         res.json(error)

@@ -15,7 +15,7 @@ const Chat = ({ to, from }) => {
 
    return (
       <div>
-         <button onClick={getChats}>asdfa</button>
+         <button onClick={getChats}>REFRESH</button>
          {messages.map( msg => <p>{msg.body}</p>)}
       </div>
    )
