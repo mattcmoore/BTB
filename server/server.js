@@ -6,7 +6,6 @@ const cors = require('cors')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const cookieParser = require('cookie-parser')
-const { sq } = require('date-fns/locale')
 
 
 dotenv.config()
