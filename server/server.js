@@ -71,6 +71,28 @@ app.post('/makeAdmin', async (req, res)=>{
 })
 })
 
+app.patch('/updateAdmin', async (req,res)=>{
+   const {email, password, name, id} = req.body
+   await bcrypt.hash(password, saltRounds, async (err, hash)=>{
+      if(err){
+          res.status(500).json({msg:'Error hashing password'})
+      } else {
+         try {
+            await sql`
+            UPDATE users
+            SET email = ${email},
+            password = ${hash},
+            name = ${name}
+            WHERE id = ${id}
+            `
+            res.json({msg: "Admin Edited"})
+         } catch (error) {
+            res.status(500).json({msg: 'Failed'})
+         }
+      }
+})
+})
+
 app.post('/login', async(req,res)=>{
    const {email, password} = req.body
    const emails = await sql`
