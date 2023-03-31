@@ -58,6 +58,17 @@ app.get('/test', (req, res) => {
    res.send('working')
 })
 
+app.get('/tasks/:id', async (req, res) => {
+   let id = req.params.id
+
+   try {
+      const data = await sql`SELECT * FROM tasks WHERE user_id = ${id}`
+      res.json(data)
+   } catch (error) {
+      res.json(error)
+   }
+})
+
 app.listen(PORT, () => {
    console.log(`listening on port ${PORT}`)
 })
