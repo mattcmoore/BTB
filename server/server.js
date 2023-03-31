@@ -89,7 +89,25 @@ app.post('/login', async(req,res)=>{
    }
 })
 
-app.get('/checkToken', async(req, res))
+app.get('/checkToken', async(req, res)=>{
+   const token = req.cookies.jwt;
+
+   if (token) {
+     // If JWT exists, decode it
+     try {
+       const decoded = jwt.verify(token, secretKey);
+       const userId = decoded;
+      res.json({msg:'Success', ...userId })
+     } catch (error) {
+       // If JWT is invalid or has expired, clear the cookie and redirect to login page
+       res.clearCookie('jwt');
+       res.json({msg:'Jwt expired'})
+     }
+   } else {
+     // If JWT does not exist, redirect to login page
+     res.json({msg:'No jwt'})
+   }
+})
 
 app.get('/test', (req, res) => {
    res.send('working')
