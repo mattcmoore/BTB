@@ -35,6 +35,21 @@ app.get('/tasks/:id', async (req, res) => {
    }
 })
 
+app.get('/messages/:to/:from', async (req, res) => {
+    let { to, from } = req.params
+
+    try {
+        const data = await sql`
+            SELECT * FROM messages
+            WHERE (to_user = ${to} AND from_user = ${from}) 
+            OR (to_user = ${from} AND from_user = ${to})
+            `
+        res.json(data)
+    } catch (error) {
+        res.json(error)
+    }
+})
+
 app.listen(PORT, () => {
    console.log(`listening on port ${PORT}`)
 })
