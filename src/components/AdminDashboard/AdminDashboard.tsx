@@ -1,5 +1,6 @@
 import './AdminDashboard.css'
 import AdminNavbar from './AdminNavbar/AdminNavbar'
+import AdminNavbar from './AdminNavbar/AdminNavbar'
 import Admins from './Admins/Admins'
 
 const AdminDashboard = () => {
