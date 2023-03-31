@@ -36,10 +36,19 @@ const SignUpForm: React.FC = () => {
     setFormData({ ...formData, [name]: checked });
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    console.log(formData);
-  };
+    const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        const makeUser = async () =>{
+            await fetch('/makeStudent', {
+                method: "POST",
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+        }
+        makeUser()
+    };
 
   return (
     <div id="contCont">
