@@ -1,19 +1,40 @@
-var express = require('express');
-var morgan = require('morgan');
-var postgres = require('postgres');
-var dotenv = require('dotenv');
-var cors = require('cors');
-dotenv.config();
-var PORT = process.env.PORT;
-var app = express();
-var sql = postgres(process.env.DATABASE_URL);
-app.use(express.json());
-app.use(morgan('tiny'));
-app.use(cors('*'));
-app.use(express.static('../dist'));
-app.get('/test', function (req, res) {
-    res.send('working');
-});
-app.listen(PORT, function () {
-    console.log("listening on port ".concat(PORT));
-});
+const express = require('express')
+const morgan = require('morgan')
+const postgres = require('postgres')
+const dotenv = require('dotenv')
+const cors = require('cors')
+
+const app = express()
+
+dotenv.config()
+
+app.use(express.static('../dist'))
+
+app.use(cors({ origin: '*' }))
+app.use(morgan('tiny'))
+app.use(express.json())
+
+const DATABASE_URL = process.env.DATABASE_URL
+const PORT = process.env.PORT || 8000
+const sql = postgres(DATABASE_URL)
+
+
+
+app.get('/test', (req, res) => {
+   res.send('working')
+})
+
+app.get('/tasks/:id', async (req, res) => {
+   let id = req.params.id
+
+   try {
+      const data = await sql`SELECT * FROM tasks WHERE user_id = ${id}`
+      res.json(data)
+   } catch (error) {
+      res.json(error)
+   }
+})
+
+app.listen(PORT, () => {
+   console.log(`listening on port ${PORT}`)
+})
