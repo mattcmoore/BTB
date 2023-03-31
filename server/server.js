@@ -55,6 +55,22 @@ app.post('/makeStudent', async (req,res)=>{
    }
 })
 
+app.post('/makeAdmin', async (req, res)=>{
+   const {email, password, name} = req.body
+   await bcrypt.hash(password, saltRounds, async (err, hash)=>{
+      if(err){
+          res.status(500).json({msg:'Error hashing password'})
+      } else {
+          const data = await sql`
+          INSERT INTO users (email, password, name, admin)
+          VALUES (${email}, ${hash}, ${name}, true) returning id
+          `
+          const userId = data[0].id
+          res.json({msg:'Admin created', userId})
+      }
+})
+})
+
 app.post('/login', async(req,res)=>{
    const {email, password} = req.body
    const emails = await sql`
@@ -108,6 +124,16 @@ app.get('/checkToken', async(req, res)=>{
      res.json({msg:'No jwt'})
    }
 })
+
+app.get('/logOut', (req, res)=>{
+   try {
+     res.clearCookie("jwt");
+     res.json({msg:'logged out'})
+
+   } catch (error) {
+     res.json({msg:'Not logged in'})
+   }
+ })
 
 app.get('/test', (req, res) => {
    res.send('working')
