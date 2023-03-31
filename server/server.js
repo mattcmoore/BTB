@@ -47,8 +47,11 @@ app.post('/makeStudent', async (req,res)=>{
                 VALUES (${email}, ${hash}, ${name}, false, ${classId}, ${separationDate}, ${branch}, ${hasFamily}, ${livesInBarracks}) returning id
                 `
                 const userId = data[0].id
-                res.json({msg:`User created with the id of ${userId}`})
-            }
+                const payload = {name: name, userId: userId, admin: false}
+                const token = jwt.sign(payload, secretKey, {expiresIn: '1h'})
+                res.cookie('jwt', token, {httpOnly: true })
+                res.json({msg:'logged in', ...payload})            
+               }
         })
    } else{
       res.json({msg: 'Invalid code'})
@@ -71,8 +74,9 @@ app.post('/makeAdmin', async (req, res)=>{
 })
 })
 
-app.patch('/updateAdmin', async (req,res)=>{
-   const {email, password, name, id} = req.body
+app.patch('/updateAdmin/:id', async (req,res)=>{
+   const {id} = req.params
+   const {email, password, name} = req.body
    await bcrypt.hash(password, saltRounds, async (err, hash)=>{
       if(err){
           res.status(500).json({msg:'Error hashing password'})

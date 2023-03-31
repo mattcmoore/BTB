@@ -29,8 +29,16 @@ const LoginForm: React.FC = () => {
   // Handle form submission
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log('Email:', formState.email);
-    console.log('Password:', formState.password);
+    const login = async () =>{
+      await fetch('/login', {
+          method: "POST",
+          headers:{
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formState)
+      })
+  }
+    login()
   };
 
   return (
