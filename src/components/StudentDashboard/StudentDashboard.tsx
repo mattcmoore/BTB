@@ -101,7 +101,14 @@ export function StudentChecklist () {
                         Notes
                     </h2>
                     <div className="notes-section">
-                        Input notes here
+                        <div className="note-container">
+                            <div className="note-item">
+                                <p>Gotta get my gear cleaned for turn in, it will take about a week.</p>
+                            </div>
+                            <div className="note-item">
+                                <p>The day dawned bleak and chill, a moving wall of grey light out of the Northeast which, instead of dissolving into moisture, seemed to disintegrate into minute and venomous particles, like dust that, when Dilsy opened the door of the cabin and emerged, needled laterally into her flesh, precipitating not so much a moisture as a substance partaking of the quality of thin, not quite congealed oil. </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

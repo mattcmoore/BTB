@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS mcsps,tasks,users,messages;
+DROP TABLE IF EXISTS mcsps,tasks,users,messages,notes;
 
 CREATE TABLE mcsps(
     id SERIAL PRIMARY KEY,
@@ -41,6 +41,14 @@ CREATE TABLE messages(
     date DATE NOT NULL,
     FOREIGN KEY (to_user) REFERENCES users(id),
     FOREIGN KEY (from_user) REFERENCES users(id)
+);
+
+CREATE TABLE notes(
+    id SERIAL PRIMARY KEY,
+    body VARCHAR(300) NOT NULL,
+    date TEXT NOT NULL,
+    author INTEGER NOT NULL,
+    FOREIGN KEY (author) REFERENCES users(id)
 );
 
 
@@ -86,3 +94,6 @@ INSERT INTO messages (to_user, from_user, body, date) VALUES ( 3, 4, 'Did you he
 INSERT INTO messages (to_user, from_user, body, date) VALUES ( 2, 3, 'Can you recommend any good books on programming?', '2023-01-15');
 INSERT INTO messages (to_user, from_user, body, date) VALUES ( 1, 4, 'How was your vacation? I hope you had a good time.', '2023-01-20');
 INSERT INTO messages (to_user, from_user, body, date) VALUES ( 5, 2, 'Do you want to grab lunch this week?', '2023-02-05');
+
+INSERT INTO notes (body, date, author) VALUES ('Gotta layout and clean my gear before turn in. Will take about a week.', '03/21/2023', 3);
+INSERT INTO notes (body, date, author) VALUES ('Need to contact my S1 so I can see if my separation orders have been created yet. I also need to contact my S2 shop to see if I can get read off.', '02/19/2023', 3);
