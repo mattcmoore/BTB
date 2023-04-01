@@ -4,20 +4,10 @@ import BTBlogo from "../../assets/blue-ocean-logo-2.png";
 import BtbContext from '../../context/BtbContext.jsx'
 
 
-type FormData = {
-  code: string;
-  name: string;
-  email: string;
-  password: string;
-  separationDate: string;
-  branch: string;
-  hasFamily: boolean;
-  livesInBarracks: boolean;
-};
 
-const SignUpForm: React.FC = () => {
+const SignUpForm = () => {
     const {makeUser} = useContext(BtbContext)
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState({
     code: "",
     name: "",
     email: "",
@@ -27,20 +17,18 @@ const SignUpForm: React.FC = () => {
     hasFamily: false,
     livesInBarracks: false,
   });
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = event.target;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = event.target;
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
     setFormData({ ...formData, [name]: checked });
   };
 
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
+    const handleSubmit = (e) => {
+        e.preventDefault();
         makeUser(formData)
     };
 
