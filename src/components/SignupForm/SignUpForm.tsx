@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import "./SignUpForm.css";
 import BTBlogo from "../../assets/blue-ocean-logo-2.png";
+import BtbContext from '../../context/BtbContext.jsx'
+
 
 type FormData = {
   code: string;
@@ -14,6 +16,7 @@ type FormData = {
 };
 
 const SignUpForm: React.FC = () => {
+    const {makeUser} = useContext(BtbContext)
   const [formData, setFormData] = useState<FormData>({
     code: "",
     name: "",
@@ -38,16 +41,7 @@ const SignUpForm: React.FC = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        const makeUser = async () =>{
-            await fetch('/makeStudent', {
-                method: "POST",
-                headers:{
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            })
-        }
-        makeUser()
+        makeUser(formData)
     };
 
   return (
