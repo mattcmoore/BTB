@@ -1,14 +1,19 @@
 import "./StudentDashboard.css";
-import React, { useState } from "react";
+import React, { useState , useContext} from "react";
+import BtbContext from '../../context/BtbContext'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import BTBlogo from '../../assets/blue-ocean-logo-2.png'
 
 
 export function StudentChecklist () {
+    // const { notes, setNotes } = useContext(BtbContext)
+
     const checkList = ["Get separation orders", "Turn in gear", "Separation physical", "Separation brief", "Pick up DD214", "Clear installation", "Clear unit"];
     const [startDate, setStartDate] = useState(new Date());
     const [mouseover, setMouseover] = useState(false);
+
+    const { notes } = useContext(BtbContext)
 
     const handleMouseover = () => {
         setMouseover(false)
@@ -102,6 +107,11 @@ export function StudentChecklist () {
                     </h2>
                     <div className="notes-section">
                         <div className="note-container">
+                            {notes.map((note) => (
+                                <div className="note-item">
+                                    <span className="note-actual">{note.body}</span>
+                                </div>
+                            ))}
                             <div className="note-item">
                                 <p>Gotta get my gear cleaned for turn in, it will take about a week.</p>
                             </div>

@@ -24,6 +24,15 @@ app.use(cookieParser())
 
 app.use(express.static('../dist'))
 
+app.route('/notes').get( async (req, res) => {
+   try {
+       const data = await sql`SELECT * FROM notes`
+       res.json(data)
+   } catch (error) {
+       res.json(error)
+   }
+})
+
 app.post('/makeStudent', async (req,res)=>{
    const {code, name, email, password, separationDate, branch, hasFamily, livesInBarracks} = req.body
    const codes = await sql`
