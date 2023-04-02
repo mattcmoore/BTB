@@ -36,42 +36,42 @@ app.post("/makeStudent", async (req, res) => {
   } = req.body;
   const emailsInUse = await sql`
   SELECT email FROM users
-  `
-  let emailNotUsed = true
-  emailsInUse.forEach(elem=>{
-   if(elem.email === email){
-      emailNotUsed = false
-   }
-  })
-  if (emailNotUsed){
-     const codes = await sql`
+  `;
+  let emailNotUsed = true;
+  emailsInUse.forEach((elem) => {
+    if (elem.email === email) {
+      emailNotUsed = false;
+    }
+  });
+  if (emailNotUsed) {
+    const codes = await sql`
       SELECT id, code FROM mcsps
       `;
-     let classId = null;
-     console.log(codes);
-     codes.forEach((element) => {
-       if (element.code === code) {
-         classId = element.id;
-       }
-     });
-     if (classId) {
-       await bcrypt.hash(password, saltRounds, async (err, hash) => {
-         if (err) {
-           res.status(500).json({ msg: "Error hashing password" });
-         } else {
-           const data = await sql`
+    let classId = null;
+    console.log(codes);
+    codes.forEach((element) => {
+      if (element.code === code) {
+        classId = element.id;
+      }
+    });
+    if (classId) {
+      await bcrypt.hash(password, saltRounds, async (err, hash) => {
+        if (err) {
+          res.status(500).json({ msg: "Error hashing password" });
+        } else {
+          const data = await sql`
                    INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks)
-                   VALUES (${email}, ${hash}, ${name}, false, ${classId}, ${separationDate}, ${branch}, ${hasFamily}, ${livesInBarracks}) returning id
+                   VALUES (${email}, ${hash}, ${name}, false, ${classId}, ${separationDate}, ${branch}, ${hasFamily}, ${livesInBarracks}) returning id, admin, name, email
                    `;
-           const userId = data[0].id;
-           res.json({ msg: `User created with the id of ${userId}` });
-         }
-       });
-     } else {
-       res.json({ msg: "Invalid code" });
-     }
+          const userId = data[0];
+          res.json({...userId, msg:'logged in'});
+        }
+      });
+    } else {
+      res.json({ msg: "Invalid code" });
+    }
   } else {
-   res.json({msg: 'Email in use'})
+    res.json({ msg: "Email in use" });
   }
 });
 
@@ -79,29 +79,29 @@ app.post("/makeAdmin", async (req, res) => {
   const { email, password, name } = req.body;
   const emailsInUse = await sql`
   SELECT email FROM users
-  `
-  let emailNotUsed = true
-  emailsInUse.forEach(elem=>{
-   if(elem.email === email){
-      emailNotUsed = false
-   }
-   })
-   if(emailNotUsed){
-      await bcrypt.hash(password, saltRounds, async (err, hash) => {
-        if (err) {
-          res.status(500).json({ msg: "Error hashing password" });
-        } else {
-          const data = await sql`
+  `;
+  let emailNotUsed = true;
+  emailsInUse.forEach((elem) => {
+    if (elem.email === email) {
+      emailNotUsed = false;
+    }
+  });
+  if (emailNotUsed) {
+    await bcrypt.hash(password, saltRounds, async (err, hash) => {
+      if (err) {
+        res.status(500).json({ msg: "Error hashing password" });
+      } else {
+        const data = await sql`
               INSERT INTO users (email, password, name, admin)
               VALUES (${email}, ${hash}, ${name}, true) returning id
               `;
-          const userId = data[0].id;
-          res.json({ msg: "Admin created", userId });
-        }
-      });
-   } else {
-      res.json({msg:'Email in use'})
-   }
+        const userId = data[0].id;
+        res.json({ msg: "Admin created", userId });
+      }
+    });
+  } else {
+    res.json({ msg: "Email in use" });
+  }
 });
 
 app.patch("/updateAdmin", async (req, res) => {

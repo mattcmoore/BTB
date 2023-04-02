@@ -2,11 +2,13 @@ import React, { useContext, useState } from "react";
 import "./SignUpForm.css";
 import BTBlogo from "../../assets/blue-ocean-logo-2.png";
 import BtbContext from '../../context/BtbContext.jsx'
+import { useNavigate } from "react-router-dom";
 
 
 
 const SignUpForm = () => {
-    const {makeUser} = useContext(BtbContext)
+  const Navigate = useNavigate()
+    const {makeUser, user} = useContext(BtbContext)
   const [formData, setFormData] = useState({
     code: "",
     name: "",
