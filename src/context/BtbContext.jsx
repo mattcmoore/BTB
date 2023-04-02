@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
+import { useEffect } from "react";
 
 
 
@@ -40,6 +41,30 @@ export const BtbProvider = ({children}) =>{
             console.log(data.msg)
         }
     }
+
+    const logOut = async () =>{
+        await fetch(`${fetchURL}/logOut`, {
+            method: 'GET'
+        })
+        setUser(null)
+    }
+
+    const checkToken = async () =>{
+        const res = await fetch(`${fetchURL}/checkToken`, {
+            method: 'GET'
+        })
+        const data = await res.json()
+        console.log(data)
+        if(data.msg === 'Success'){
+            setUser(data)
+        } else {
+            console.log(data);
+        }
+    }
+
+    useEffect(()=>{
+        checkToken()
+    },[])
     
 
     return(
@@ -49,7 +74,8 @@ export const BtbProvider = ({children}) =>{
             login,
             user,
             makeUser,
-
+            logOut,
+            
         }}>
             {children}
         </BtbContext.Provider>
