@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "proxy": "http://localhost:3000",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -10,11 +11,8 @@
   },
   "dependencies": {
     "@types/react-router-dom": "^5.3.3",
-<<<<<<< HEAD
-=======
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
->>>>>>> a1521f1f13608e8a2a70c2340d9421f16db2a8b1
     "@types/react-datepicker": "^4.10.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
