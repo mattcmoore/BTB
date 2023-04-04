@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 import LoginForm from './components/LoginForm/LoginForm'
 import AdminDashboard from './components/AdminDashboard/AdminDashboard'
 import StudentDashboard from './components/StudentDashboard/StudentDashboard'
-import SignUpForm from './components/SignupForm/SignUpForm'
+import NewClassForm from './components/NewClassForm/NewClassForm'
 import {BtbProvider} from './context/BtbContext'
 
 function App() {
@@ -25,6 +25,9 @@ function App() {
           }/>
           <Route path='/signup' element={
             <SignUpForm/>
+          }/>
+          <Route path='/newclass' element={
+            <NewClassForm/>
           }/>
         </Routes>
       </Router>
