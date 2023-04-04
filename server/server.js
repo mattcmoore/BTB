@@ -7,6 +7,25 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 const { sq } = require("date-fns/locale");
+// Import the functions you need from the SDKs you need
+const { initializeApp } = require("firebase/app")
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCMJF54HDsaSJ6k4OrVZ9EK796i18zAzVE",
+  authDomain: "barracks-to-boardroom.firebaseapp.com",
+  projectId: "barracks-to-boardroom",
+  storageBucket: "barracks-to-boardroom.appspot.com",
+  messagingSenderId: "72331003800",
+  appId: "1:72331003800:web:c139c86d8e26a48ad6cded",
+  measurementId: "G-HZRVT2BDF9"
+};
+
+// Initialize Firebase
+const init = initializeApp(firebaseConfig);
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
