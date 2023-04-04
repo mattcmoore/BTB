@@ -1,11 +1,209 @@
 @import url('https://fonts.cdnfonts.com/css/proxima-nova-2?styles=44818,44817,44816,44820');
 
 .main-container {
-    width: 100vw;
-    height: 100vh;
+    width: 90vw;
+    height: 90vh;
     background-color: white;
     display: flex;
+    flex-direction: column;
+}
+
+.student-navbar-container{
+    position: relative;
+    top: 30px;
+    left: 0;
+    height: 48px;
+    width: 100%;
+}
+
+.student-navbar-buttons{
+    position: relative;
+    height: 100%;
+    width: 50%;
+    left: 40px;
+    display: flex;
+    justify-items: flex-start;
+    gap: 20px;
+}
+
+.student-navbar-logo{
+   height: 90%;
+   margin-right: 5px;
+}
+
+.student-navbar-buttons div{
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
+.student-navbar-buttons div span{
+    position: relative;
+    display: block;
+    font-size: 20px;
+    font-weight: 250;
+    cursor: pointer;
+    padding: 10px; 
+}
+ 
+.student-navbar-buttons span:hover{
+    position: relative;
+    border-bottom: 2px solid var(--gray);
+    bottom: 2px;
+}
+
+.student-dropdown.mouseover{
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.2); 
+}
+
+.student-dropdown{
+    position: absolute;
+    top: -30px;
+    width: 250px;
+    right: 30px;
+}
+
+.student-dropdown div{
+    height: 48px;
+    padding: 0px 10px;
+    cursor: pointer;
+}
+
+.student-dropdown-btn{
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 300;
+}
+
+.student-dropdown-avatar{
+    background-color: gray;
+    padding: 4px;
+    height: 20px;
+    width: 20px;
+    border-radius: 25px;
+    font-size: 15px;
+    color: white;
+}
+
+.student-dropdown-account {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 10px 0;
+}
+
+.student-dropdown p{
+    margin: 0;
+}
+
+.student-dropdown-sign-out {
+    border-top: 1px solid var(--gray);
+    display: flex;
+    align-items: center;
+}
+
+/*first attempt begin*/
+
+/* .student-navbar-container {
+    position: relative;
+    height: 48px;
+    width: 100%;
+}
+
+.student-navbar-buttons {
+    position: relative;
+    height: 100%;
+    width: 50%;
+    display: flex;
+    justify-items: flex-start;
+    gap: 20px;
+}
+
+.student-navbar-logo {
+    height: 90%;
+    margin-right: 5px;
+}
+
+.student-navbar-buttons div{
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
+.student-navbar-buttons div span{
+    position: relative;
+    display: block;
+    font-size: 20px;
+    font-weight: 250;
+    cursor: pointer;
+    padding: 10px; 
+}
+ 
+.student-navbar-buttons span:hover{
+    position: relative;
+    border-bottom: 2px solid var(--gray);
+    bottom: 2px;
+}
+
+.student-dropdown.mouseover{
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.2); 
+}
+
+.student-dropdown{
+    position: absolute;
+    top: 0px;
+    width: 50%;
+    right: 200px;
+    display: flex;
+}
+
+.student-dropdown div{
+    height: 48px;
+    padding: 0px 10px;
+    cursor: pointer;
+}
+
+.student-dropdown-button{
+    margin-top: 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 300;
+}
+
+.student-dropdown-avatar{
+    background-color: gray;
+    padding: 4px;
+    height: 20px;
+    width: 20px;
+    border-radius: 25px;
+    font-size: 15px;
+    color: white;
+}
+
+.student-dropdown-account {
+    justify-content: space-around;
+    margin: 10px 0;
+}
+
+.student-dropdown p{
+    margin: 0;
+}
+
+.student-dropdown-sign-out {
+    border-top: 1px solid var(--gray);
+    display: flex;
+    align-items: center;
+} */
+
+/*first attempt end*/
+
+.student-container {
+    display: flex;
     flex-direction: row;
+    padding-top: 50px;
 }
 
 .outprocessing-container {
@@ -53,7 +251,19 @@
     /* flex-direction: column; */
     text-align: left;
     width: 100%;
-    list-style-type: armenian;
+    list-style-type: none;
+}
+
+.task-item-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%
+}
+
+.list-pop {
+    display: flex;
+    flex: column;
+    width: 50%;
 }
 
 .task-item {
@@ -66,6 +276,8 @@
 .due-date {
     display: flex;
     padding: 0 15px;
+    width: 50%;
+    justify-content: right;
 }
 
 .calendar-container {
@@ -76,8 +288,10 @@
     font-weight: proxima-nova, sans-serif;
     width: 50%;
     text-align: left;
-    padding-left: 15px;
+    padding-left: 100px;
     display: flex;
     flex-direction: column;
 }
+
+
 

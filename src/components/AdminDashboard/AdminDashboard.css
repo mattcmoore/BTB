@@ -1,6 +1,7 @@
 .admin-dashboard-container{
     height: 100%;
     width: 100%;
+    background-color: var(--light-gray);
 }
 
 .admin-dashboard-container-body{

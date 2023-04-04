@@ -97,3 +97,9 @@
     align-items: center;
 }
 
+.triangle{
+    position: relative;
+    width: 12px;
+    top: -5px;
+    
+}
