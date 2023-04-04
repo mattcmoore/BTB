@@ -7,14 +7,15 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const cookieParser = require('cookie-parser')
 
+const app = express()
+
 
 dotenv.config()
 const PORT = process.env.PORT || 3000
 const secretKey = process.env.SECRET_KEY || 'my_secret_key'
 const saltRounds = 10
 
-const app = express()
-const sql = postgres(process.env.DATABASE_URL)
+const sql = postgres("postgresql://matt:volleyball@localhost:5432/btb")
 
 app.use(express.json())
 app.use(morgan('tiny'))
@@ -171,6 +172,15 @@ app.get('/tasks/:id', async (req, res) => {
       const data = await sql`SELECT * FROM tasks WHERE user_id = ${id}`
       res.json(data)
    } catch (error) {
+      res.json(error)
+   }
+})
+
+app.get('/admins', async (req, res) => {
+   try{
+      const data = await sql `SELECT * FROM users WHERE admin = true`
+      res.json(data)
+   } catch(error){
       res.json(error)
    }
 })
