@@ -1,24 +1,21 @@
 // src/LoginForm.tsx
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent, useContext } from "react";
 import "./LoginForm.css";
 import BTBlogo from "../../assets/blue-ocean-logo-2.png";
 import { Link } from "react-router-dom";
+import BtbContext from '../../context/BtbContext.jsx'
 
-// Define the interface for the form state
-interface FormState {
-  email: string;
-  password: string;
-}
 
-const LoginForm: React.FC = () => {
+const LoginForm = () => {
+  const {login} = useContext(BtbContext)
   // Initialize form state
-  const [formState, setFormState] = useState<FormState>({
+  const [formState, setFormState] = useState({
     email: "",
     password: "",
   });
 
   // Handle input changes
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormState((prevState) => ({
       ...prevState,
@@ -27,18 +24,9 @@ const LoginForm: React.FC = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const login = async () =>{
-      await fetch('/login', {
-          method: "POST",
-          headers:{
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(formState)
-      })
-  }
-    login()
+    login(formState)
   };
 
   return (
