@@ -34,26 +34,38 @@ const Chat = ({ to, from }) => {
       getChats()
    }
 
+   const dateTimeFormat = (date) => {
+      const dateObj = new Date(date)
+      let dateFormated = dateObj.toDateString()
+      let hour = dateObj.getHours()
+      let minute = dateObj.getMinutes()
+
+      return `${hour}:${minute} | ${dateFormated}`
+   }
+
    return (
-      <>
+      <div className="chat-container">
          <button onClick={getChats}>REFRESH</button>
          <div className="chatbox">
             {messages.map( msg => 
                <div key={msg.id} className={'msg ' + (msg.from_user == from ? 'msgFrom' : 'msgTo')}>
                   {msg.body}
+                  <span className="msgTime">
+                     {dateTimeFormat(msg.date)}
+                  </span>
                </div>)
             }
          </div>
          <form onSubmit={handleSendMessage}>
-            <input 
+            <textarea className="chat-input"
                type='text'
                value={newMessage} 
                onChange={(e)=>{setNewMessage(e.target.value)}}
                placeholder='Write a message...'
-               ></input>
+               ></textarea>
             <input className="submit" type='submit' value='Send'></input>
          </form>
-      </>
+      </div>
    )
 }
 
