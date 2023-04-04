@@ -7,19 +7,19 @@ const Admins = () => {
     const {adminModal, admins} = useContext(BtbContext)
     
     const [tableData, setTableData] = useState(admins)
-    const [isDesc, setIsDesc] = useState(false)
+    const [isAsc, setIsAsc] = useState(true)
     const [newAdmin, setNewAdmin] = useState({
         "name":"",
         "email":"",
         "password":"",
     })
 
-    const sorted = async (val, order = isDesc) => {
+    const sorted = async (val, order = isAsc) => {
             const data = await admins
-            setIsDesc(order)
+            setIsAsc(order)
             const sorted= data.sort((a, b) => {
-                if (a[val] < b[val]) return isDesc ? 1 : -1;
-                if (a[val] > b[val]) return isDesc ? -1 : 1;
+                if (a[val] < b[val]) return isAsc ? -1 : 1;
+                if (a[val] > b[val]) return isAsc ? 1 : -1;
                 return 0;
               });
             setTableData(sorted)
