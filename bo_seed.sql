@@ -38,7 +38,7 @@ CREATE TABLE messages(
     to_user INTEGER NOT NULL,
     from_user INTEGER NOT NULL,
     body VARCHAR(255) NOT NULL,
-    date DATE NOT NULL,
+    date TIMESTAMP NOT NULL,
     FOREIGN KEY (to_user) REFERENCES users(id),
     FOREIGN KEY (from_user) REFERENCES users(id)
 );
@@ -81,7 +81,7 @@ INSERT INTO messages (to_user, from_user, body, date) VALUES ( 2, 1, 'Hello, do 
 INSERT INTO messages (to_user, from_user, body, date) VALUES ( 3, 1, 'u got plans this weekends ?','2023-02-15');
 INSERT INTO messages (to_user, from_user, body, date) VALUES ( 4, 5, 'how did the job interview go ?','2023-01-10');
 INSERT INTO messages (to_user, from_user, body, date) VALUES ( 5, 3, 'Hey, have you finished that project yet?', '2023-03-12');
-INSERT INTO messages (to_user, from_user, body, date) VALUES ( 1, 2, 'Hi, thanks for offering to help with the algorithm. Can we schedule a time?', '2023-03-21');
+INSERT INTO messages (to_user, from_user, body, date) VALUES ( 1, 2, 'I would be happy to help. Can we schedule a time?', '2023-03-21');
 INSERT INTO messages (to_user, from_user, body, date) VALUES ( 3, 4, 'Did you hear about the new game that just came out?', '2023-02-20');
 INSERT INTO messages (to_user, from_user, body, date) VALUES ( 2, 3, 'Can you recommend any good books on programming?', '2023-01-15');
 INSERT INTO messages (to_user, from_user, body, date) VALUES ( 1, 4, 'How was your vacation? I hope you had a good time.', '2023-01-20');

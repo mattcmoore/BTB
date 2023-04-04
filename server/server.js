@@ -203,22 +203,33 @@ app.get("/tasks/:id", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`listening on port ${PORT}`);
-});
-
 app.get('/messages/:to/:from', async (req, res) => {
   let { to, from } = req.params
 
   try {
       const data = await sql
-          `SELECT * FROM messages
-          WHERE (to_user = ${to} AND from_user = ${from}) 
-          OR (to_user = ${from} AND from_user = ${to})
-          ORDER BY date ASC`
+        `SELECT * FROM messages
+        WHERE (to_user = ${to} AND from_user = ${from}) 
+        OR (to_user = ${from} AND from_user = ${to})
+        ORDER BY date DESC`
       res.json(data)
   } catch (error) {
       res.json(error)
+  }
+})
+
+app.post('/messages', async (req, res) => {
+  let { to, from, body } = req.body
+
+  try {
+    const data = await sql
+      `INSERT INTO messages
+      (to_user, from_user, body, date)
+      VALUES 
+      (${to}, ${from}, ${body}, NOW())`
+    res.json(data)
+  } catch (error) {
+    res.json(error)
   }
 })
 
