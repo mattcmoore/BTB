@@ -149,7 +149,7 @@ app.post("/login", async (req, res) => {
     if (match) {
       const payload = { name: name, userId: userId, admin: admin };
       const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
-      res.cookie("jwt", token, { httpOnly: true });
+      res.cookie("jwt", token);
       res.json({ msg: "logged in", ...payload });
     } else {
       res.json({ msg: "Email or password does not exist" });

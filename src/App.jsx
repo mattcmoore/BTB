@@ -11,7 +11,6 @@ function App() {
         <Router>
           <Routes>
             <Route exact={true} path="/" element={<ProtectedHome />} />
-
             <Route path="/signup" element={<SignUpForm />} />
           </Routes>
         </Router>
