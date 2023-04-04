@@ -8,19 +8,24 @@ const Admins = () => {
     
     const [tableData, setTableData] = useState(admins)
     const [isDesc, setIsDesc] = useState(false)
+    const [newAdmin, setNewAdmin] = useState({
+        "name":"",
+        "email":"",
+        "password":"",
+    })
 
-    const sortData = async (val, order) => {
+    const sorted = async (val, order = isDesc) => {
             const data = await admins
-            console.log(data)
+            setIsDesc(order)
             const sorted= data.sort((a, b) => {
-                if (a.name < b.name) return isDesc ? 1 : -1;
-                if (a.name > b.name) return isDesc ? -1 : 1;
+                if (a[val] < b[val]) return isDesc ? 1 : -1;
+                if (a[val] > b[val]) return isDesc ? -1 : 1;
                 return 0;
               });
             setTableData(sorted)
-            setOrder(!isDesc)
     }   
-    sortData('name')
+
+    sorted('name')
 
     const headers = [
         {key: "name", label: "name"},
@@ -28,14 +33,22 @@ const Admins = () => {
         {key: "password", label: "password"},
     ]
 
+    const handleChange = (event) => {
+        const {name, value} = event.target
+        setNewAdmin({...newAdmin, [name] : value}) 
+    }
+
     if(adminModal==='admins'){
         return(
             <div className="admin-table">
                 <table>
+                        <caption>
+                           (Add New Admin Or Click To Edit)
+                        </caption>
                         <thead>
                             <tr>
-                                {headers.map( (row) => {
-                                    return <th key={row.key}>{row.label}</th>
+                                {headers.map( row => {
+                                    return <th key={row.key} name={row.id}>{row.label}</th>
                                 })}
                             </tr>
                         </thead>
@@ -46,7 +59,13 @@ const Admins = () => {
                                     <td>{row.email}</td>
                                     <td>{row.password}</td>
                                 </tr>
-                            })}     
+                            })}
+                            <tr key={tableData.length+1}>
+                                <td><input type="text" name="name" value={newAdmin.name} onChange={handleChange}/></td>
+                                <td><input type="text" name="email" value={newAdmin.email} onChange={handleChange}/></td>
+                                <td><input type="text" name="password" value={newAdmin.password} onChange={handleChange}/></td>
+                            </tr>
+                          
                         </tbody>
                 </table>
             </div>
