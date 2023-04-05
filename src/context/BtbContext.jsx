@@ -7,6 +7,11 @@ export const BtbProvider = ({children}) =>{
     const [classes, setClasses] = useState(['this'])
     const [adminModal, setAdminModal] = useState('classes')
     const [admins, setAdmins] = useState([])
+    const [newAdmin, setNewAdmin] = useState({
+        name: "",
+        email: "",
+        password: "",
+    })
 
     const fetchUrl = 'http://localhost:3000';
 
@@ -28,7 +33,9 @@ export const BtbProvider = ({children}) =>{
             setClasses,
             adminModal,
             setAdminModal,
-            admins
+            admins,
+            newAdmin,
+            setNewAdmin,
         }}>
             {children}
         </BtbContext.Provider>

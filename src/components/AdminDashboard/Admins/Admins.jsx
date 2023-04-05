@@ -1,32 +1,34 @@
 import './Admins.css'
 import BtbContext from "../../../context/BtbContext"
-import React, {useState, useContext, useEffect, FC} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 
 
 const Admins = () => {
-    const {adminModal, admins} = useContext(BtbContext)
-    
-    const [tableData, setTableData] = useState(admins)
+    const {adminModal, admins, newAdmin, setNewAdmin} = useContext(BtbContext)
+    const [tableData, setTableData] = useState([])
     const [isAsc, setIsAsc] = useState(true)
-    const [newAdmin, setNewAdmin] = useState({
-        "name":"",
-        "email":"",
-        "password":"",
-    })
+    const [sortValue, setSortValue] = useState('')
+    const [isValid, setIsValid] = useState(true)
 
-    const sorted = async (val, order = isAsc) => {
+
+    const [test, setTest] = useState('')
+
+    const sorted = async () => {
+            const val = sortValue
             const data = await admins
-            setIsAsc(order)
-            const sorted= data.sort((a, b) => {
+            const sorted = data.sort((a, b) => {
                 if (a[val] < b[val]) return isAsc ? -1 : 1;
                 if (a[val] > b[val]) return isAsc ? 1 : -1;
                 return 0;
               });
             setTableData(sorted)
-    }   
-
-    sorted('name')
-
+    }
+    
+    useEffect(()=>{
+        setIsAsc(true)
+        setSortValue('name')
+        sorted()
+    })
     const headers = [
         {key: "name", label: "name"},
         {key: "email", label: "email"},
@@ -35,7 +37,20 @@ const Admins = () => {
 
     const handleChange = (event) => {
         const {name, value} = event.target
-        setNewAdmin({...newAdmin, [name] : value}) 
+        setNewAdmin(prev => {
+            return {...prev, [name] : value }
+        })
+    }
+
+    const handleEnter = (event) => {
+        if(event.keyCode === 13){
+            console.log('enter')
+            if( Object.keys(newAdmin).every(key => newAdmin[key] !== "" && isValid === true) ){
+                console.log('submit')
+            }else {
+                console.log('focus next')
+            }
+        }
     }
 
     if(adminModal==='admins'){
@@ -61,9 +76,9 @@ const Admins = () => {
                                 </tr>
                             })}
                             <tr key={tableData.length+1}>
-                                <td><input type="text" name="name" value={newAdmin.name} onChange={handleChange}/></td>
-                                <td><input type="text" name="email" value={newAdmin.email} onChange={handleChange}/></td>
-                                <td><input type="text" name="password" value={newAdmin.password} onChange={handleChange}/></td>
+                                <td><input type="text" name="name" value={newAdmin['name']} onChange={handleChange} onKeyDown={handleEnter}/></td>
+                                <td><input type="text" name="email" value={newAdmin.email} onChange={handleChange} onKeyDown={handleEnter}/></td>
+                                <td><input type="text" name="password" value={newAdmin.password} onChange={handleChange} onKeyDown={handleEnter}/></td>
                             </tr>
                           
                         </tbody>
