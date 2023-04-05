@@ -286,17 +286,51 @@
 }
 
 .notes-container {
+    position:relative;
     font-weight: proxima-nova, sans-serif;
-    width: 50%;
-    text-align: left;
-    padding-left: 100px;
+    width: 40%;
+    /* text-align: left; */
     display: flex;
     flex-direction: column;
+    left: 7.5%;
+}
+
+.note-container {
+    position:absolute;
+    left:0;
+    right:0;
+    display:block;
+    width: 100%;
+
+}
+
+.header-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#notes-title {
+    margin-right:2%;
+}
+
+.new-note {
+    position: absolute;
+    right: 0;
+    width: auto;
+    border: 1px solid black; 
+    border-radius: 10px;   
+    cursor: pointer;
+}
+
+.note-btn {
+    margin: 5px 5px;
 }
 
 .note-item {
     height: 10%;
-    width: 80%;
+    width: 100%;
     border: 1px solid black;
     border-radius: 10px;
 }

@@ -3,7 +3,8 @@ import React, { useState , useContext} from "react";
 import BtbContext from '../../context/BtbContext'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import BTBlogo from '../../assets/blue-ocean-logo-2.png'
+import BTBlogo from '../../assets/blue-ocean-logo-2.png';
+import StudentDashboardModal from './StudentDashboardModal';
 
 
 export function StudentChecklist () {
@@ -13,15 +14,15 @@ export function StudentChecklist () {
     const [startDate, setStartDate] = useState(new Date());
     const [mouseover, setMouseover] = useState(false);
 
-    const { notes } = useContext(BtbContext)
+    const { notes, addNewNote, openNoteModal, closeNoteModal } = useContext(BtbContext)
 
     const handleMouseover = () => {
         setMouseover(false)
     }
 
-    const [checked, setChecked]: Array<any> = useState([]); 
-    const handleCheck = (e: React.FormEvent<HTMLInputElement>) => {
-        let updatedList: Array<any> = [...checked];
+    const [checked, setChecked] = useState([]); 
+    const handleCheck = (e) => {
+        let updatedList = [...checked];
         if (e.target.checked) {
             updatedList = [...checked, e.target.value]
         } else {
@@ -29,6 +30,8 @@ export function StudentChecklist () {
         }
         setChecked(updatedList);
     }
+
+
 
     return (
         <div className="main-container">
@@ -102,26 +105,34 @@ export function StudentChecklist () {
                     </div>
                 </div>
                 <div className="notes-container">
-                    <h2 className="column-title">
-                        Notes
-                    </h2>
+                    <div className="header-btn">
+                        <h2 className="column-title" id="notes-title">
+                            Notes
+                        </h2>
+                        <div className="new-note" onClick={openNoteModal}>
+                            <div className="note-btn">
+                                New note
+                            </div>
+                        </div>
+                    </div>
                     <div className="notes-section">
+                        {/* <form onSubmit={handleSubmit}>
+                            <input type="text" value={text} onChange={handleChange} />
+                            <input type="text" />
+                        </form> */}
                         <div className="note-container">
                             {notes.map((note) => (
                                 <div className="note-item">
-                                    <span className="note-actual">{note.body}</span>
+                                    <p>
+                                        <span className="note-actual">{note.body}</span>
+                                    </p>
                                 </div>
                             ))}
-                            <div className="note-item">
-                                <p>Gotta get my gear cleaned for turn in, it will take about a week.</p>
-                            </div>
-                            <div className="note-item">
-                                <p>The day dawned bleak and chill, a moving wall of grey light out of the Northeast which, instead of dissolving into moisture, seemed to disintegrate into minute and venomous particles, like dust that, when Dilsy opened the door of the cabin and emerged, needled laterally into her flesh, precipitating not so much a moisture as a substance partaking of the quality of thin, not quite congealed oil. </p>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {addNewNote && (<StudentDashboardModal/>)}
         </div>
     )
 }
