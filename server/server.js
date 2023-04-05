@@ -23,6 +23,36 @@ app.use(cookieParser());
 
 app.use(express.static("../dist"));
 
+
+app.get("/classes", async (req, res) => {
+  try {
+    console.log("Fetching classes...");
+    const data = await sql`SELECT * FROM mcsps`;
+    console.log("Classes fetched:", data);
+    res.json(data);
+  } catch (error) {
+    console.error("Error fetching classes:", error);
+    res.json(error);
+  }
+});
+
+app.post("/createNewClass", async (req, res) => {
+  const { start_date, end_date, code, mcsp_name } = req.body;
+  try {
+    // Insert the new class into the database
+    const data = await sql`
+      INSERT INTO mcsps (start_date, end_date, code, mcsp_name)
+      VALUES (${start_date},${end_date},${code},${mcsp_name})
+      RETURNING id`;
+    const classId = data[0].id;
+
+    res.json({ msg: "Class created", classId });
+  } catch (error) {
+    res.status(500).json({ msg: "Failed to create class" });
+  }
+});
+
+
 app.post("/makeStudent", async (req, res) => {
   const {
     code,
