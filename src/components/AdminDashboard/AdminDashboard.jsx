@@ -1,5 +1,5 @@
 import './AdminDashboard.css'
-import AdminNavbar from './AdminNavbar/AdminNavbar.tsx'
+import AdminNavbar from './AdminNavbar/AdminNavbar.jsx'
 
 export const AdminDashboard = () => {
     return(

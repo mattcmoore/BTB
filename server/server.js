@@ -23,6 +23,15 @@ app.use(cookieParser());
 
 app.use(express.static("../dist"));
 
+app.route('/notes').get( async (req, res) => {
+   try {
+       const data = await sql`SELECT * FROM notes`
+       res.json(data)
+   } catch (error) {
+       res.json(error)
+   }
+})
+
 app.post("/makeStudent", async (req, res) => {
   const {
     code,
@@ -75,46 +84,6 @@ app.post("/makeStudent", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-app.route('/notes').get( async (req, res) => {
-   try {
-       const data = await sql`SELECT * FROM notes`
-       res.json(data)
-   } catch (error) {
-       res.json(error)
-   }
-})
-
-app.post('/makeStudent', async (req,res)=>{
-   const {code, name, email, password, separationDate, branch, hasFamily, livesInBarracks} = req.body
-   const codes = await sql`
-   SELECT id, code FROM mcsps
-   `
-   let classId = null
-   console.log(codes)
-   codes.forEach(element => {
-      if(element.code === code){
-         classId = element.id
-         console.log('first')
-      } 
-   });
-   if(classId){
-        await bcrypt.hash(password, saltRounds, async (err, hash)=>{
-            if(err){
-                res.status(500).json({msg:'Error hashing password'})
-            } else {
-                const userId = await sql`
-                INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks)
-                VALUES (${email}, ${hash}, ${name}, false, ${classId}, ${separationDate}, ${branch}, ${hasFamily}, ${livesInBarracks}) returning id
-                `
-                console.log(userId)
-            }
-        })
-   } else{
-      res.json({msg: 'Invalid code'})
-   }
-})
-=======
 app.post("/makeAdmin", async (req, res) => {
   const { email, password, name } = req.body;
   const emailsInUse = await sql`
@@ -143,7 +112,6 @@ app.post("/makeAdmin", async (req, res) => {
     res.json({ msg: "Email in use" });
   }
 });
->>>>>>> Developer_Branch
 
 app.patch("/updateAdmin", async (req, res) => {
   const { email, password, name, id } = req.body;

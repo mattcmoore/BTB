@@ -5,6 +5,7 @@ import AdminDashboard from './components/AdminDashboard/AdminDashboard'
 import StudentDashboard from './components/StudentDashboard/StudentDashboard'
 import SignUpForm from './components/SignupForm/SignUpForm'
 import {BtbProvider} from './context/BtbContext'
+import ProtectedHome from './components/ProtectedHome/ProtectedHome'
 
 function App() {
 
@@ -15,7 +16,7 @@ function App() {
       <Router>
         <Routes>
           <Route exact={true} path='/' element={
-            <LoginForm/>
+            <ProtectedHome/>
           }/>
           <Route path='/admin' element={
             <AdminDashboard/>
