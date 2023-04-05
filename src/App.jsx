@@ -4,6 +4,7 @@ import LoginForm from './components/LoginForm/LoginForm'
 import AdminDashboard from './components/AdminDashboard/AdminDashboard'
 import StudentDashboard from './components/StudentDashboard/StudentDashboard'
 import SignUpForm from './components/SignupForm/SignUpForm'
+import NewClassForm from "./components/NewClassForm/NewClassForm"
 import {BtbProvider} from './context/BtbContext'
 import ProtectedHome from './components/ProtectedHome/ProtectedHome'
 
