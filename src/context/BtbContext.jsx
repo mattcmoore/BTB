@@ -27,9 +27,9 @@ export const BtbProvider = ({children}) =>{
         getAdmins()
     },[])
 
-    const makeAdmin = async () => {
-        const req = 
-    }
+    // const makeAdmin = async () => {
+    //     const req = 
+    // }
 
     return(
         <BtbContext.Provider value={{

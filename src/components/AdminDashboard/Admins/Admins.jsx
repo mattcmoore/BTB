@@ -5,13 +5,11 @@ import React, {useState, useContext, useEffect} from 'react'
 
 const Admins = () => {
     const {adminModal, admins, newAdmin, setNewAdmin} = useContext(BtbContext)
+    
     const [tableData, setTableData] = useState([])
     const [isAsc, setIsAsc] = useState(true)
     const [sortValue, setSortValue] = useState('')
     const [isValid, setIsValid] = useState(true)
-
-
-    const [test, setTest] = useState('')
 
     const sorted = async () => {
             const val = sortValue
