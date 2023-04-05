@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 const BtbContext = createContext()
 
 export const BtbProvider = ({children}) =>{
+    const fetchURL = 'http://localhost:3000'
     const [classes, setClasses] = useState(['this'])
     const [notes, setNotes] = useState([]);
     const [addNewNote, setAddNewNote] = useState(false);
