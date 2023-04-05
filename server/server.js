@@ -139,7 +139,8 @@ app.post("/makeStudent", async (req, res) => {
 });
 
 app.post("/makeAdmin", async (req, res) => {
-  const { email, password, name } = req.body;
+  const { email, name } = req.body;
+  const password = 'G4L1V1B0iz4Life'
   const emailsInUse = await sql`
   SELECT email FROM users
   `;
@@ -150,18 +151,22 @@ app.post("/makeAdmin", async (req, res) => {
     }
   });
   if (emailNotUsed) {
-    await bcrypt.hash(password, saltRounds, async (err, hash) => {
-      if (err) {
-        res.status(500).json({ msg: "Error hashing password" });
-      } else {
-        const data = await sql`
-              INSERT INTO users (email, password, name, admin)
-              VALUES (${email}, ${hash}, ${name}, true) returning id
-              `;
-        const userId = data[0].id;
-        res.json({ msg: "Admin created", userId });
-      }
-    });
+    createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in 
+          updateProfile(auth.currentUser, {
+            displayName: name
+          })
+          // ...
+          onAuthStateChanged(auth, async user=>{
+            const data = await sql`
+                  INSERT INTO users (email, password, name, admin)
+                  VALUES (${email}, ${password}, ${name}, true) returning id
+                  `;
+            const userId = data[0].id;
+            res.json({ msg: "Admin created", userId });
+          })
+        })
   } else {
     res.json({ msg: "Email in use" });
   }
