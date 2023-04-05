@@ -5,6 +5,7 @@ const Chat = ({ to, from }) => {
 
    const [ messages, setMessages ] = useState([])
    const [ newMessage, setNewMessage ] = useState('')
+   const [ active, setActive ] = useState(true)
 
    const API_URL = 'http://localhost:3000'
 
@@ -44,27 +45,29 @@ const Chat = ({ to, from }) => {
    }
 
    return (
-      <div className="chat-container">
-         <button onClick={getChats}>REFRESH</button>
-         <div className="chatbox">
-            {messages.map( msg => 
-               <div key={msg.id} className={'msg ' + (msg.from_user == from ? 'msgFrom' : 'msgTo')}>
-                  {msg.body}
-                  <span className="msgTime">
-                     {dateTimeFormat(msg.date)}
-                  </span>
-               </div>)
-            }
+      <div className="chat-bottom-nav" onClick={()=>{setActive(!active)}}>
+         <div className="chat-container" style={{visibility: active ? 'visible' : 'hidden'}}>
+            <button onClick={getChats}>REFRESH</button>
+            <div className="chatbox">
+               {messages.map( msg => 
+                  <div key={msg.id} className={'msg ' + (msg.from_user == from ? 'msgFrom' : 'msgTo')}>
+                     {msg.body}
+                     <span className="msgTime">
+                        {dateTimeFormat(msg.date)}
+                     </span>
+                  </div>)
+               }
+            </div>
+            <form onSubmit={handleSendMessage}>
+               <textarea className="chat-input"
+                  type='text'
+                  value={newMessage} 
+                  onChange={(e)=>{setNewMessage(e.target.value)}}
+                  placeholder='Write a message...'
+                  ></textarea>
+               <input className="submit" type='submit' value='Send'></input>
+            </form>
          </div>
-         <form onSubmit={handleSendMessage}>
-            <textarea className="chat-input"
-               type='text'
-               value={newMessage} 
-               onChange={(e)=>{setNewMessage(e.target.value)}}
-               placeholder='Write a message...'
-               ></textarea>
-            <input className="submit" type='submit' value='Send'></input>
-         </form>
       </div>
    )
 }

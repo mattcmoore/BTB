@@ -4,14 +4,16 @@ import './Chatbar.css'
 
 const Chatbar = () => {
    const [ sessions, setSessions ] = useState([
-      {to: '1', from: '2'},
-      {to: '3', from: '5'}
+      {to: '1', from: '2', active: true},
    ])
+
+   
 
    return (
       <div className="chatbar">
          {sessions.map(session => 
-            <Chat to={session.to} from={session.from}/>
+               <Chat to={session.to} 
+               from={session.from} />
             )}
       </div>
    )
