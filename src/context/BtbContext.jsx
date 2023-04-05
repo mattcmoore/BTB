@@ -10,11 +10,14 @@ export const BtbProvider = ({children}) =>{
     const [classes, setClasses] = useState(['this'])
     const [adminModal, setAdminModal] = useState('classes')
     const [admins, setAdmins] = useState([])
-    const [newAdmin, setNewAdmin] = useState({
+    const emptyAdmin = {
         name: "",
         email: "",
         password: "",
-    })
+        admin: true,
+    }
+    const [adminUpdate, setAdminUpdate] = useState({})
+    const [newAdmin, setNewAdmin] = useState(emptyAdmin)
 
     const fetchUrl = 'http://localhost:3000';
 
@@ -22,6 +25,19 @@ export const BtbProvider = ({children}) =>{
         const res = await fetch(`${fetchUrl}/admins`)
         const data = await res.json()
         setAdmins(data)
+    }
+
+    const makeAdmin = async (admin) => {
+        const req = admin
+        const res = await fetch(`${fetchUrl}/makeAdmin`, {
+            method: 'POST',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify(req)})
+        console.log(res.msg.json())
+        getAdmins()
+        setNewAdmin(emptyAdmin)
     }
     
     useEffect(()=>{
@@ -39,6 +55,9 @@ export const BtbProvider = ({children}) =>{
             admins,
             newAdmin,
             setNewAdmin,
+            makeAdmin,
+            adminUpdate,
+            setAdminUpdate,
         }}>
             {children}
         </BtbContext.Provider>
