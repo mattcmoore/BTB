@@ -10,6 +10,22 @@ export const BtbProvider = ({children}) =>{
     const [classes, setClasses] = useState(['this'])
     const [user, setUser] = useState(null)
     
+    const createNewClass = async (formData) => {
+        const res = await fetch('http://localhost:3000/createNewClass', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+        const data = await res.json();
+        if (data.msg === 'Class created') {
+          return data.classId;
+        } else {
+          throw new Error('Failed to create class');
+        }
+      };
+
     const login = async (formState) =>{
         const res = await fetch(`${fetchURL}/login`, {
             method: "POST",
@@ -75,7 +91,7 @@ export const BtbProvider = ({children}) =>{
             user,
             makeUser,
             logOut,
-            
+            createNewClass,
         }}>
             {children}
         </BtbContext.Provider>
