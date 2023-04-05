@@ -6,4 +6,5 @@ export default defineConfig({
   plugins: [react({
     include: "../src/components/StudentChecklist.tsx",
 })],
+
 })

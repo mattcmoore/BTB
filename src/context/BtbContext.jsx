@@ -1,9 +1,12 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
+import { useEffect } from "react";
+
 
 
 const BtbContext = createContext()
 
 export const BtbProvider = ({children}) =>{
+    const fetchURL = 'http://localhost:3000'
     const [classes, setClasses] = useState(['this'])
     const [adminModal, setAdminModal] = useState('classes')
     const [admins, setAdmins] = useState([])
@@ -26,10 +29,6 @@ export const BtbProvider = ({children}) =>{
         setAdminModal('admins')
         getAdmins()
     },[])
-
-    // const makeAdmin = async () => {
-    //     const req = 
-    // }
 
     return(
         <BtbContext.Provider value={{

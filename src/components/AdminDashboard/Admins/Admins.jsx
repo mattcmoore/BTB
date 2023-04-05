@@ -5,7 +5,7 @@ import React, {useState, useContext, useEffect} from 'react'
 
 const Admins = () => {
     const {adminModal, admins, newAdmin, setNewAdmin} = useContext(BtbContext)
-    
+
     const [tableData, setTableData] = useState([])
     const [isAsc, setIsAsc] = useState(true)
     const [sortValue, setSortValue] = useState('')
@@ -74,7 +74,7 @@ const Admins = () => {
                                 </tr>
                             })}
                             <tr key={tableData.length+1}>
-                                <td><input type="text" name="name" value={newAdmin['name']} onChange={handleChange} onKeyDown={handleEnter}/></td>
+                                <td><input type="text" name="name" value={newAdmin.name} onChange={handleChange} onKeyDown={handleEnter}/></td>
                                 <td><input type="text" name="email" value={newAdmin.email} onChange={handleChange} onKeyDown={handleEnter}/></td>
                                 <td><input type="text" name="password" value={newAdmin.password} onChange={handleChange} onKeyDown={handleEnter}/></td>
                             </tr>
