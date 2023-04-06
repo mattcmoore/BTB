@@ -1,0 +1,10 @@
+.search-suggestion {
+}
+
+.all-suggestions {
+   position: absolute;
+   bottom: 100%;
+   display: flex;
+   flex-direction: column-reverse;
+   
+}

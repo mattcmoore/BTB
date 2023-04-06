@@ -8,12 +8,17 @@ const ChatSearch = () => {
    const [ suggestions, setSuggestions ] = useState([])
 
    const populateSuggestions = async (search) => {
-      const response = await fetch(`${API_URL}/usersSearch/`, {
-         method: 'POST',
-         body: JSON.stringify({search})
-      })
-      const data = await response.json()
-      setSuggestions(data)
+      if(search){
+         const response = await fetch(`${API_URL}/usersSearch/`, {
+            method: 'POST',
+            headers: {
+               "Content-Type": "application/json"
+             },
+            body: JSON.stringify({search})
+         })
+         const data = await response.json()
+         setSuggestions(data)
+      } else setSuggestions([])
    }
 
    const handleChange = (e) => {
@@ -29,6 +34,13 @@ const ChatSearch = () => {
                placeholder='Search'
                onChange={handleChange}></input>
          </form>
+         <div className='all-suggestions'>
+            {suggestions.map(user=>
+               <div className='search-suggestion'>
+                  {user.name}
+               </div>
+            )}
+         </div>
       </div>
    )
 }

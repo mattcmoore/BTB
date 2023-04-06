@@ -235,7 +235,6 @@ app.post('/messages', async (req, res) => {
 
 app.post('/usersSearch/', async (req, res) => {
   let { search } = req.body
-  console.log(search);
 
   try {
     const data = await sql
