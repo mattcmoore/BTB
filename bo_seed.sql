@@ -97,3 +97,4 @@ INSERT INTO messages (to_user, from_user, body, date) VALUES ( 5, 2, 'Do you wan
 
 INSERT INTO notes (body, date, author) VALUES ('Gotta layout and clean my gear before turn in. Will take about a week.', '03/21/2023', 3);
 INSERT INTO notes (body, date, author) VALUES ('Need to contact my S1 so I can see if my separation orders have been created yet. I also need to contact my S2 shop to see if I can get read off.', '02/19/2023', 3);
+INSERT INTO notes (body, date, author) VALUES ('This is a test. If you see this rendered, it was a success', '02/19/2023', 12);

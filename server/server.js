@@ -45,9 +45,11 @@ app.use(cookieParser());
 
 app.use(express.static("../dist"));
 
-app.route('/notes').get( async (req, res) => {
+app.route('/notes/:author').get( async (req, res) => {
+   const { author } = req.params
    try {
-       const data = await sql`SELECT * FROM notes`
+       const data = await sql`SELECT * FROM notes WHERE author = ${author};`
+       console.log(data)
        res.json(data)
    } catch (error) {
        res.json(error)

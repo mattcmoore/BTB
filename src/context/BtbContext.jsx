@@ -13,13 +13,15 @@ export const BtbProvider = ({children}) =>{
     
 
     useEffect(() => {
-        const fetchNotes = async () => {
-            const response = await fetch(`${fetchURL}/notes`);
-            const data = await response.json();
-            console.log(data);
-            setNotes(data);
-        };
-        fetchNotes();
+        // if (user) {
+            const fetchNotes = async () => {
+                const response = await fetch(`${fetchURL}/notes`);
+                const data = await response.json();
+                console.log(data);
+                setNotes(data);
+            };
+            fetchNotes();
+        // }
     }, [])
 
     const openNoteModal = () => {
@@ -29,22 +31,6 @@ export const BtbProvider = ({children}) =>{
     const closeNoteModal = () => {
         setAddNewNote(false)
     }
-
-    const createNewClass = async (formData) => {
-        const res = await fetch('http://localhost:3000/createNewClass', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(formData)
-        });
-        const data = await res.json();
-        if (data.msg === 'Class created') {
-          return data.classId;
-        } else {
-          throw new Error('Failed to create class');
-        }
-      };
 
     const createNewClass = async (formData) => {
         const res = await fetch('http://localhost:3000/createNewClass', {
@@ -136,7 +122,7 @@ export const BtbProvider = ({children}) =>{
             user,
             makeUser,
             logOut,
-            createNewClass,createNewClass,
+            createNewClass,
         }}>
             {children}
         </BtbContext.Provider>
