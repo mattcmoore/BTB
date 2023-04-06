@@ -199,7 +199,7 @@ app.get("/tasks/:id", async (req, res) => {
     const data = await sql`SELECT * FROM tasks WHERE user_id = ${id}`;
     res.json(data);
   } catch (error) {
-    res.json(error);
+    res.status(500).json(error);
   }
 });
 
@@ -211,10 +211,10 @@ app.get('/messages/:to/:from', async (req, res) => {
         `SELECT * FROM messages
         WHERE (to_user = ${to} AND from_user = ${from}) 
         OR (to_user = ${from} AND from_user = ${to})
-        ORDER BY date DESC`
+        ORDER BY date DESC`;
       res.json(data)
   } catch (error) {
-      res.json(error)
+      res.status(500).json(error)
   }
 })
 
@@ -226,10 +226,26 @@ app.post('/messages', async (req, res) => {
       `INSERT INTO messages
       (to_user, from_user, body, date)
       VALUES 
-      (${to}, ${from}, ${body}, NOW())`
+      (${to}, ${from}, ${body}, NOW())`;
     res.json(data)
   } catch (error) {
-    res.json(error)
+    res.status(500).json(error)
+  }
+})
+
+app.post('/usersSearch/', async (req, res) => {
+  let { search } = req.body
+  console.log(search);
+
+  try {
+    const data = await sql
+      `SELECT name, id 
+      FROM users 
+      WHERE name ILIKE ${'%' + search + '%'}`;
+
+    res.json(data)
+  } catch (error) {
+    res.status(500).json({error: 'server error'})
   }
 })
 

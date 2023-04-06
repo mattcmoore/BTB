@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
 import './Chat.css'
 
+import { API_URL } from "../Chatbar"
+
 const Chat = ({ to, from }) => {
 
    const [ messages, setMessages ] = useState([])
    const [ newMessage, setNewMessage ] = useState('')
    const [ active, setActive ] = useState(true)
-
-   const API_URL = 'http://localhost:3000'
 
    const getChats = async () => {
       let response = await fetch(`${API_URL}/messages/${to}/${from}`)
@@ -45,7 +45,8 @@ const Chat = ({ to, from }) => {
    }
 
    return (
-      <div className="chat-bottom-nav" onClick={()=>{setActive(!active)}}>
+      <div className="chat-bottom-nav">
+         <div className="chat-name" onClick={()=>{setActive(!active)}}></div>
          <div className="chat-container" style={{visibility: active ? 'visible' : 'hidden'}}>
             <button onClick={getChats}>REFRESH</button>
             <div className="chatbox">
