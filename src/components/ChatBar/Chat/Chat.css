@@ -29,8 +29,9 @@
    font-size: smaller;
    visibility: hidden;
    position: absolute;
-   right: 0;
-   bottom: 0;
+   left: 8px;
+   bottom: -8px;
+   width: max-content;
    
    z-index: 10;
    background-color: rgba(175, 175, 175, 0.685);
@@ -40,8 +41,9 @@
    font-size: smaller;
    visibility: hidden;
    position: absolute;
-   left: 0;
-   bottom: 0;
+   right: 8px;
+   bottom: -8px;
+   width: max-content;
    
    z-index: 10;
    background-color: rgba(175, 175, 175, 0.685);
@@ -73,13 +75,16 @@
    margin: .5px;
    outline: 1px black solid;
    position: relative;
+   display: flex;
+   justify-content: space-between;
+   padding: 10px;
 }
 
 .chat-name {
    background-color: rgb(228, 228, 228);
-   margin: 10px;
-   height: 100%;
+   max-height: 100%;
    width: 100%;
+   padding: 16px;
    
    transition: background-color 0.25s;
 }
@@ -87,4 +92,11 @@
 .chat-name:hover {
    background-color: rgb(197, 197, 197);
    cursor: pointer;
+}
+
+.close {
+   align-self: center;
+   padding: 3px;
+   border: 1px black solid;
+   border-radius: 8px;
 }

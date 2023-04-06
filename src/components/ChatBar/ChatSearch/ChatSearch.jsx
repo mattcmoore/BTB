@@ -3,7 +3,7 @@ import './ChatSearch.css'
 
 import { API_URL } from '../Chatbar'
 
-const ChatSearch = () => {
+const ChatSearch = ({ newSession }) => {
    const [ searchField, setSearchField ] = useState('')
    const [ suggestions, setSuggestions ] = useState([])
 
@@ -36,7 +36,12 @@ const ChatSearch = () => {
          </form>
          <div className='all-suggestions'>
             {suggestions.map(user=>
-               <div className='search-suggestion'>
+               <div className='search-suggestion'
+                  onClick={()=>{
+                     newSession(user.id, user.name)
+                     setSuggestions([])
+                     setSearchField('')
+                  }}>
                   {user.name}
                </div>
             )}

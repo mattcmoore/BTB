@@ -3,7 +3,7 @@ import './Chat.css'
 
 import { API_URL } from "../Chatbar"
 
-const Chat = ({ to, from }) => {
+const Chat = ({ to, from, name, closeSession }) => {
 
    const [ messages, setMessages ] = useState([])
    const [ newMessage, setNewMessage ] = useState('')
@@ -46,7 +46,8 @@ const Chat = ({ to, from }) => {
 
    return (
       <div className="chat-bottom-nav">
-         <div className="chat-name" onClick={()=>{setActive(!active)}}></div>
+         <div className="chat-name" onClick={()=>setActive(!active)}>{name}</div>
+         <div className="close" onClick={()=>closeSession(to)}>X</div>
          <div className="chat-container" style={{visibility: active ? 'visible' : 'hidden'}}>
             <button onClick={getChats}>REFRESH</button>
             <div className="chatbox">
@@ -64,8 +65,7 @@ const Chat = ({ to, from }) => {
                   type='text'
                   value={newMessage} 
                   onChange={(e)=>{setNewMessage(e.target.value)}}
-                  placeholder='Write a message...'
-                  ></textarea>
+                  placeholder='Write a message...' ></textarea>
                <input className="submit" type='submit' value='Send'></input>
             </form>
          </div>
