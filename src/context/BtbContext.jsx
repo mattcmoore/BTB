@@ -9,20 +9,13 @@ export const BtbProvider = ({children}) =>{
     const [notes, setNotes] = useState([]);
     const [addNewNote, setAddNewNote] = useState(false);
     const [user, setUser] = useState(null);
+    // const userId = user.userId;
 
-    
-
-    useEffect(() => {
-        // if (user) {
-            const fetchNotes = async () => {
-                const response = await fetch(`${fetchURL}/notes`);
-                const data = await response.json();
-                console.log(data);
-                setNotes(data);
-            };
-            fetchNotes();
-        // }
-    }, [])
+    const fetchNotes = async () => {
+        const response = await fetch(`${fetchURL}/notes/${user.userId}`);
+        const data = await response.json();
+        setNotes(data);
+    };
 
     const openNoteModal = () => {
         setAddNewNote(true)
@@ -62,6 +55,7 @@ export const BtbProvider = ({children}) =>{
         } else {
             setUser(data)
             console.log(data)
+            fetchNotes(user)
         }
     }
 
@@ -123,6 +117,7 @@ export const BtbProvider = ({children}) =>{
             makeUser,
             logOut,
             createNewClass,
+            fetchNotes
         }}>
             {children}
         </BtbContext.Provider>

@@ -1,5 +1,5 @@
 import "./StudentDashboard.css";
-import React, { useState , useContext} from "react";
+import React, { useState , useContext, useEffect} from "react";
 import BtbContext from '../../context/BtbContext'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -14,11 +14,17 @@ export function StudentChecklist () {
     const [startDate, setStartDate] = useState(new Date());
     const [mouseover, setMouseover] = useState(false);
 
-    const { notes, addNewNote, openNoteModal, closeNoteModal } = useContext(BtbContext)
+    const { notes, addNewNote, openNoteModal, closeNoteModal, fetchNotes } = useContext(BtbContext)
 
     const handleMouseover = () => {
         setMouseover(false)
     }
+
+    useEffect(() => {
+        fetchNotes()
+    },[])
+
+
 
     const [checked, setChecked] = useState([]); 
     const handleCheck = (e) => {

@@ -11,9 +11,12 @@ const StudentDashboardModal = ({}) => {
     // const editMode = mode === 'edit' ? true : false;
     const fetchUrl = 'http://localhost:13000';
 
-    const { notes, addNewNote, openNoteModal, closeNoteModal } = useContext(BtbContext)
+    const { notes, addNewNote, openNoteModal, closeNoteModal, user } = useContext(BtbContext)
+    const [newNote, setNewNote] = useState({
 
+    })
 
+        //import user from context user.userId
     
     const postNote = async (e) => {
         e.preventDefault()
@@ -27,7 +30,7 @@ const StudentDashboardModal = ({}) => {
                 body: JSON.stringify({
                     "body": `${body}`,
                     "date": `${date}`,
-                    "author": `${author}`
+                    "author": `${user.userId}`
                 })
             })
         } catch(err) {
