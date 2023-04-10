@@ -32,6 +32,7 @@ const SignUpForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         makeUser(formData)
+        setTimeout(()=>{Navigate('/') }, 500)
     };
 
   return (
