@@ -7,6 +7,28 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 const { sq } = require("date-fns/locale");
+// Import the functions you need from the SDKs you need
+const { initializeApp } = require("firebase/app");
+const { getAuth, sendEmailVerification,createUserWithEmailAndPassword, onAuthStateChanged, updateProfile, signInWithEmailAndPassword, setPersistence, browserLocalPersistence, signOut } = require("firebase/auth");
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCMJF54HDsaSJ6k4OrVZ9EK796i18zAzVE",
+  authDomain: "barracks-to-boardroom.firebaseapp.com",
+  projectId: "barracks-to-boardroom",
+  storageBucket: "barracks-to-boardroom.appspot.com",
+  messagingSenderId: "72331003800",
+  appId: "1:72331003800:web:c139c86d8e26a48ad6cded",
+  measurementId: "G-HZRVT2BDF9",
+};
+
+// Initialize Firebase
+const init = initializeApp(firebaseConfig);
+
+const auth = getAuth(init);
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -22,6 +44,36 @@ app.use(cors("*"));
 app.use(cookieParser());
 
 app.use(express.static("../dist"));
+
+
+app.get("/classes", async (req, res) => {
+  try {
+    console.log("Fetching classes...");
+    const data = await sql`SELECT * FROM mcsps`;
+    console.log("Classes fetched:", data);
+    res.json(data);
+  } catch (error) {
+    console.error("Error fetching classes:", error);
+    res.json(error);
+  }
+});
+
+app.post("/createNewClass", async (req, res) => {
+  const { start_date, end_date, code, mcsp_name } = req.body;
+  try {
+    // Insert the new class into the database
+    const data = await sql`
+      INSERT INTO mcsps (start_date, end_date, code, mcsp_name)
+      VALUES (${start_date},${end_date},${code},${mcsp_name})
+      RETURNING id`;
+    const classId = data[0].id;
+
+    res.json({ msg: "Class created", classId });
+  } catch (error) {
+    res.status(500).json({ msg: "Failed to create class" });
+  }
+});
+
 
 app.post("/makeStudent", async (req, res) => {
   const {
@@ -55,18 +107,29 @@ app.post("/makeStudent", async (req, res) => {
       }
     });
     if (classId) {
-      await bcrypt.hash(password, saltRounds, async (err, hash) => {
-        if (err) {
-          res.status(500).json({ msg: "Error hashing password" });
-        } else {
-          const data = await sql`
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in 
+          updateProfile(auth.currentUser, {
+            displayName: name
+          })
+          // ...
+          onAuthStateChanged(auth, async user=>{
+            console.log('first')
+            const data = await sql`
                    INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks)
-                   VALUES (${email}, ${hash}, ${name}, false, ${classId}, ${separationDate}, ${branch}, ${hasFamily}, ${livesInBarracks}) returning id, admin, name, email
+                   VALUES (${email}, ${password}, ${name}, false, ${classId}, ${separationDate}, ${branch}, ${hasFamily}, ${livesInBarracks}) returning id, admin, name, email
                    `;
-          const userId = data[0];
-          res.json({...userId, msg:'logged in'});
-        }
-      });
+            const userId = data[0];
+            res.json({ ...userId, msg: "logged in" });
+          })
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          res.json(error)
+          // ..
+        });
     } else {
       res.json({ msg: "Invalid code" });
     }
@@ -76,7 +139,8 @@ app.post("/makeStudent", async (req, res) => {
 });
 
 app.post("/makeAdmin", async (req, res) => {
-  const { email, password, name } = req.body;
+  const { email, name } = req.body;
+  const password = 'G4L1V1B0iz4Life'
   const emailsInUse = await sql`
   SELECT email FROM users
   `;
@@ -87,18 +151,22 @@ app.post("/makeAdmin", async (req, res) => {
     }
   });
   if (emailNotUsed) {
-    await bcrypt.hash(password, saltRounds, async (err, hash) => {
-      if (err) {
-        res.status(500).json({ msg: "Error hashing password" });
-      } else {
-        const data = await sql`
-              INSERT INTO users (email, password, name, admin)
-              VALUES (${email}, ${hash}, ${name}, true) returning id
-              `;
-        const userId = data[0].id;
-        res.json({ msg: "Admin created", userId });
-      }
-    });
+    createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in 
+          updateProfile(auth.currentUser, {
+            displayName: name
+          })
+          // ...
+          onAuthStateChanged(auth, async user=>{
+            const data = await sql`
+                  INSERT INTO users (email, password, name, admin)
+                  VALUES (${email}, ${password}, ${name}, true) returning id
+                  `;
+            const userId = data[0].id;
+            res.json({ msg: "Admin created", userId });
+          })
+        })
   } else {
     res.json({ msg: "Email in use" });
   }
@@ -135,6 +203,7 @@ app.post("/login", async (req, res) => {
   let hash = "";
   let admin = null;
   let name = "";
+  let userId ;
   emails.forEach((mail) => {
     if (mail.email === email) {
       exists = true;
@@ -144,19 +213,26 @@ app.post("/login", async (req, res) => {
       name = mail.name;
     }
   });
+  const payload = { name: name, userId: userId, admin: admin };
   if (exists) {
-    const match = await bcrypt.compare(password, hash);
-    if (match) {
-      const payload = { name: name, userId: userId, admin: admin };
+    signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    // ...
+    onAuthStateChanged(auth, user=>{
+      console.log("first")
       const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
       res.cookie("jwt", token);
       res.json({ msg: "logged in", ...payload });
-    } else {
-      res.json({ msg: "Email or password does not exist" });
-    }
-  } else {
+    })
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
     res.json({ msg: "Email or password does not exist" });
-  }
+  });
+}
 });
 
 app.get("/checkToken", async (req, res) => {

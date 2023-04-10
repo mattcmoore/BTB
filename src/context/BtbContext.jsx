@@ -8,21 +8,32 @@ const BtbContext = createContext()
 export const BtbProvider = ({children}) =>{
     const fetchURL = 'http://localhost:3000'
     const [classes, setClasses] = useState(['this'])
-    const [adminModal, setAdminModal] = useState('classes')
-    const [admins, setAdmins] = useState([])
-    const emptyAdmin = {
-        name: "",
-        email: "",
-        password: "",
-        admin: true,
-    }
-    const [adminUpdate, setAdminUpdate] = useState({})
-    const [newAdmin, setNewAdmin] = useState(emptyAdmin)
+    const [user, setUser] = useState(null)
+    
+    const createNewClass = async (formData) => {
+        const res = await fetch('http://localhost:3000/createNewClass', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+        const data = await res.json();
+        if (data.msg === 'Class created') {
+          return data.classId;
+        } else {
+          throw new Error('Failed to create class');
+        }
+      };
 
-    const fetchUrl = 'http://localhost:3000';
-
-    const getAdmins = async () => {
-        const res = await fetch(`${fetchUrl}/admins`)
+    const login = async (formState) =>{
+        const res = await fetch(`${fetchURL}/login`, {
+            method: "POST",
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formState)
+        })
         const data = await res.json()
         setAdmins(data)
     }
@@ -50,14 +61,11 @@ export const BtbProvider = ({children}) =>{
         <BtbContext.Provider value={{
             classes,
             setClasses,
-            adminModal,
-            setAdminModal,
-            admins,
-            newAdmin,
-            setNewAdmin,
-            makeAdmin,
-            adminUpdate,
-            setAdminUpdate,
+            login,
+            user,
+            makeUser,
+            logOut,
+            createNewClass,
         }}>
             {children}
         </BtbContext.Provider>

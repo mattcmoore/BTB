@@ -44,10 +44,10 @@ CREATE TABLE messages(
 );
 
 
-INSERT INTO mcsps (start_date, end_date, code, mcsp_name) VALUES ( '2022-12-10', '2023-04-20', 'AAA1', 'MSCP-18');
-INSERT INTO mcsps (start_date, end_date, code, mcsp_name) VALUES ( '2022-02-10', '2023-06-20', 'BBB2', 'MSCP-19');
-INSERT INTO mcsps (start_date, end_date, code, mcsp_name) VALUES ( '2022-10-10', '2023-02-20', 'BAA3', 'MSCP-17');
-INSERT INTO mcsps (start_date, end_date, code, mcsp_name) VALUES ( '2022-08-10', '2022-12-20', 'BBA4', 'MSCP-16');
+INSERT INTO mcsps (start_date, end_date, code, mcsp_name) VALUES ( '2022-12-10', '2023-04-20', 'AAA1', 'MCSP-18');
+INSERT INTO mcsps (start_date, end_date, code, mcsp_name) VALUES ( '2022-02-10', '2023-06-20', 'BBB2', 'MCSP-19');
+INSERT INTO mcsps (start_date, end_date, code, mcsp_name) VALUES ( '2022-10-10', '2023-02-20', 'BAA3', 'MCSP-17');
+INSERT INTO mcsps (start_date, end_date, code, mcsp_name) VALUES ( '2022-08-10', '2022-12-20', 'BBA4', 'MCSP-16');
 
 INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('jrives@gmail.com', 'password123', 'Jullian Rives', true, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('emusk@tesla.com', 'password1234', 'Elon Musk', true, NULL, NULL, NULL, NULL, NULL);
