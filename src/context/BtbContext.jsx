@@ -8,23 +8,11 @@ const BtbContext = createContext()
 export const BtbProvider = ({children}) =>{
     const fetchURL = 'http://localhost:3000'
     const [classes, setClasses] = useState(['this'])
-    const [user, setUser] = useState(null)
+    const [adminModal, setAdminModal] = useState('classes')
+    const [admins, setAdmins] = useState([])
+    const [adminUpdate, setAdminUpdate] = useState({})
     
-    const createNewClass = async (formData) => {
-        const res = await fetch('http://localhost:3000/createNewClass', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(formData)
-        });
-        const data = await res.json();
-        if (data.msg === 'Class created') {
-          return data.classId;
-        } else {
-          throw new Error('Failed to create class');
-        }
-      };
+    const fetchUrl = 'http://localhost:3000';
 
     const login = async (formState) =>{
         const res = await fetch(`${fetchURL}/login`, {
@@ -34,6 +22,12 @@ export const BtbProvider = ({children}) =>{
             },
             body: JSON.stringify(formState)
         })
+        const data = await res.json()
+        setAdmins(data)
+    }
+
+    const getAdmins = async () => {
+        const res = await fetch(`${fetchUrl}/admins`)
         const data = await res.json()
         setAdmins(data)
     }
@@ -61,11 +55,9 @@ export const BtbProvider = ({children}) =>{
         <BtbContext.Provider value={{
             classes,
             setClasses,
-            login,
-            user,
-            makeUser,
-            logOut,
-            createNewClass,
+            adminModal,
+            setAdminModal,
+            admins
         }}>
             {children}
         </BtbContext.Provider>

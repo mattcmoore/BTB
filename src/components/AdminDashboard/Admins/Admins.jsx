@@ -1,45 +1,33 @@
 import './Admins.css'
-import Cell from './Cell'
+import Row from './Row'
 import BtbContext from "../../../context/BtbContext"
-import React, {useState, useContext, useEffect, useRef} from 'react'
+import React, {useState, useContext, useEffect, FC} from 'react'
 
 
 const Admins = () => {
-    const {adminModal, admins, newAdmin, setNewAdmin, makeAdmin, adminUpdate, setAdminUpdate} = useContext(BtbContext)
-
-    const [tableData, setTableData] = useState([])
+    const {adminModal, admins} = useContext(BtbContext)
+    const [tableData, setTableData] = useState(admins)
     const [isAsc, setIsAsc] = useState(true)
-    const [sortValue, setSortValue] = useState('name')
-    const [isValid, setIsValid] = useState(true)
-    const [currentCell, setCurrentCell] = useState([])
+    const [newAdmin, setNewAdmin] = useState({
+        "name":"",
+        "email":"",
+        "password":"",
+    })
 
-    const nameInputRef = useRef(null)
-    const emailInputRef = useRef(null)
-    const passwordInputRef = useRef(null)
+    cont [currentCell, setCurrentCell] = useState([])
 
-    const sorted = async () => {
-            const val = sortValue
+    const sorted = async (val, order = isAsc) => {
             const data = await admins
-            const sorted = data.sort((a, b) => {
+            setIsAsc(order)
+            const sorted= data.sort((a, b) => {
                 if (a[val] < b[val]) return isAsc ? -1 : 1;
                 if (a[val] > b[val]) return isAsc ? 1 : -1;
                 return 0;
               });
             setTableData(sorted)
-    }
-    
-    useEffect(()=>{
-        // setIsAsc(true)
-        // setSortValue('name')
-        sorted()
-    })
+    }   
 
-    useEffect(()=>{
-        setIsAsc(true)
-        setSortValue('name')
-    },[])
-
-
+    sorted('name')
 
     const headers = [
         {key: "name", label: "name"},
@@ -49,23 +37,7 @@ const Admins = () => {
     const handleChange = (event) => {
 
         const {name, value} = event.target
-        setNewAdmin(prev => {
-            return {...prev, [name] : value }
-        })
-    }
-
-    const handleEnter = (event) => {
-        if(event.keyCode === 13){
-            console.log('enter')
-            if(event.target.parentElement.className === "input-row"){
-                console.log("update")
-            }
-            if( Object.keys(newAdmin).every(key => newAdmin[key] !== "" && isValid === true) ){
-                makeAdmin(newAdmin)
-            }else {
-                console.log('focus next')
-            }
-        }
+        setNewAdmin({...newAdmin, [name] : value}) 
     }
 
     const handleClick = (event) => {
@@ -108,14 +80,12 @@ const Admins = () => {
                         </thead>
                         <tbody>
                             {tableData.map(row => {
-                                return <tr name={row.id} key={row.id}>
-                                    <td name="name" onClick={handleClick}><Cell currentCell={currentCell} name={"name"} index={row.id.toString()} value={adminUpdate.name} onChange={handleChange} onKeyDown={handleEnter} alt={row.name} /></td>
-                                    <td name="email" onClick={handleClick}>{row.email}</td>
-                                </tr>
+                                return <Row index={row.id} handleClick={handleClick} handleChange={handleChange} handleClick={handleClick} alt={row.name}  />
                             })}
-                            <tr className="input-row" key={tableData.length+1}>
-                                <td><input autoFocus type="text" name="name" ref={nameInputRef} value={newAdmin.name} onChange={handleChange} onKeyDown={handleEnter}/></td>
-                                <td><input type="text" name="email" ref={emailInputRef} value={newAdmin.email} onChange={handleChange} onKeyDown={handleEnter}/></td>
+                            <tr key={tableData.length+1}>
+                                <td><input type="text" name="name" value={newAdmin.name} onChange={handleChange}/></td>
+                                <td><input type="text" name="email" value={newAdmin.email} onChange={handleChange}/></td>
+                                <td><input type="text" name="password" value={newAdmin.password} onChange={handleChange}/></td>
                             </tr>
                           
                         </tbody>
