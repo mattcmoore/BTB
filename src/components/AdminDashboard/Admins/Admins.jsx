@@ -9,7 +9,7 @@ const Admins = () => {
 
     const [tableData, setTableData] = useState([])
     const [isAsc, setIsAsc] = useState(true)
-    const [sortValue, setSortValue] = useState('')
+    const [sortValue, setSortValue] = useState('name')
     const [isValid, setIsValid] = useState(true)
     const [currentCell, setCurrentCell] = useState([])
 
@@ -29,17 +29,21 @@ const Admins = () => {
     }
     
     useEffect(()=>{
+        // setIsAsc(true)
+        // setSortValue('name')
+        sorted()
+    })
+
+    useEffect(()=>{
         setIsAsc(true)
         setSortValue('name')
-        sorted()
-        setCurrentCell([])
-        // nameInputRef.current.focus()
-    },[admins])
+    },[])
+
+
 
     const headers = [
         {key: "name", label: "name"},
         {key: "email", label: "email"},
-        {key: "password", label: "password"},
     ]
 
     const handleChange = (event) => {
@@ -66,16 +70,15 @@ const Admins = () => {
 
     const handleClick = (event) => {
         const name = event.target.getAttribute("name")
-        const id = event.target.parentElement.getAttribute('name')
-        console.log(name, id)
+        const id = event.target.parentElement.getAttribute("name")
         const updateObj = {}
         updateObj["id"] = id
         Array.prototype.slice.call(event.target.parentElement.children).forEach(cell => {
             updateObj[cell.getAttribute('name')] = cell.innerText 
         })
         setAdminUpdate(updateObj)
-        setCurrentCell([name, id])
-        console.log(currentCell)
+        setCurrentCell([name, id.toString()])
+        // console.log(currentCell)
         // setAdminUpdate(prev => {
         //     return {...prev, [name] : value }
         // })
@@ -106,16 +109,13 @@ const Admins = () => {
                         <tbody>
                             {tableData.map(row => {
                                 return <tr name={row.id} key={row.id}>
-
-                                    <td name="name" onClick={handleClick}><Cell currentCell={currentCell} name={"name"} id={row.id} value={adminUpdate.name} onChange={handleChange} onKeyDown={handleEnter} alt={row.name} /></td>
+                                    <td name="name" onClick={handleClick}><Cell currentCell={currentCell} name={"name"} index={row.id.toString()} value={adminUpdate.name} onChange={handleChange} onKeyDown={handleEnter} alt={row.name} /></td>
                                     <td name="email" onClick={handleClick}>{row.email}</td>
-                                    <td name="password" onClick={handleClick}>{row.password}</td>
                                 </tr>
                             })}
                             <tr className="input-row" key={tableData.length+1}>
                                 <td><input autoFocus type="text" name="name" ref={nameInputRef} value={newAdmin.name} onChange={handleChange} onKeyDown={handleEnter}/></td>
                                 <td><input type="text" name="email" ref={emailInputRef} value={newAdmin.email} onChange={handleChange} onKeyDown={handleEnter}/></td>
-                                <td><input type="text" name="password" ref={passwordInputRef} value={newAdmin.password} onChange={handleChange} onKeyDown={handleEnter}/></td>
                             </tr>
                           
                         </tbody>
