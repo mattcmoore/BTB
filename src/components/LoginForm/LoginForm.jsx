@@ -100,7 +100,7 @@ const LoginForm = () => {
               </Link>
             </div>
             <div className="forgCont">
-              <a className="forgLink">Forgot Password?</a>
+              <Link to='/resetPassword' className="forgLink">Forgot Password?</Link>
             </div>
           </div>
         </form>

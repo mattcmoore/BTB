@@ -51,7 +51,9 @@ const sql = postgres(process.env.DATABASE_URL);
 
 app.use(express.json());
 app.use(morgan("tiny"));
-app.use(cors("*"));
+app.use(cors({
+  origin: '*'
+}));
 app.use(cookieParser());
 
 app.use(express.static("../dist"));
@@ -236,13 +238,13 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/checkToken", async (req, res) => {
-  const {token} = req.body
-
-  if (token) {
+app.post("/checkToken", async (req, res) => {
+  const {jwt} = req.body
+  console.log(jwt);
+  if (jwt) {
     // If JWT exists, decode it
     try {
-      const decoded = jwt.verify(token, secretKey);
+      const decoded = jwt.verify(jwt, secretKey);
       const userId = decoded;
       res.json({ msg: "Success", ...userId });
     } catch (error) {
@@ -254,6 +256,17 @@ app.get("/checkToken", async (req, res) => {
     res.json({ msg: "No jwt" });
   }
 });
+
+app.post("/resetPass", async (req, res)=>{
+  const {email} = req.body
+  sendPasswordResetEmail(auth, email)
+  .then(()=>{
+    res.status(200)
+  })
+  .catch(()=>{
+    res.status(404)
+  })
+})
 
 app.get("/logOut", (req, res) => {
   try {

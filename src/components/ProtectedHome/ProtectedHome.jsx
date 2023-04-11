@@ -16,7 +16,7 @@ function ProtectedHome() {
                 <StudentDashboard/>
             )
         }
-    } else{
+    } else {
         return (
         <LoginForm/>
       )
