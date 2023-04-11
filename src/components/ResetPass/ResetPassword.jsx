@@ -18,8 +18,9 @@ const ResetPassword = () => {
         },
         body: JSON.stringify({ email }),
       });
-
-      if (response.status === 200) {
+      const data = await response.json()
+      console.log(data)
+      if (data.msg === 'sent' || response.status === 204 ) {
         setMessage('A reset password link has been sent to your email.');
       } else {
         setMessage('Failed to send the reset password link. Please try again.');

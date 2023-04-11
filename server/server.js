@@ -261,10 +261,10 @@ app.post("/resetPass", async (req, res)=>{
   const {email} = req.body
   sendPasswordResetEmail(auth, email)
   .then(()=>{
-    res.status(200)
+    res.status(200).json({msg:'sent'})
   })
-  .catch(()=>{
-    res.status(404)
+  .catch((error)=>{
+    res.status(404).json({...error})
   })
 })
 
