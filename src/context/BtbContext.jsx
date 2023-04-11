@@ -39,6 +39,7 @@ export const BtbProvider = ({children}) =>{
         if(data.msg === 'Email or password does not exist'){
             console.log('Make alert')
         } else {
+            localStorage.setItem('jwt', data.token)
             setUser(data)
         }
     }
@@ -67,10 +68,16 @@ export const BtbProvider = ({children}) =>{
     }
 
     const checkToken = async () =>{
+        const token = localStorage.getItem('jwt')
+        const jwt = await token
         const res = await fetch(`${fetchURL}/checkToken`, {
-            method: 'GET'
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jwt)
         })
-        const data = await res.json()
+        console.log(await res.json());
         console.log(data)
         if(data.msg === 'Success'){
             setUser(data)
@@ -79,8 +86,9 @@ export const BtbProvider = ({children}) =>{
         }
     }
 
+
     useEffect(()=>{
-        checkToken()
+        //checkToken()
     },[])
     
 
