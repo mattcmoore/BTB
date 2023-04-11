@@ -35,6 +35,7 @@ export const BtbProvider = ({children}) =>{
             body: JSON.stringify(formState)
         })
         const data = await res.json()
+        console.log(data);
         if(data.msg === 'Email or password does not exist'){
             console.log('Make alert')
         } else {
