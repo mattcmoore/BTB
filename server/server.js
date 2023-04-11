@@ -282,6 +282,7 @@ app.get("/tasks/:id", async (req, res) => {
 app.get('/admins', async (req, res) => {
    try{
       const data = await sql `SELECT * FROM users WHERE admin = true`
+      console.log(data)
       res.json(data)
    } catch(error){
       res.json(error)
