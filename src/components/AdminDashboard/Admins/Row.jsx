@@ -5,7 +5,7 @@ const Row = (props) => {
     const {index, handleChange, handleEnter} = props
     const [currentCell, setCurrentCell] = useState([])
 
-    const []= useContext(BtbContext)
+    // const []= useContext(BtbContext)
 
     const handleClick = (event) => {
         setCurrentCell()
@@ -16,9 +16,7 @@ const Row = (props) => {
         //     return {...prev, [name] : value }
         // })
         // const {name, value} = event.target
-
         // console.log(event.target.parentElement.rowIndex)
-
     }
 
 

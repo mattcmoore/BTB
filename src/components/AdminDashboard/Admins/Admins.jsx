@@ -88,7 +88,7 @@ const Admins = () => {
                         </thead>
                         <tbody>
                             {tableData.map(row => {
-                                <Row index={row.id.toString} handleClick={handleClick} handleChange={handleChange} handleEnter={handleEnter}/>
+                                <Row index={row.id.toString} handleChange={handleChange} handleEnter={handleEnter}/>
                               
                             })}
                             {/* <tr className="input-row" key={tableData.length+1}>
