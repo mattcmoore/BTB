@@ -16,13 +16,21 @@ function App() {
         <Router>
           <Routes>
             <Route exact={true} path="/" element={<ProtectedHome />} />
-            <Route path="/signup" element={<SignUpForm />} />
+            <Route path="/signup" element={
+            <ProtectedUser>
+              <SignUpForm />
+            </ProtectedUser>
+            } />
             <Route path="/newclass" element={
             <ProtectedAdmin>
               <NewClassForm />
             </ProtectedAdmin>
             }/>
-            <Route path="/resetPassword" element={<ResetPassword/>}/>
+            <Route path="/resetPassword" element={
+            <ProtectedUser>
+              <ResetPassword/>
+            </ProtectedUser>
+            }/>
           </Routes>
         </Router>
       </BtbProvider>
