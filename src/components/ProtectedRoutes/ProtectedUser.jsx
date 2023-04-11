@@ -5,9 +5,9 @@ import BtbContext from '../../context/BtbContext'
 function ProtectedUser({children}) {
     const {user} = useContext(BtbContext)
     if(user){
-        return children
-    } else {
         return <Navigate to='/' replace />
+    } else {
+        return children
     }
 }
 
