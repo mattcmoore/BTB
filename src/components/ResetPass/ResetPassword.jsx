@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import BTBlogo from "../../assets/blue-ocean-logo-2.png";
 import './ResetPassword.css'
 
 const ResetPassword = () => {
@@ -31,7 +32,10 @@ const ResetPassword = () => {
   return (
     <div className="containerReset">
         <div className="resetAndTitle">
-      <h2>Reset Password</h2>
+        <div id="logoCont">
+          <img src={BTBlogo} className="loginLogo"></img>
+        </div>
+        <h3 className="slogan">Charting the Path to Your Next Mission</h3>
       <div className="form-group">
         <div className='emailCont'>
         <label htmlFor="email" className='inputEx'>Email:</label>
