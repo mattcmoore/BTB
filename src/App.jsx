@@ -8,6 +8,7 @@ import ProtectedAdmin from "./components/ProtectedRoutes/ProtectedAdmin";
 import ProtectedStudent from "./components/ProtectedRoutes/ProtectedStudent";
 import ProtectedUser from "./components/ProtectedRoutes/ProtectedUser";
 import { BtbProvider } from "./context/BtbContext";
+import TaskProgress from "./components/TaskProgress/TaskProgress";
 
 function App() {
   return (
@@ -15,6 +16,12 @@ function App() {
       <BtbProvider>
         <Router>
           <Routes>
+          <Route
+              path="/TaskProgress"
+              element={
+                <TaskProgress/>
+              }
+              />
             <Route exact={true} path="/" element={<ProtectedHome />} />
             <Route
               path="/signup"
@@ -23,7 +30,7 @@ function App() {
                   <SignUpForm />
                 </ProtectedUser>
               }
-            />
+              />
             <Route
               path="/newclass"
               element={
