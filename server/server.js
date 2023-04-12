@@ -56,6 +56,51 @@ app.route('/notes/:id').get( async (req, res) => {
    }
 })
 
+app.route('/tasks/:id').get( async (req, res) => {
+  console.log('tasks hit')
+  const { id } = req.params
+  try {
+    const data = await sql`SELECT * FROM tasks WHERE user_id = ${id}`
+    res.json(data)
+  }
+  catch(error) {
+    res.json(error)
+  }
+})
+
+app.route('/notes').post( async (req, res) => {
+   const { body, date, author } = req.body
+   try {
+      const newNote = await sql`INSERT INTO notes(body, date, author) VALUES (${body}, ${date}, ${author})`
+      res.json(newNote)
+   } catch(err) {
+      console.log(err)
+   }
+})
+
+app.route('/notes/:id').put(async (req, res) => {
+  const { id } = req.params;
+  const { body, date, author } = req.body
+  try {
+    const editNote = await sql`UPDATE notes SET body = ${body}, date = ${date}, author = ${author} WHERE id = ${id} RETURNING id`
+    res.json(editNote)
+  } catch(err) {
+    console.error(err)
+  }
+})
+
+app.route('/notes/:id').delete( async (req, res) => {
+  const { id } = req.params
+
+  console.log(typeof id)
+  try{
+    const deleteNote = await sql`DELETE FROM notes WHERE id = ${id} RETURNING id`
+    res.json(deleteNote)
+  } catch(err) {
+    console.error(err)
+  }
+})
+
 
 app.get("/classes", async (req, res) => {
   try {

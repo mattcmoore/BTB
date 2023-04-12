@@ -26,6 +26,7 @@ CREATE TABLE users(
 CREATE TABLE tasks(
     id SERIAL PRIMARY KEY,
     task VARCHAR(255) NOT NULL,
+    timeline INTEGER NOT NULL,
     complete BOOLEAN NOT NULL,
     complete_date DATE,
     due DATE NOT NULL,
@@ -69,21 +70,42 @@ INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family,
 INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('jack.wilson@example.com', 'mysecret', 'Jack Wilson', false, 1, '2023-02-10', 'Navy', true, false);
 INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('susan.jackson@example.com', 'Pa$$w0rd', 'Susan Jackson', false, 1, '2023-01-01', 'Army', false, false);
 
-INSERT INTO tasks (task, complete, complete_date, due, user_id) VALUES ('clear CIF', false, NULL, '2022-07-20', 1);
-INSERT INTO tasks (task, complete, complete_date, due, user_id) VALUES ('clear CIF', false, NULL, '2022-09-05', 2);
-INSERT INTO tasks (task, complete, complete_date, due, user_id) VALUES ('clear CIF', false, NULL, '2022-08-21', 3);
-INSERT INTO tasks (task, complete, complete_date, due, user_id) VALUES ('clear CIF', false, NULL, '2022-08-13', 4);
-INSERT INTO tasks (task, complete, complete_date, due, user_id) VALUES ('clear CIF', false, NULL, '2022-10-14', 5);
-INSERT INTO tasks (task, complete, complete_date, due, user_id) VALUES ('clear unit', true, '2022-07-20', '2022-07-20', 1);
-INSERT INTO tasks (task, complete, complete_date, due, user_id) VALUES ('clear unit', false, NULL, '2022-09-05', 2);
-INSERT INTO tasks (task, complete, complete_date, due, user_id) VALUES ('clear unit', true, '2022-08-21', '2022-08-21', 3);
-INSERT INTO tasks (task, complete, complete_date, due, user_id) VALUES ('clear unit', false, NULL, '2022-08-13', 4);
-INSERT INTO tasks (task, complete, complete_date, due, user_id) VALUES ('clear unit', true, '2022-10-14', '2022-10-14', 5);
-INSERT INTO tasks (task, complete, complete_date, due, user_id) VALUES ('Sign DD-214', false, NULL, '2022-12-02', 4);
-INSERT INTO tasks (task, complete, complete_date, due, user_id) VALUES ('Submit leave request form', true, '2023-03-24', '2023-04-10', 6);
-INSERT INTO tasks (task, complete, complete_date, due, user_id) VALUES ('Complete training module', false, NULL, '2023-05-01', 5);
-INSERT INTO tasks (task, complete, complete_date, due, user_id) VALUES ('Submit leave request form', true, '2023-03-24', '2023-04-10', 10);
-INSERT INTO tasks (task, complete, complete_date, due, user_id) VALUES ('Attend medical check-up', true, '2023-02-22', '2023-03-10', 4);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Prepare transition leave documents', 180, true, NULL, '2022-07-20', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Arrange transportation and household goods', 180, false, NULL, '2022-09-05', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Review/update/acquire LES, SGLI, Certifications, and other relevant documents', 180, false, NULL, '2022-08-21', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Schedule Separation Physical', 180, false, NULL, '2022-08-13', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Clean and account for gear, schedule turn-in', 180, false, NULL, '2022-10-14', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Obtain copies of medical records', 180, true, '2022-07-20', '2022-07-20', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Meet with Service Retirement Officer (retirees only)', 180, false, NULL, '2022-09-05', 12);
+
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Attend out-processing brief', 90, true, '2022-08-21', '2022-08-21', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Submit transition leave form', 90, false, NULL, '2022-08-13', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Obtain copies of medical and dental records', 90, true, '2022-10-14', '2022-10-14', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Complete Separation physical and Separation Dental Exam', 90, false, NULL, '2022-12-02', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Obtain separation orders', 90, true, '2023-03-24', '2023-04-10', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Research VA insurance coverage and benefits', 90, false, NULL, '2023-05-01', 12);
+
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Obtain separation orders and make at least 15 copies for distribution', 60, true, '2023-03-24', '2023-04-10', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Clothing record final review and turn-in', 60, true, '2023-02-22', '2023-03-10', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('If taking leave, begin clearing the installation', 60, true, '2023-02-22', '2023-03-10', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Finalize relocation appointments (if applicable)', 60, true, '2023-02-22', '2023-03-10', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Review benefits', 60, true, '2023-02-22', '2023-03-10', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Begin preparations for disability claim (if applicable)', 60, true, '2023-02-22', '2023-03-10', 12);
+
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Review military records', 30, true, '2023-02-22', '2023-03-10', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('If not taking leave, begin clearing installation', 30, true, '2023-02-22', '2023-03-10', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Gear/CIF turn-in', 30, true, '2023-02-22', '2023-03-10', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Finalize medical processes on post', 30, true, '2023-02-22', '2023-03-10', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Review your disability claim (if applicable)', 30, true, '2023-02-22', '2023-03-10', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Review your plan for life after the military', 30, true, '2023-02-22', '2023-03-10', 12);
+
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Finalize unit clearing', 29, true, '2023-02-22', '2023-03-10', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Finalize installation clearing', 29, true, '2023-02-22', '2023-03-10', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Sign and obtain DD-214, store in a safe location', 29, true, '2023-02-22', '2023-03-10', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Establish your local VA centers (emergency and clinic)', 29, true, '2023-02-22', '2023-03-10', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Communicate ETS ceremony with your unit', 29, true, '2023-02-22', '2023-03-10', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Communicate with local VSO', 29, true, '2023-02-22', '2023-03-10', 12);
+INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Contact VA for benefits enrollment/verification', 29, true, '2023-02-22', '2023-03-10', 12);
 
 INSERT INTO messages (to_user, from_user, body, date) VALUES ( 2, 1, 'Hello, do you have time to help me with an algorithm ?','2023-03-20');
 INSERT INTO messages (to_user, from_user, body, date) VALUES ( 3, 1, 'u got plans this weekends ?','2023-02-15');

@@ -4,18 +4,27 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 const BtbContext = createContext()
 
 export const BtbProvider = ({children}) =>{
-    const fetchURL = 'http://localhost:3000'
-    const [classes, setClasses] = useState(['this'])
+    const fetchURL = 'http://localhost:3000';
+    const [classes, setClasses] = useState(['this']);
     const [notes, setNotes] = useState([]);
     const [addNewNote, setAddNewNote] = useState(false);
     const [user, setUser] = useState(null);
+    const [tasks, setTasks] = useState([]);
     // const userId = user.userId;
 
     const fetchNotes = async () => {
         const response = await fetch(`${fetchURL}/notes/${user.userId}`);
         const data = await response.json();
         setNotes(data);
+        console.log(notes)
     };
+
+    const fetchTasks = async () => {
+        const response = await fetch(`${fetchURL}/tasks/${user.userId}`);
+        const data = await response.json();
+        setTasks(data);
+        console.log(tasks);
+    }
 
     const openNoteModal = () => {
         setAddNewNote(true)
@@ -117,7 +126,9 @@ export const BtbProvider = ({children}) =>{
             makeUser,
             logOut,
             createNewClass,
-            fetchNotes
+            fetchNotes,
+            tasks,
+            fetchTasks,
         }}>
             {children}
         </BtbContext.Provider>

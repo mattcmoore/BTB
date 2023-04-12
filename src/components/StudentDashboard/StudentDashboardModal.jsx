@@ -9,34 +9,46 @@ import StudentDashboard from './StudentDashboard';
 
 const StudentDashboardModal = ({}) => {
     // const editMode = mode === 'edit' ? true : false;
-    const fetchUrl = 'http://localhost:13000';
+    const fetchURL = 'http://localhost:3000';
 
-    const { notes, addNewNote, openNoteModal, closeNoteModal, user } = useContext(BtbContext)
+    const { notes, addNewNote, openNoteModal, closeNoteModal, user, fetchNotes } = useContext(BtbContext)
     const [newNote, setNewNote] = useState({
+        body: null,
+        date: new Date(),
+        author: user.userId
+    });
 
-    })
+    
 
         //import user from context user.userId
     
     const postNote = async (e) => {
         e.preventDefault()
         try {
-            response = await fetch(`${fetchUrl}/notes`, {
+            const response = await fetch(`${fetchURL}/notes`, {
                 method: "POST",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "body": `${body}`,
-                    "date": `${date}`,
-                    "author": `${user.userId}`
-                })
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(newNote)
             })
+            if (response.status === 200) {
+                closeNoteModal()
+                fetchNotes()
+              }
         } catch(err) {
             console.log(err)
         }
     }
+
+    const handleChange = (e) => {
+        console.log('changing', e)
+        const { name, value } = e.target
+
+        setNewNote( newNote => ({
+            ...newNote, 
+            [name] : value 
+        }));
+        console.log(newNote)
+    };
 
     return (
         <>
@@ -54,7 +66,14 @@ const StudentDashboardModal = ({}) => {
                         </div>
                         <div className="submit-container">
                             <form>
-                                <input type="text" />
+                                <input 
+                                    required
+                                    placeholder="enter new note"
+                                    // className="new-note"
+                                    name="body"
+                                    value={newNote.body}
+                                    onChange={handleChange}
+                                />
                                 <input type="submit" onClick={postNote} />
                             </form>
                         </div>
