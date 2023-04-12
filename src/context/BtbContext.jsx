@@ -35,7 +35,7 @@ export const BtbProvider = ({children}) =>{
     }
 
     const createNewClass = async (formData) => {
-        const res = await fetch('http://localhost:3000/createNewClass', {
+        const res = await fetch(`${fetchURL}/createNewClass`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -59,9 +59,11 @@ export const BtbProvider = ({children}) =>{
             body: JSON.stringify(formState),
         })
         const data = await res.json()
+        console.log(data);
         if(data.msg === 'Email or password does not exist'){
             console.log('Make alert')
         } else {
+            localStorage.setItem('jwt', data.token)
             setUser(data)
             console.log(data)
             fetchNotes(user)
@@ -94,10 +96,16 @@ export const BtbProvider = ({children}) =>{
     }
 
     const checkToken = async () =>{
+        const token = localStorage.getItem('jwt')
+        const jwt = await token
         const res = await fetch(`${fetchURL}/checkToken`, {
-            method: 'GET'
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jwt)
         })
-        const data = await res.json()
+        console.log(await res.json());
         console.log(data)
         if(data.msg === 'Success'){
             setUser(data)
@@ -106,8 +114,9 @@ export const BtbProvider = ({children}) =>{
         }
     }
 
+
     useEffect(()=>{
-        checkToken()
+        //checkToken()
     },[])
     
 
@@ -126,6 +135,7 @@ export const BtbProvider = ({children}) =>{
             makeUser,
             logOut,
             createNewClass,
+            fetchURL
             fetchNotes,
             tasks,
             fetchTasks,

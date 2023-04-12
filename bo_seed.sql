@@ -11,7 +11,6 @@ CREATE TABLE mcsps(
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL,
     admin BOOLEAN NOT NULL,
     mcsp INTEGER,
@@ -58,17 +57,17 @@ INSERT INTO mcsps (start_date, end_date, code, mcsp_name) VALUES ( '2022-02-10',
 INSERT INTO mcsps (start_date, end_date, code, mcsp_name) VALUES ( '2022-10-10', '2023-02-20', 'BAA3', 'MCSP-17');
 INSERT INTO mcsps (start_date, end_date, code, mcsp_name) VALUES ( '2022-08-10', '2022-12-20', 'BBA4', 'MCSP-16');
 
-INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('jrives@gmail.com', 'password123', 'Jullian Rives', true, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('emusk@tesla.com', 'password1234', 'Elon Musk', true, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('mariajohnson@example.com', 'P@ssw0rd123', 'Maria Johnson', false, 3, '2023-01-11', 'Airforce', true, false);
-INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('davidlee@example.com', 'MyPassword1', 'David Lee', false, 1, '2023-01-11', 'Navy', false, true);
-INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('emilydavis@example.com', 'SecretPass', 'Emily Davis', false, 1, '2023-01-11', 'Army', true, true);
-INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('johnsmith@example.com', 'Password!1', 'John Smith', false, 1, '2023-01-11', 'Marine', false, false);
-INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('sarahbrown@example.com', '123456Abc', 'Sarah Brown', false, 1, '2023-01-11', 'Coast Guard', true, false);
-INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('jane.smith@example.com', 'p@ssword', 'Jane Smith', false, 2, '2023-01-05', 'Space Force', false, true);
-INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('mike.brown@example.com', '12345abcde', 'Mike Brown', false, 3, '2023-01-07', 'Airforce', true, false);
-INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('jack.wilson@example.com', 'mysecret', 'Jack Wilson', false, 1, '2023-02-10', 'Navy', true, false);
-INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('susan.jackson@example.com', 'Pa$$w0rd', 'Susan Jackson', false, 1, '2023-01-01', 'Army', false, false);
+INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('jrives@gmail.com', 'Jullian Rives', true, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('emusk@tesla.com', 'Elon Musk', true, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('mariajohnson@example.com', 'Maria Johnson', false, 3, '2023-01-11', 'Airforce', true, false);
+INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('davidlee@example.com', 'David Lee', false, 1, '2023-01-11', 'Navy', false, true);
+INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('emilydavis@example.com', 'Emily Davis', false, 1, '2023-01-11', 'Army', true, true);
+INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('johnsmith@example.com', 'John Smith', false, 1, '2023-01-11', 'Marine', false, false);
+INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('sarahbrown@example.com', 'Sarah Brown', false, 1, '2023-01-11', 'Coast Guard', true, false);
+INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('jane.smith@example.com', 'Jane Smith', false, 2, '2023-01-05', 'Space Force', false, true);
+INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('mike.brown@example.com', 'Mike Brown', false, 3, '2023-01-07', 'Airforce', true, false);
+INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('jack.wilson@example.com', 'Jack Wilson', false, 1, '2023-02-10', 'Navy', true, false);
+INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('susan.jackson@example.com', 'Susan Jackson', false, 1, '2023-01-01', 'Army', false, false);
 
 INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Prepare transition leave documents', 180, true, NULL, '2022-07-20', 12);
 INSERT INTO tasks (task, timeline, complete, complete_date, due, user_id) VALUES ('Arrange transportation and household goods', 180, false, NULL, '2022-09-05', 12);

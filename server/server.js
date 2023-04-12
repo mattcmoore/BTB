@@ -9,7 +9,18 @@ const cookieParser = require("cookie-parser");
 const { sq } = require("date-fns/locale");
 // Import the functions you need from the SDKs you need
 const { initializeApp } = require("firebase/app");
-const { getAuth, sendEmailVerification,createUserWithEmailAndPassword, onAuthStateChanged, updateProfile, signInWithEmailAndPassword, setPersistence, browserLocalPersistence, signOut } = require("firebase/auth");
+const {
+  getAuth,
+  sendPasswordResetEmail,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  updateProfile,
+  updateEmail,
+  signInWithEmailAndPassword,
+  setPersistence,
+  browserLocalPersistence,
+  signOut,
+} = require("firebase/auth");
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -40,10 +51,27 @@ const sql = postgres(process.env.DATABASE_URL);
 
 app.use(express.json());
 app.use(morgan("tiny"));
-app.use(cors("*"));
+app.use(cors({
+  origin: '*'
+}));
 app.use(cookieParser());
 
 app.use(express.static("../dist"));
+
+function subtractDays(dateString, days) {
+  // Convert the 'yyyy-mm-dd' string to a Date object
+  const date = new Date(dateString);
+
+  // Subtract the desired number of days
+  date.setDate(date.getDate() - days);
+
+  // Convert the new Date object back to the 'yyyy-mm-dd' format
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+
+  return `${yyyy}-${mm}-${dd}`;
+}
 
 app.route('/notes/:id').get( async (req, res) => {
    console.log('hit')
@@ -130,7 +158,6 @@ app.post("/createNewClass", async (req, res) => {
   }
 });
 
-
 app.post("/makeStudent", async (req, res) => {
   const {
     code,
@@ -165,25 +192,58 @@ app.post("/makeStudent", async (req, res) => {
     if (classId) {
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          // Signed in 
+          // Signed in
           updateProfile(auth.currentUser, {
-            displayName: name
-          })
+            displayName: name,
+          });
           // ...
-          onAuthStateChanged(auth, async user=>{
-            console.log('first')
+          onAuthStateChanged(auth, async (user) => {
+            console.log("first");
             const data = await sql`
-                   INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks)
-                   VALUES (${email}, ${password}, ${name}, false, ${classId}, ${separationDate}, ${branch}, ${hasFamily}, ${livesInBarracks}) returning id, admin, name, email
+                   INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks)
+                   VALUES (${email}, ${name}, false, ${classId}, ${separationDate}, ${branch}, ${hasFamily}, ${livesInBarracks}) returning id, admin, name, email
                    `;
             const userId = data[0];
-            res.json({ ...userId, msg: "logged in" });
-          })
+            const sixMonths = subtractDays(separationDate, 180)
+            const sixTasks = ['Decide whether to take transition leave or sell back your leave balance. If taking transition leave, prepare a branch-specific leave form', 'If you plan to relocate upon separation, inquire for transportation counseling for your household goods', 'Review/update and acquire your military documents, LES, SGLI, Certifications', 'Schedule a Physical Evaluation appointment', 'Review your clothing record and clean your gear for CIF turn-in', 'Obtain copies of your Medical Records', 'If retiring, meet with your service retirement officer']
+            sixTasks.forEach(async (task)=>{
+              await sql`
+              INSERT INTO tasks (task, complete, due, user_id)
+              VALUES (${task}, false, ${sixMonths}, ${userId.id})
+              `
+            })
+            const threeMonths = subtractDays(separationDate, 90)
+            const threeTasks = ['Attend briefings relevant to out-processing', 'If taking transition leave, secure your leave form', 'Contact medical facility to get copies of medical & dental records', 'Complete dental and physical examinations', 'Inquire/secure separation orders', 'Research VA insurance coverage and other health insurance options if not sure of eligibility']
+            threeTasks.forEach(async (task)=>{
+              await sql`
+              INSERT INTO tasks (task, complete, due, user_id)
+              VALUES (${task}, false, ${threeMonths}, ${userId.id})
+              `
+            })
+            const twoMonths = subtractDays(separationDate, 60)
+            const twoTasks = ['Acquire your separation orders and if taking leave, leave form, make 15 copies for distribution', 'Review your clothing record and inspect gear for CIF turn-in, or turn-in CIF gear', 'If taking leave, begin clearing the installation', 'Finalize relocation appointments and review benefits', 'Begin to prepare disability claim with local VSO (if applicable and not completed previously)']
+            twoTasks.forEach(async (task)=>{
+              await sql`
+              INSERT INTO tasks (task, complete, due, user_id)
+              VALUES (${task}, false, ${twoMonths}, ${userId.id})
+              `
+            })
+            const oneMonth = subtractDays(separationDate, 30)
+            const oneTasks = ['Review your military records for accuracy. Request corrections, if necessary (awards, deployments, DOR).', 'If not taking leave, begin clearing the installation', 'Turn in your central issue (CIF)', 'Finalize medical processes on post', 'Review your disability claim (if applicable)', 'Review your plan for life aer the military', 'Finalize unit clearing', 'Finalize installation clearing', 'Pick up DD-214 and make copies, store in a safe location', 'Establish your local VA centers (Emergency and Clinic)', 'Communicate ETS Ceremony with your unit (if needed)', 'Communicate with local VSO', 'Contact VA for benefits enrollment/verification']
+            oneTasks.forEach(async (task)=>{
+              await sql`
+              INSERT INTO tasks (task, complete, due, user_id)
+              VALUES (${task}, false, ${oneMonth}, ${userId.id})
+              `
+            })
+            const token = jwt.sign(userId, secretKey, { expiresIn: "1h" });
+          res.json({ msg: "logged in", ...userId , token: token});
+          });
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          res.json(error)
+          res.json(error);
           // ..
         });
     } else {
@@ -196,7 +256,7 @@ app.post("/makeStudent", async (req, res) => {
 
 app.post("/makeAdmin", async (req, res) => {
   const { email, name } = req.body;
-  const password = 'G4L1V1B0iz4Life'
+  const password = "G4L1V1B0iz4Life";
   const emailsInUse = await sql`
   SELECT email FROM users
   `;
@@ -207,63 +267,55 @@ app.post("/makeAdmin", async (req, res) => {
     }
   });
   if (emailNotUsed) {
-    createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          // Signed in 
-          updateProfile(auth.currentUser, {
-            displayName: name
-          })
-          // ...
-          onAuthStateChanged(auth, async user=>{
-            const data = await sql`
-                  INSERT INTO users (email, password, name, admin)
-                  VALUES (${email}, ${password}, ${name}, true) returning id
+    createUserWithEmailAndPassword(auth, email, password).then(
+      (userCredential) => {
+        // Signed in
+        updateProfile(auth.currentUser, {
+          displayName: name,
+        });
+        // ...
+        onAuthStateChanged(auth, async (user) => {
+          const data = await sql`
+                  INSERT INTO users (email, name, admin)
+                  VALUES (${email}, ${name}, true) returning id
                   `;
-            const userId = data[0].id;
-            res.json({ msg: "Admin created", userId });
-          })
-        })
+          const userId = data[0].id;
+          res.json({ msg: "Admin created", userId });
+        });
+      }
+    );
   } else {
     res.json({ msg: "Email in use" });
   }
 });
 
 app.patch("/updateAdmin", async (req, res) => {
-  const { email, password, name, id } = req.body;
-  await bcrypt.hash(password, saltRounds, async (err, hash) => {
-    if (err) {
-      res.status(500).json({ msg: "Error hashing password" });
-    } else {
-      try {
-        await sql`
+  const { email, name, id } = req.body;
+  try {
+    await sql`
             UPDATE users
             SET email = ${email},
-            password = ${hash},
             name = ${name}
             WHERE id = ${id}
             `;
-        res.json({ msg: "Admin Edited" });
-      } catch (error) {
-        res.status(500).json({ msg: "Failed" });
-      }
-    }
-  });
+    res.json({ msg: "Admin Edited" });
+  } catch (error) {
+    res.status(500).json({ msg: "Failed" });
+  }
 });
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const emails = await sql`
-   SELECT email, password, admin, id, name FROM users
+   SELECT email, admin, id, name FROM users
    `;
   let exists = false;
-  let hash = "";
   let admin = null;
   let name = "";
-  let userId ;
+  let userId;
   emails.forEach((mail) => {
     if (mail.email === email) {
       exists = true;
-      hash = mail.password;
       admin = mail.admin;
       userId = mail.id;
       name = mail.name;
@@ -272,37 +324,35 @@ app.post("/login", async (req, res) => {
   const payload = { name: name, userId: userId, admin: admin };
   if (exists) {
     signInWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    // Signed in 
-    const user = userCredential.user;
-    // ...
-    onAuthStateChanged(auth, user=>{
-      console.log("first")
-      const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
-      res.cookie("jwt", token);
-      res.json({ msg: "logged in", ...payload });
-    })
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    res.json({ msg: "Email or password does not exist" });
-  });
-}
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        // ...
+        onAuthStateChanged(auth, (user) => {
+          console.log("first");
+          const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
+          res.json({ msg: "logged in", ...payload , token: token});
+        });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        res.json({ msg: "Email or password does not exist" });
+      });
+  }
 });
 
-app.get("/checkToken", async (req, res) => {
-  const token = req.cookies.jwt;
-
-  if (token) {
+app.post("/checkToken", async (req, res) => {
+  const {jwt} = req.body
+  console.log(jwt);
+  if (jwt) {
     // If JWT exists, decode it
     try {
-      const decoded = jwt.verify(token, secretKey);
+      const decoded = jwt.verify(jwt, secretKey);
       const userId = decoded;
       res.json({ msg: "Success", ...userId });
     } catch (error) {
       // If JWT is invalid or has expired, clear the cookie and redirect to login page
-      res.clearCookie("jwt");
       res.json({ msg: "Jwt expired" });
     }
   } else {
@@ -310,6 +360,17 @@ app.get("/checkToken", async (req, res) => {
     res.json({ msg: "No jwt" });
   }
 });
+
+app.post("/resetPass", async (req, res)=>{
+  const {email} = req.body
+  sendPasswordResetEmail(auth, email)
+  .then(()=>{
+    res.status(200).json({msg:'sent'})
+  })
+  .catch((error)=>{
+    res.status(404).json({...error})
+  })
+})
 
 app.get("/logOut", (req, res) => {
   try {
