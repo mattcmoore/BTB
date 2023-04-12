@@ -8,9 +8,9 @@ const ResetPassword = () => {
   const {fetchURL} = useContext(BtbContext)
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const Navigate = useNavigate()
 
   const handleResetPassword = async () => {
-    const Navigate = useNavigate()
     try {
 
 
