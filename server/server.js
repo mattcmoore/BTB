@@ -201,7 +201,7 @@ app.post("/makeStudent", async (req, res) => {
               "Turn in your central issue (CIF)",
               "Finalize medical processes on post",
               "Review your disability claim (if applicable)",
-              "Review your plan for life aer the military",
+              "Review your plan for life after the military",
               "Finalize unit clearing",
               "Finalize installation clearing",
               "Pick up DD-214 and make copies, store in a safe location",
@@ -324,11 +324,10 @@ app.post("/login", async (req, res) => {
 
 app.post("/checkToken", async (req, res) => {
   const { jwt } = req.body;
-  console.log(jwt);
   if (jwt) {
     // If JWT exists, decode it
     try {
-      const decoded = jwt.verify(jwt, secretKey);
+      const decoded = jwt.verify(jwt, secretKey);      
       const userId = decoded;
       res.json({ msg: "Success", ...userId });
     } catch (error) {
