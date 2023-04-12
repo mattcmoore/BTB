@@ -23,6 +23,13 @@ export const BtbProvider = ({children}) =>{
     const getAdmins = async () => {
         const res = await fetch(`${fetchUrl}/admins`)
         const data = await res.json()
+        console.log(data);
+        if(data.msg === 'Email or password does not exist'){
+            console.log('Make alert')
+        } else {
+            localStorage.setItem('jwt', data.token)
+            setUser(data)
+        }
         setAdmins([...data])
     }
 
@@ -49,6 +56,30 @@ export const BtbProvider = ({children}) =>{
             body: JSON.stringify(req)})
             getAdmins()
             setAdminUpdate({})
+    const logOut = async () =>{
+        await fetch(`${fetchURL}/logOut`, {
+            method: 'GET'
+        })
+        setUser(null)
+    }
+
+    const checkToken = async () =>{
+        const token = localStorage.getItem('jwt')
+        const jwt = await token
+        const res = await fetch(`${fetchURL}/checkToken`, {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jwt)
+        })
+        console.log(await res.json());
+        console.log(data)
+        if(data.msg === 'Success'){
+            setUser(data)
+        } else {
+            console.log(data);
+        }
     }
     
     useEffect(()=>{
