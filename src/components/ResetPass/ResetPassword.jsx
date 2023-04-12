@@ -2,7 +2,6 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import BtbContext from "../../context/BtbContext";
 import BTBlogo from "../../assets/blue-ocean-logo-2.png";
-import BtbContext from "../../context/BtbContext";
 import "./ResetPassword.css";
 
 const ResetPassword = () => {
