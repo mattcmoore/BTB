@@ -11,7 +11,7 @@ export const BtbProvider = ({children}) =>{
     const [user, setUser] = useState(null)
     
     const createNewClass = async (formData) => {
-        const res = await fetch('http://localhost:3000/createNewClass', {
+        const res = await fetch(`${fetchURL}/createNewClass`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -101,6 +101,7 @@ export const BtbProvider = ({children}) =>{
             makeUser,
             logOut,
             createNewClass,
+            fetchURL
         }}>
             {children}
         </BtbContext.Provider>
