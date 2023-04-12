@@ -9,7 +9,18 @@ const cookieParser = require("cookie-parser");
 const { sq } = require("date-fns/locale");
 // Import the functions you need from the SDKs you need
 const { initializeApp } = require("firebase/app");
-const { getAuth, sendEmailVerification,createUserWithEmailAndPassword, onAuthStateChanged, updateProfile, signInWithEmailAndPassword, setPersistence, browserLocalPersistence, signOut } = require("firebase/auth");
+const {
+  getAuth,
+  sendPasswordResetEmail,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  updateProfile,
+  updateEmail,
+  signInWithEmailAndPassword,
+  setPersistence,
+  browserLocalPersistence,
+  signOut,
+} = require("firebase/auth");
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -40,11 +51,12 @@ const sql = postgres(process.env.DATABASE_URL);
 
 app.use(express.json());
 app.use(morgan("tiny"));
-app.use(cors("*"));
+app.use(cors({
+  origin: '*'
+}));
 app.use(cookieParser());
 
 app.use(express.static("../dist"));
-
 
 app.get("/classes", async (req, res) => {
   try {
@@ -73,7 +85,6 @@ app.post("/createNewClass", async (req, res) => {
     res.status(500).json({ msg: "Failed to create class" });
   }
 });
-
 
 app.post("/makeStudent", async (req, res) => {
   const {
@@ -109,25 +120,26 @@ app.post("/makeStudent", async (req, res) => {
     if (classId) {
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          // Signed in 
+          // Signed in
           updateProfile(auth.currentUser, {
-            displayName: name
-          })
+            displayName: name,
+          });
           // ...
-          onAuthStateChanged(auth, async user=>{
-            console.log('first')
+          onAuthStateChanged(auth, async (user) => {
+            console.log("first");
             const data = await sql`
-                   INSERT INTO users (email, password, name, admin, mcsp, sep_date, branch, family, barracks)
-                   VALUES (${email}, ${password}, ${name}, false, ${classId}, ${separationDate}, ${branch}, ${hasFamily}, ${livesInBarracks}) returning id, admin, name, email
+                   INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks)
+                   VALUES (${email}, ${name}, false, ${classId}, ${separationDate}, ${branch}, ${hasFamily}, ${livesInBarracks}) returning id, admin, name, email
                    `;
             const userId = data[0];
-            res.json({ ...userId, msg: "logged in" });
-          })
+            const token = jwt.sign(userId, secretKey, { expiresIn: "1h" });
+          res.json({ msg: "logged in", ...userId , token: token});
+          });
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          res.json(error)
+          res.json(error);
           // ..
         });
     } else {
@@ -138,9 +150,19 @@ app.post("/makeStudent", async (req, res) => {
   }
 });
 
+app.get('/admins', async (req, res) => {
+  try{
+     const data = await sql `SELECT * FROM users WHERE admin = true`
+     console.log(data)
+     res.json(data)
+  } catch(error){
+     res.json(error)
+  }
+})
+
 app.post("/makeAdmin", async (req, res) => {
   const { email, name } = req.body;
-  const password = 'G4L1V1B0iz4Life'
+  const password = "G4L1V1B0iz4Life";
   const emailsInUse = await sql`
   SELECT email FROM users
   `;
@@ -151,22 +173,23 @@ app.post("/makeAdmin", async (req, res) => {
     }
   });
   if (emailNotUsed) {
-    createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          // Signed in 
-          updateProfile(auth.currentUser, {
-            displayName: name
-          })
-          // ...
-          onAuthStateChanged(auth, async user=>{
-            const data = await sql`
-                  INSERT INTO users (email, password, name, admin)
-                  VALUES (${email}, ${password}, ${name}, true) returning id
+    createUserWithEmailAndPassword(auth, email, password).then(
+      (userCredential) => {
+        // Signed in
+        updateProfile(auth.currentUser, {
+          displayName: name,
+        });
+        // ...
+        onAuthStateChanged(auth, async (user) => {
+          const data = await sql`
+                  INSERT INTO users (email, name, admin)
+                  VALUES (${email}, ${name}, true) returning id
                   `;
-            const userId = data[0].id;
-            res.json({ msg: "Admin created", userId });
-          })
-        })
+          const userId = data[0].id;
+          res.json({ msg: "Admin created", userId });
+        });
+      }
+    );
   } else {
     res.json({ msg: "Email in use" });
   }
@@ -174,39 +197,31 @@ app.post("/makeAdmin", async (req, res) => {
 
 app.patch("/updateAdmin", async (req, res) => {
   const { email, name, id } = req.body;
-  await bcrypt.hash(password, saltRounds, async (err, hash) => {
-    if (err) {
-      res.status(500).json({ msg: "Error hashing password" });
-    } else {
-      try {
-        await sql`
+  try {
+    await sql`
             UPDATE users
             SET email = ${email},
             name = ${name}
             WHERE id = ${id}
             `;
-        res.json({ msg: "Admin Edited" });
-      } catch (error) {
-        res.status(500).json({ msg: "Failed" });
-      }
-    }
-  });
+    res.json({ msg: "Admin Edited" });
+  } catch (error) {
+    res.status(500).json({ msg: "Failed" });
+  }
 });
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const emails = await sql`
-   SELECT email, password, admin, id, name FROM users
+   SELECT email, admin, id, name FROM users
    `;
   let exists = false;
-  let hash = "";
   let admin = null;
   let name = "";
-  let userId ;
+  let userId;
   emails.forEach((mail) => {
     if (mail.email === email) {
       exists = true;
-      hash = mail.password;
       admin = mail.admin;
       userId = mail.id;
       name = mail.name;
@@ -215,37 +230,35 @@ app.post("/login", async (req, res) => {
   const payload = { name: name, userId: userId, admin: admin };
   if (exists) {
     signInWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    // Signed in 
-    const user = userCredential.user;
-    // ...
-    onAuthStateChanged(auth, user=>{
-      console.log("first")
-      const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
-      res.cookie("jwt", token);
-      res.json({ msg: "logged in", ...payload });
-    })
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    res.json({ msg: "Email or password does not exist" });
-  });
-}
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        // ...
+        onAuthStateChanged(auth, (user) => {
+          console.log("first");
+          const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
+          res.json({ msg: "logged in", ...payload , token: token});
+        });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        res.json({ msg: "Email or password does not exist" });
+      });
+  }
 });
 
-app.get("/checkToken", async (req, res) => {
-  const token = req.cookies.jwt;
-
-  if (token) {
+app.post("/checkToken", async (req, res) => {
+  const {jwt} = req.body
+  console.log(jwt);
+  if (jwt) {
     // If JWT exists, decode it
     try {
-      const decoded = jwt.verify(token, secretKey);
+      const decoded = jwt.verify(jwt, secretKey);
       const userId = decoded;
       res.json({ msg: "Success", ...userId });
     } catch (error) {
       // If JWT is invalid or has expired, clear the cookie and redirect to login page
-      res.clearCookie("jwt");
       res.json({ msg: "Jwt expired" });
     }
   } else {
@@ -253,6 +266,17 @@ app.get("/checkToken", async (req, res) => {
     res.json({ msg: "No jwt" });
   }
 });
+
+app.post("/resetPass", async (req, res)=>{
+  const {email} = req.body
+  sendPasswordResetEmail(auth, email)
+  .then(()=>{
+    res.status(200).json({msg:'sent'})
+  })
+  .catch((error)=>{
+    res.status(404).json({...error})
+  })
+})
 
 app.get("/logOut", (req, res) => {
   try {
@@ -277,16 +301,6 @@ app.get("/tasks/:id", async (req, res) => {
     res.json(error);
   }
 });
-
-app.get('/admins', async (req, res) => {
-   try{
-      const data = await sql `SELECT * FROM users WHERE admin = true`
-      console.log(data)
-      res.json(data)
-   } catch(error){
-      res.json(error)
-   }
-})
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);

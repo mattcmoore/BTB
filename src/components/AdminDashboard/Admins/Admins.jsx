@@ -5,7 +5,7 @@ import React, {useState, useContext, useEffect, useRef} from 'react'
 
 
 const Admins = () => {
-    const {adminModal, admins, newAdmin, setNewAdmin, makeAdmin, adminUpdate, setAdminUpdate} = useContext(BtbContext)
+    const {adminModal, admins, newAdmin, setNewAdmin, makeAdmin} = useContext(BtbContext)
 
     const [tableData, setTableData] = useState([])
     const [isAsc, setIsAsc] = useState(true)
@@ -29,11 +29,11 @@ const Admins = () => {
     
     useEffect(()=>{
         sorted()
-    })
+    },[admins])
+
     useEffect(()=>{
         setIsAsc(true)
         setSortValue('name')
-        // sorted()
     },[])
 
 
@@ -54,7 +54,6 @@ const Admins = () => {
 
     const handleEnter = (event) => {
         if(event.keyCode === 13){
-            console.log('enter')
             if(event.target.parentElement.className === "input-row"){
                 console.log("update")
             }
@@ -64,12 +63,6 @@ const Admins = () => {
                 console.log('focus next')
             }
         }
-    }
-
-    
-    
-    const handleUpdate = (event) => {
-
     }
 
     if(adminModal==='admins'){
