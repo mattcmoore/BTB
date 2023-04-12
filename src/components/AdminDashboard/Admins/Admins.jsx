@@ -28,14 +28,12 @@ const Admins = () => {
     }
     
     useEffect(()=>{
-        // setIsAsc(true)
-        // setSortValue('name')
         sorted()
     })
-
     useEffect(()=>{
         setIsAsc(true)
         setSortValue('name')
+        // sorted()
     },[])
 
 
@@ -43,6 +41,8 @@ const Admins = () => {
     const headers = [
         {key: "name", label: "name"},
         {key: "email", label: "email"},
+        {key: "mcsp", label: "mcsp"},
+
     ]
 
     const handleChange = (event) => {
@@ -88,14 +88,12 @@ const Admins = () => {
                         </thead>
                         <tbody>
                             {tableData.map(row => {
-                                <Row index={row.id.toString} handleChange={handleChange} handleEnter={handleEnter}/>
-                              
+                                return <Row key={row.id} row={row} handleChange={handleChange} handleEnter={handleEnter} />    
                             })}
-                            {/* <tr className="input-row" key={tableData.length+1}>
+                            <tr className="input-row" key={tableData.length+1}>
                                 <td><input autoFocus type="text" name="name" ref={nameInputRef} value={newAdmin.name} onChange={handleChange} onKeyDown={handleEnter}/></td>
                                 <td><input type="text" name="email" ref={emailInputRef} value={newAdmin.email} onChange={handleChange} onKeyDown={handleEnter}/></td>
-                            </tr> */}
-                          
+                            </tr>               
                         </tbody>
                 </table>
             </div>

@@ -173,7 +173,7 @@ app.post("/makeAdmin", async (req, res) => {
 });
 
 app.patch("/updateAdmin", async (req, res) => {
-  const { email, password, name, id } = req.body;
+  const { email, name, id } = req.body;
   await bcrypt.hash(password, saltRounds, async (err, hash) => {
     if (err) {
       res.status(500).json({ msg: "Error hashing password" });
@@ -182,7 +182,6 @@ app.patch("/updateAdmin", async (req, res) => {
         await sql`
             UPDATE users
             SET email = ${email},
-            password = ${hash},
             name = ${name}
             WHERE id = ${id}
             `;

@@ -41,3 +41,11 @@ tbody tr:last-child td{
 tr:not(:last-child) td{
     cursor: pointer;
 } 
+
+.hide-input{
+    display: none;
+}
+
+.show-input input{
+    display: block;
+}
