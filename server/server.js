@@ -90,6 +90,7 @@ app.route('/tasks/:id').get( async (req, res) => {
   try {
     const data = await sql`SELECT * FROM tasks WHERE user_id = ${id}`
     res.json(data)
+    console.log(data)
   }
   catch(error) {
     res.json(error)

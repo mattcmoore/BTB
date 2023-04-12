@@ -135,7 +135,7 @@ export const BtbProvider = ({children}) =>{
             makeUser,
             logOut,
             createNewClass,
-            fetchURL
+            fetchURL,
             fetchNotes,
             tasks,
             fetchTasks,

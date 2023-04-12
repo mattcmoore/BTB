@@ -294,6 +294,18 @@
     padding-left: 10px;
 }
 
+.red {
+    color: red;
+  }
+
+.yellow {
+    color: orange;
+}
+
+.checked {
+    color: green;
+  }
+
 .notes-container {
     position:relative;
     font-weight: proxima-nova, sans-serif;

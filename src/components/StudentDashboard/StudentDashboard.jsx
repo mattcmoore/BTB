@@ -49,12 +49,68 @@ export function StudentChecklist () {
     const handleCheck = (e) => {
         let updatedList = [...checked];
         if (e.target.checked) {
-            updatedList = [...checked, e.target.value]
+            updatedList = [...checked, e.target.value];
+            e.target.parentNode.style.color = "green";
+            console.log(updatedList);
         } else {
             updatedList.splice(checked.indexOf(e.target.value), 1);
+            e.target.parentNode.style.color = "black";
         }
         setChecked(updatedList);
     }
+
+    function formatDate(dateString) {
+        // Convert the 'yyyy-mm-dd' string to a Date object
+        const date = new Date(dateString);
+      
+        // Array of month names for formatting
+        const monthNames = [
+           'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        ];
+      
+        // Extract the day, month, and year from the Date object
+        const day = date.getDate();
+        const month = monthNames[date.getMonth()];
+        const year = date.getFullYear();
+      
+        // Format the date as 'dd mmm yyyy'
+        return `${day} ${month} ${year}`;
+      }
+
+      function daysLeft(dateString) {
+        // Convert the 'yyyy-mm-dd' string to a Date object
+        const targetDate = new Date(dateString);
+      
+        // Get the current date and time
+        const now = new Date();
+      
+        // Set the time portion of the current date to 0 (midnight)
+        now.setHours(0, 0, 0, 0);
+      
+        // Calculate the difference in milliseconds between the two dates
+        const differenceInMilliseconds = targetDate - now;
+      
+        // Convert the difference to days
+        const days = Math.ceil(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+      
+        console.log(days)
+        return days;
+      }
+
+      const colorItem = (item, days) =>{
+        if(checked.includes(item)){
+         return 'checked'
+        } else {
+         if(60 >= days && days >= 14){
+         return 'yellow'
+         } /*else if (14 > days){
+         return 'red'
+         }*/ else {
+         return ''
+         }
+        }
+       }
 
 
 
@@ -107,23 +163,20 @@ export function StudentChecklist () {
                         </h3>
                     </div>
                     <div className="checklist-container">
-                        {/* <DatePicker selected={startDate} onChange={(date) => setStartDate(date)}/> */}
                         <ul className="task">
                         {tasks.map((item, index) => (
                             <div className="task-item-container">
                                 <div className="list-pop">
                                     <div className="task-item" key={index}>
                                         <input value={item} type="checkbox" onChange={handleCheck} />
-                                        <span>{item.task}</span>
+                                        <span className={`${colorItem(item, daysLeft(item.due))}`}>{item.task}</span>
+                                        {/* className={checked.includes(item) ? 'checked' : ''} */}
+                                        {/* checked.includes(item) ? 'checked' : (daysLeft(item.due) <= 14 ? 'red' : daysLeft(item.due) <= 30 ? 'yellow' : '') */}
                                     </div>
                                 </div>
                                 <div className="due-date">
-                                    Date due:
-                                    <div className="calendar-container">
-                                        <DatePicker selected={startDate} onChange={(date) => setStartDate(date)}/>
-                                    </div>
+                                    Date due: {formatDate(item.due)}
                                 </div>
-
                             </div>
                         ))}
                         </ul>
