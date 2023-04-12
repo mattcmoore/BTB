@@ -17,6 +17,7 @@ export const BtbProvider = ({children}) =>{
     }
     const [adminUpdate, setAdminUpdate] = useState({})
     const [newAdmin, setNewAdmin] = useState(emptyAdmin)
+    const [user, setUser] = useState(null)
 
     const fetchUrl = 'http://localhost:3000';
 
@@ -56,6 +57,7 @@ export const BtbProvider = ({children}) =>{
             body: JSON.stringify(req)})
             getAdmins()
             setAdminUpdate({})
+        }
     const logOut = async () =>{
         await fetch(`${fetchURL}/logOut`, {
             method: 'GET'
