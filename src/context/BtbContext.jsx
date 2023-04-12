@@ -83,7 +83,7 @@ export const BtbProvider = ({ children }) => {
         const remainingTime = (decoded.exp - currentTime) * 1000;
     
         const timer = setTimeout(() => {
-          localStorage.removeItem('jwt');
+          localStorage.clear('jwt');
           console.log('JWT token cleared from local storage');
         }, remainingTime);
     
