@@ -25,7 +25,7 @@ const ResetPassword = () => {
       console.log(data);
       if (data.msg === "sent" || response.status === 204) {
         setMessage("A reset password link has been sent to your email.");
-        Navigate('/')
+        setTimeout(()=>{Navigate('/')}, 1000)
       } else {
         setMessage("Failed to send the reset password link. Please try again.");
       }
