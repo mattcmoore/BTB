@@ -5,27 +5,34 @@ import jwtDecode from "jwt-decode";
 const BtbContext = createContext()
 
 export const BtbProvider = ({children}) =>{
-    const fetchURL = 'http://localhost:3000'
-    const [classes, setClasses] = useState(['this']);
-    const [notes, setNotes] = useState([]);
-    const [addNewNote, setAddNewNote] = useState(false);
-    const [user, setUser] = useState(null);
-    const [tasks, setTasks] = useState([]);
-    // const userId = user.userId;
-    const [adminModal, setAdminModal] = useState('classes')
-    const [admins, setAdmins] = useState([])
-    const emptyAdmin = {
-        name: "",
-        email: "",
-    }
-    const [adminUpdate, setAdminUpdate] = useState({})
-    const [newAdmin, setNewAdmin] = useState(emptyAdmin)
+  const fetchURL = 'http://localhost:3000'
+  const [classes, setClasses] = useState(['this']);
+  const [notes, setNotes] = useState([]);
+  const [addNewNote, setAddNewNote] = useState(false);
+  const [user, setUser] = useState(null);
+  const [tasks, setTasks] = useState([]);
+  // const userId = user.userId;
+  const [adminModal, setAdminModal] = useState('classes')
+  const [admins, setAdmins] = useState([])
+  const emptyAdmin = {
+      name: "",
+      email: "",
+  }
+  const [adminUpdate, setAdminUpdate] = useState({})
+  const [newAdmin, setNewAdmin] = useState(emptyAdmin)
 
-    const fetchTasks = async () => {
-      const response = await fetch(`${fetchURL}/tasks/${user.userId}`);
-      const data = await response.json();
-      setTasks(data);
-      console.log(tasks);
+  const fetchNotes = async () => {
+    const response = await fetch(`${fetchURL}/notes/${user.userId}`);
+    const data = await response.json();
+    setNotes(data);
+    console.log(notes)
+  };
+
+  const fetchTasks = async () => {
+    const response = await fetch(`${fetchURL}/tasks/${user.userId}`);
+    const data = await response.json();
+    setTasks(data);
+    console.log(tasks);
   }
 
   const openNoteModal = () => {
@@ -136,7 +143,7 @@ export const BtbProvider = ({children}) =>{
   },[]);
 
     const getAdmins = async () => {
-        const res = await fetch(`${fetchUrl}/admins`)
+        const res = await fetch(`${fetchURL}/admins`)
         const data = await res.json()
         if(data.msg === 'Email or password does not exist'){
             console.log('Make alert')
@@ -146,7 +153,7 @@ export const BtbProvider = ({children}) =>{
 
     const makeAdmin = async (admin) => {
         const req = admin
-        const res = await fetch(`${fetchUrl}/makeAdmin`, {
+        const res = await fetch(`${fetchURL}/makeAdmin`, {
             method: 'POST',
             headers: {
                 'Content-Type':'application/json'
@@ -158,7 +165,7 @@ export const BtbProvider = ({children}) =>{
 
     const updateAdmin = async (update) => {
         const req = update
-        const res = await fetch(`${fetchUrl}/updateAdmin`, {
+        const res = await fetch(`${fetchURL}/updateAdmin`, {
             method: 'PATCH',
             headers: {
                 'Content-Type':'application/json'
@@ -179,6 +186,7 @@ export const BtbProvider = ({children}) =>{
           openNoteModal, 
           closeNoteModal,
           login,
+          logOut,
           user,
           makeUser,
           logOut,
@@ -187,6 +195,15 @@ export const BtbProvider = ({children}) =>{
           fetchNotes,
           tasks,
           fetchTasks,
+          adminModal,
+          setAdminModal,
+          admins,
+          newAdmin,
+          setNewAdmin,
+          makeAdmin,
+          adminUpdate,
+          setAdminUpdate,
+          updateAdmin,
         }}>
             {children}
         </BtbContext.Provider>
