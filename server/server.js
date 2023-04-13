@@ -130,6 +130,20 @@ app.route('/notes/:id').delete( async (req, res) => {
   }
 })
 
+app.route('/tasks/:id').put( async (req, res) => {
+  const { id } = req.params
+  const parseId = parseInt(id, 10)
+  try {
+    const currentTask = await sql`SELECT complete FROM tasks WHERE id = ${parseId}`
+    const currentCompleteValue = currentTask[0].complete
+    const newCompleteValue = !currentCompleteValue
+    const completeTask = await sql`UPDATE tasks SET complete = ${newCompleteValue} WHERE id = ${id} RETURNING id`
+    res.json(completeTask)
+  } catch(err) {
+    console.error(err)
+  }
+})
+
 
 app.get("/classes", async (req, res) => {
   try {

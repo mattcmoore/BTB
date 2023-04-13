@@ -46,17 +46,56 @@ export function StudentChecklist () {
         }
     }
     const [checked, setChecked] = useState([]); 
-    const handleCheck = (e) => {
+    const handleCheck = async (e, id) => {
         let updatedList = [...checked];
         if (e.target.checked) {
             updatedList = [...checked, e.target.value];
             e.target.parentNode.style.color = "green";
-            console.log(updatedList);
         } else {
-            updatedList.splice(checked.indexOf(e.target.value), 1);
+            updatedList.splice(checked.indexOf(id), 1);
             e.target.parentNode.style.color = "black";
         }
         setChecked(updatedList);
+
+        try {
+            const response = await fetch(`${fetchURL}/tasks/${id}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                checked: e.target.checked,
+              }),
+            });
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            const data = await response.json();
+            console.log(data);
+          } catch (error) {
+            console.error("Error:", error);
+          }
+    }
+
+    const editTask = async (id) => {
+        e.preventDefault()
+
+        try {
+            const response = await fetch(`${fetchURL}/tasks/${id}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    checked: value
+                }),
+            })
+            if(!response.status === 200) {
+                throw new Error('Did not hit')
+            }
+            const data = await response.json();
+            console.log(data)
+        } catch(err) {
+            console.error(error)
+        }
     }
 
     function formatDate(dateString) {
@@ -94,7 +133,6 @@ export function StudentChecklist () {
         // Convert the difference to days
         const days = Math.ceil(differenceInMilliseconds / (1000 * 60 * 60 * 24));
       
-        console.log(days)
         return days;
       }
 
@@ -168,8 +206,8 @@ export function StudentChecklist () {
                             <div className="task-item-container">
                                 <div className="list-pop">
                                     <div className="task-item" key={index}>
-                                        <input value={item} type="checkbox" onChange={handleCheck} />
-                                        <span className={`${colorItem(item, daysLeft(item.due))}`}>{item.task}</span>
+                                        <input value={item} type="checkbox" onChange={(e) => handleCheck(e, item.id)}  />
+                                        <span className={checked.includes(item) ? 'checked' : (daysLeft(item.due) <= 14 ? 'red' : daysLeft(item.due) <= 30 ? 'yellow' : '')}>{item.task}</span>
                                         {/* className={checked.includes(item) ? 'checked' : ''} */}
                                         {/* checked.includes(item) ? 'checked' : (daysLeft(item.due) <= 14 ? 'red' : daysLeft(item.due) <= 30 ? 'yellow' : '') */}
                                     </div>
