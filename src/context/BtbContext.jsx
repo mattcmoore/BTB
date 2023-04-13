@@ -189,7 +189,6 @@ export const BtbProvider = ({children}) =>{
           logOut,
           user,
           makeUser,
-          logOut,
           createNewClass,
           fetchURL,
           fetchNotes,
