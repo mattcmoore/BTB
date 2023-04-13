@@ -6,6 +6,10 @@
 
 .admin-dashboard-container-body{
     position: relative;
-    min-height: 100%;
+    top: 30px;
+    height: calc(100vh - 30px);
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center ;
 }
