@@ -17,12 +17,18 @@ export const BtbProvider = ({children}) =>{
     const [adminUpdate, setAdminUpdate] = useState({})
     const [newAdmin, setNewAdmin] = useState(emptyAdmin)
     const [user, setUser] = useState(null)
+    const [tasks, setTasks] = useState([])
 
     const fetchUrl = 'http://localhost:3000';
 
     const closeNoteModal = () => {
         setAddNewNote(false)
     }
+    useEffect(()=>{
+      // should be set to 'classes' in production
+      setAdminModal('admins')
+      getAdmins()
+    },[])
 
     const createNewClass = async (formData) => {
         const res = await fetch(`${fetchURL}/createNewClass`, {
@@ -40,22 +46,22 @@ export const BtbProvider = ({children}) =>{
         }
       };
 
-  const login = async (formState) => {
-    const res = await fetch(`${fetchURL}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formState),
-    });
-    const data = await res.json();
-    console.log(data);
-    if (data.msg === "Email or password does not exist") {
-      console.log("Make alert");
-    } else {
-      localStorage.setItem("jwt", data.token);
-      setUser(data);
-    }
+    const login = async (formState) => {
+      const res = await fetch(`${fetchURL}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formState),
+      });
+      const data = await res.json();
+      console.log(data);
+      if (data.msg === "Email or password does not exist") {
+        console.log("Make alert");
+      } else {
+        localStorage.setItem("jwt", data.token);
+        setUser(data);
+      }
   };
 
   const makeUser = async (formData) => {
@@ -117,7 +123,6 @@ export const BtbProvider = ({children}) =>{
     }
   },[]);
 
-
     const getAdmins = async () => {
         const res = await fetch(`${fetchUrl}/admins`)
         const data = await res.json()
@@ -149,89 +154,7 @@ export const BtbProvider = ({children}) =>{
             body: JSON.stringify(req)})
             getAdmins()
             setAdminUpdate({})
-        }
-        const login = async (formState) => {
-            const res = await fetch(`${fetchURL}/login`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(formState),
-            });
-            const data = await res.json();
-            console.log(data);
-            if (data.msg === "Email or password does not exist") {
-              console.log("Make alert");
-            } else {
-              localStorage.setItem("jwt", data.token);
-              setUser(data);
-            }
-          };
-        
-          const makeUser = async (formData) => {
-            const res = await fetch(`${fetchURL}/makeStudent`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(formData),
-            });
-            const data = await res.json();
-            if (data.msg === "logged in") {
-              setUser(data);
-            } else {
-              console.log(data.msg);
-            }
-          };
-        
-          const logOut = async () => {
-            localStorage.clear("jwt");
-            setUser(null);
-          };
-        
-          const checkToken = async () => {
-            const token = localStorage.getItem("jwt");  
-            if(token){
-                const decoded = jwtDecode(token);
-                setUser(decoded)
-            }  
-          };
-        
-          useEffect(() => {
-            checkToken();
-          }, []);
-        
-          function clearTokenOnExpiration(token) {
-            try {
-                const decoded = jwtDecode(token);
-                const currentTime = Math.floor(Date.now() / 1000);
-                const remainingTime = (decoded.exp - currentTime) * 1000;
-            
-                const timer = setTimeout(() => {
-                  localStorage.clear('jwt');
-                  console.log('JWT token cleared from local storage');
-                }, remainingTime);
-            
-                // Return a function to clear the timer
-                return () => clearTimeout(timer);
-              } catch (error) {
-                console.error('Invalid JWT:', error);
-              }
-          }
-        
-          useEffect(() => {
-            const token = localStorage.getItem("jwt");
-            if (token) {
-              const cleanUp = clearTokenOnExpiration(token);
-              return cleanUp
-            }
-          },[]);
-    
-    useEffect(()=>{
-        // should be set to 'classes' in production
-        setAdminModal('admins')
-        getAdmins()
-    },[])
+        }     
 
     return(
         <BtbContext.Provider value={{
@@ -239,6 +162,7 @@ export const BtbProvider = ({children}) =>{
             logOut,
             login,
             user,
+            tasks,
             fetchURL,
             makeUser,
             setClasses,
