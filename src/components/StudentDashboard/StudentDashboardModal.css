@@ -1,0 +1,60 @@
+.notes-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.notes-modal-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.notes-modal {
+    background-color: white;
+    border-radius: 2.5%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 780px;
+    max-width: 100%;
+    height: 80%;
+    /* overflow: scroll; */
+    display:flex;
+    flex-direction: column;
+}
+
+.notes-close-btn {
+    display: flex;
+    border-radius: 50%;
+    margin-left: 1em;
+    margin-top: 1.5em;
+    height: 60px;
+}
+
+.notes-close-btn button {
+    height: 32px;
+    width: 32px;
+    background-color: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.notes-close-btn svg {
+    height: 16px;
+    width: 16px;
+    stroke: rgb(34, 34, 34);
+    stroke-width: 3px;
+    /* overflow: visible; */
+    border-radius: 50%;
+}
+
+.notes-close-btn button:hover {
+    background-color: rgba(235, 235, 235, 0.55);
+}

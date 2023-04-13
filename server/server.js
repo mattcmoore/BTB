@@ -51,12 +51,87 @@ const sql = postgres(process.env.DATABASE_URL);
 
 app.use(express.json());
 app.use(morgan("tiny"));
-app.use(cors({
-  origin: '*'
-}));
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(cookieParser());
 
 app.use(express.static("../dist"));
+
+function subtractDays(dateString, days) {
+  // Convert the 'yyyy-mm-dd' string to a Date object
+  const date = new Date(dateString);
+
+  // Subtract the desired number of days
+  date.setDate(date.getDate() - days);
+
+  // Convert the new Date object back to the 'yyyy-mm-dd' format
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+app.route('/notes/:id').get( async (req, res) => {
+   console.log('hit')
+   const { id } = req.params
+   try {
+       const data = await sql`SELECT * FROM notes WHERE author = ${id}`
+       res.json(data)
+   } catch (error) {
+       res.json(error)
+   }
+})
+
+app.route('/tasks/:id').get( async (req, res) => {
+  console.log('tasks hit')
+  const { id } = req.params
+  try {
+    const data = await sql`SELECT * FROM tasks WHERE user_id = ${id}`
+    res.json(data)
+    console.log(data)
+  }
+  catch(error) {
+    res.json(error)
+  }
+})
+
+app.route('/notes').post( async (req, res) => {
+   const { body, date, author } = req.body
+   try {
+      const newNote = await sql`INSERT INTO notes(body, date, author) VALUES (${body}, ${date}, ${author})`
+      res.json(newNote)
+   } catch(err) {
+      console.log(err)
+   }
+})
+
+app.route('/notes/:id').put(async (req, res) => {
+  const { id } = req.params;
+  const { body, date, author } = req.body
+  try {
+    const editNote = await sql`UPDATE notes SET body = ${body}, date = ${date}, author = ${author} WHERE id = ${id} RETURNING id`
+    res.json(editNote)
+  } catch(err) {
+    console.error(err)
+  }
+})
+
+app.route('/notes/:id').delete( async (req, res) => {
+  const { id } = req.params
+
+  console.log(typeof id)
+  try{
+    const deleteNote = await sql`DELETE FROM notes WHERE id = ${id} RETURNING id`
+    res.json(deleteNote)
+  } catch(err) {
+    console.error(err)
+  }
+})
+
 
 app.get("/classes", async (req, res) => {
   try {
@@ -132,8 +207,75 @@ app.post("/makeStudent", async (req, res) => {
                    VALUES (${email}, ${name}, false, ${classId}, ${separationDate}, ${branch}, ${hasFamily}, ${livesInBarracks}) returning id, admin, name, email
                    `;
             const userId = data[0];
+            const sixMonths = subtractDays(separationDate, 180);
+            const sixTasks = [
+              "Decide whether to take transition leave or sell back your leave balance. If taking transition leave, prepare a branch-specific leave form",
+              "If you plan to relocate upon separation, inquire for transportation counseling for your household goods",
+              "Review/update and acquire your military documents, LES, SGLI, Certifications",
+              "Schedule a Physical Evaluation appointment",
+              "Review your clothing record and clean your gear for CIF turn-in",
+              "Obtain copies of your Medical Records",
+              "If retiring, meet with your service retirement officer",
+            ];
+            sixTasks.forEach(async (task) => {
+              await sql`
+              INSERT INTO tasks (task, complete, due, user_id)
+              VALUES (${task}, false, ${sixMonths}, ${userId.id})
+              `;
+            });
+            const threeMonths = subtractDays(separationDate, 90);
+            const threeTasks = [
+              "Attend briefings relevant to out-processing",
+              "If taking transition leave, secure your leave form",
+              "Contact medical facility to get copies of medical & dental records",
+              "Complete dental and physical examinations",
+              "Inquire/secure separation orders",
+              "Research VA insurance coverage and other health insurance options if not sure of eligibility",
+            ];
+            threeTasks.forEach(async (task) => {
+              await sql`
+              INSERT INTO tasks (task, complete, due, user_id)
+              VALUES (${task}, false, ${threeMonths}, ${userId.id})
+              `;
+            });
+            const twoMonths = subtractDays(separationDate, 60);
+            const twoTasks = [
+              "Acquire your separation orders and if taking leave, leave form, make 15 copies for distribution",
+              "Review your clothing record and inspect gear for CIF turn-in, or turn-in CIF gear",
+              "If taking leave, begin clearing the installation",
+              "Finalize relocation appointments and review benefits",
+              "Begin to prepare disability claim with local VSO (if applicable and not completed previously)",
+            ];
+            twoTasks.forEach(async (task) => {
+              await sql`
+              INSERT INTO tasks (task, complete, due, user_id)
+              VALUES (${task}, false, ${twoMonths}, ${userId.id})
+              `;
+            });
+            const oneMonth = subtractDays(separationDate, 30);
+            const oneTasks = [
+              "Review your military records for accuracy. Request corrections, if necessary (awards, deployments, DOR).",
+              "If not taking leave, begin clearing the installation",
+              "Turn in your central issue (CIF)",
+              "Finalize medical processes on post",
+              "Review your disability claim (if applicable)",
+              "Review your plan for life after the military",
+              "Finalize unit clearing",
+              "Finalize installation clearing",
+              "Pick up DD-214 and make copies, store in a safe location",
+              "Establish your local VA centers (Emergency and Clinic)",
+              "Communicate ETS Ceremony with your unit (if needed)",
+              "Communicate with local VSO",
+              "Contact VA for benefits enrollment/verification",
+            ];
+            oneTasks.forEach(async (task) => {
+              await sql`
+              INSERT INTO tasks (task, complete, due, user_id)
+              VALUES (${task}, false, ${oneMonth}, ${userId.id})
+              `;
+            });
             const token = jwt.sign(userId, secretKey, { expiresIn: "1h" });
-          res.json({ msg: "logged in", ...userId , token: token});
+            res.json({ msg: "logged in", ...userId, token: token });
           });
         })
         .catch((error) => {
@@ -236,7 +378,7 @@ app.post("/login", async (req, res) => {
         onAuthStateChanged(auth, (user) => {
           console.log("first");
           const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
-          res.json({ msg: "logged in", ...payload , token: token});
+          res.json({ msg: "logged in", ...payload, token: token });
         });
       })
       .catch((error) => {
@@ -248,12 +390,11 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/checkToken", async (req, res) => {
-  const {jwt} = req.body
-  console.log(jwt);
+  const { jwt } = req.body;
   if (jwt) {
     // If JWT exists, decode it
     try {
-      const decoded = jwt.verify(jwt, secretKey);
+      const decoded = jwt.verify(jwt, secretKey);      
       const userId = decoded;
       res.json({ msg: "Success", ...userId });
     } catch (error) {
@@ -266,16 +407,16 @@ app.post("/checkToken", async (req, res) => {
   }
 });
 
-app.post("/resetPass", async (req, res)=>{
-  const {email} = req.body
+app.post("/resetPass", async (req, res) => {
+  const { email } = req.body;
   sendPasswordResetEmail(auth, email)
-  .then(()=>{
-    res.status(200).json({msg:'sent'})
-  })
-  .catch((error)=>{
-    res.status(404).json({...error})
-  })
-})
+    .then(() => {
+      res.status(200).json({ msg: "sent" });
+    })
+    .catch((error) => {
+      res.status(404).json({ ...error });
+    });
+});
 
 app.get("/logOut", (req, res) => {
   try {
