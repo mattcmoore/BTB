@@ -1,7 +1,7 @@
 import './AdminDashboard.css'
-import AdminNavbar from './AdminNavbar/AdminNavbar'
+import AdminNavbar from './AdminNavbar/AdminNavbar.jsx'
 
-const AdminDashboard = () => {
+export const AdminDashboard = () => {
     return(
         <div className="admin-dashboard-container">
             <AdminNavbar />

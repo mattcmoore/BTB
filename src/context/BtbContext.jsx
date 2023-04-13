@@ -9,19 +9,73 @@ export const BtbProvider = ({ children }) => {
   const [classes, setClasses] = useState(["this"]);
   const [user, setUser] = useState(null);
 
-  const createNewClass = async (formData) => {
-    const res = await fetch(`${fetchURL}/createNewClass`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-    const data = await res.json();
-    if (data.msg === "Class created") {
-      return data.classId;
-    } else {
-      throw new Error("Failed to create class");
+const BtbContext = createContext()
+
+export const BtbProvider = ({children}) =>{
+    const fetchURL = 'http://localhost:3000';
+    const [classes, setClasses] = useState(['this']);
+    const [notes, setNotes] = useState([]);
+    const [addNewNote, setAddNewNote] = useState(false);
+    const [user, setUser] = useState(null);
+    const [tasks, setTasks] = useState([]);
+    // const userId = user.userId;
+
+    const fetchNotes = async () => {
+        const response = await fetch(`${fetchURL}/notes/${user.userId}`);
+        const data = await response.json();
+        setNotes(data);
+        console.log(notes)
+    };
+
+    const fetchTasks = async () => {
+        const response = await fetch(`${fetchURL}/tasks/${user.userId}`);
+        const data = await response.json();
+        setTasks(data);
+        console.log(tasks);
+    }
+
+    const openNoteModal = () => {
+        setAddNewNote(true)
+    }
+
+    const closeNoteModal = () => {
+        setAddNewNote(false)
+    }
+
+    const createNewClass = async (formData) => {
+        const res = await fetch(`${fetchURL}/createNewClass`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+        const data = await res.json();
+        if (data.msg === 'Class created') {
+          return data.classId;
+        } else {
+          throw new Error('Failed to create class');
+        }
+      };
+
+    const login = async (formState) =>{
+        const res = await fetch(`${fetchURL}/login`, {
+            method: "POST",
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formState),
+        })
+        const data = await res.json()
+        console.log(data);
+        if(data.msg === 'Email or password does not exist'){
+            console.log('Make alert')
+        } else {
+            localStorage.setItem('jwt', data.token)
+            setUser(data)
+            console.log(data)
+            fetchNotes(user)
+        }
     }
   };
 
@@ -104,21 +158,28 @@ export const BtbProvider = ({ children }) => {
 
 
 
-  return (
-    <BtbContext.Provider
-      value={{
-        classes,
-        setClasses,
-        login,
-        user,
-        makeUser,
-        logOut,
-        createNewClass,
-        fetchURL,
-      }}
-    >
-      {children}
-    </BtbContext.Provider>
-  );
-};
-export default BtbContext;
+    return(
+        <BtbContext.Provider value={{
+            classes,
+            setClasses,
+            notes,
+            setNotes,
+            addNewNote,
+            setAddNewNote,
+            openNoteModal, 
+            closeNoteModal,
+            login,
+            user,
+            makeUser,
+            logOut,
+            createNewClass,
+            fetchURL,
+            fetchNotes,
+            tasks,
+            fetchTasks,
+        }}>
+            {children}
+        </BtbContext.Provider>
+    )
+}
+export default BtbContext
