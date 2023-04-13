@@ -5,6 +5,8 @@ import SignUpForm from "./components/SignupForm/SignUpForm";
 import NewClassForm from "./components/NewClassForm/NewClassForm"
 import { BtbProvider } from "./context/BtbContext";
 
+import Chatbar from "./components/ChatBar/Chatbar";
+
 function App() {
   return (
     <div className="App">
@@ -14,6 +16,7 @@ function App() {
             <Route exact={true} path="/" element={<ProtectedHome />} />
             <Route path="/signup" element={<SignUpForm />} />
             <Route path="/newclass" element={<NewClassForm />}/>
+            <Route path='/chat-test' element={<Chatbar />}/>
           </Routes>
         </Router>
       </BtbProvider>
