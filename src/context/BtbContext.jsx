@@ -6,8 +6,12 @@ const BtbContext = createContext()
 
 export const BtbProvider = ({children}) =>{
     const fetchURL = 'http://localhost:3000'
-
-    const [classes, setClasses] = useState(['this'])
+    const [classes, setClasses] = useState(['this']);
+    const [notes, setNotes] = useState([]);
+    const [addNewNote, setAddNewNote] = useState(false);
+    const [user, setUser] = useState(null);
+    const [tasks, setTasks] = useState([]);
+    // const userId = user.userId;
     const [adminModal, setAdminModal] = useState('classes')
     const [admins, setAdmins] = useState([])
     const emptyAdmin = {
@@ -16,11 +20,6 @@ export const BtbProvider = ({children}) =>{
     }
     const [adminUpdate, setAdminUpdate] = useState({})
     const [newAdmin, setNewAdmin] = useState(emptyAdmin)
-    const [user, setUser] = useState(null)
-    const [tasks, setTasks] = useState([])
-    const [addNewNote, setAddNewNote] = useState(false)
-
-    const fetchUrl = 'http://localhost:3000';
 
     const fetchTasks = async () => {
       const response = await fetch(`${fetchURL}/tasks/${user.userId}`);
