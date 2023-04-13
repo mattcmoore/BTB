@@ -292,6 +292,15 @@ app.post("/makeStudent", async (req, res) => {
   }
 });
 
+app.get('/admins', async (req, res) => {
+  try{
+     const data = await sql `SELECT * FROM users WHERE admin = true`
+     res.json(data)
+  } catch(error){
+     res.json(error)
+  }
+})
+
 app.post("/makeAdmin", async (req, res) => {
   const { email, name } = req.body;
   const password = "G4L1V1B0iz4Life";
