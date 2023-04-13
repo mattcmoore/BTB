@@ -2,13 +2,6 @@ import React, { createContext, useContext, useState } from "react";
 import { useEffect } from "react";
 import jwtDecode from "jwt-decode";
 
-const BtbContext = createContext();
-
-export const BtbProvider = ({ children }) => {
-  const fetchURL = "http://localhost:3000";
-  const [classes, setClasses] = useState(["this"]);
-  const [user, setUser] = useState(null);
-
 const BtbContext = createContext()
 
 export const BtbProvider = ({children}) =>{
@@ -57,27 +50,6 @@ export const BtbProvider = ({children}) =>{
           throw new Error('Failed to create class');
         }
       };
-
-    const login = async (formState) =>{
-        const res = await fetch(`${fetchURL}/login`, {
-            method: "POST",
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formState),
-        })
-        const data = await res.json()
-        console.log(data);
-        if(data.msg === 'Email or password does not exist'){
-            console.log('Make alert')
-        } else {
-            localStorage.setItem('jwt', data.token)
-            setUser(data)
-            console.log(data)
-            fetchNotes(user)
-        }
-    }
-  };
 
   const login = async (formState) => {
     const res = await fetch(`${fetchURL}/login`, {
@@ -181,5 +153,6 @@ export const BtbProvider = ({children}) =>{
             {children}
         </BtbContext.Provider>
     )
-}
+  }
+
 export default BtbContext
