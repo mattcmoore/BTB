@@ -18,33 +18,46 @@ export const BtbProvider = ({children}) =>{
     const [newAdmin, setNewAdmin] = useState(emptyAdmin)
     const [user, setUser] = useState(null)
     const [tasks, setTasks] = useState([])
+    const [addNewNote, setAddNewNote] = useState(false)
 
     const fetchUrl = 'http://localhost:3000';
 
-    const closeNoteModal = () => {
-        setAddNewNote(false)
-    }
+    const fetchTasks = async () => {
+      const response = await fetch(`${fetchURL}/tasks/${user.userId}`);
+      const data = await response.json();
+      setTasks(data);
+      console.log(tasks);
+  }
+
+  const openNoteModal = () => {
+      setAddNewNote(true)
+  }
+
+  const closeNoteModal = () => {
+      setAddNewNote(false)
+  }
+
+  const createNewClass = async (formData) => {
+      const res = await fetch(`${fetchURL}/createNewClass`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+      const data = await res.json();
+      if (data.msg === 'Class created') {
+        return data.classId;
+      } else {
+        throw new Error('Failed to create class');
+      }
+    };
+
     useEffect(()=>{
       // should be set to 'classes' in production
       setAdminModal('admins')
       getAdmins()
     },[])
-
-    const createNewClass = async (formData) => {
-        const res = await fetch(`${fetchURL}/createNewClass`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(formData)
-        });
-        const data = await res.json();
-        if (data.msg === 'Class created') {
-          return data.classId;
-        } else {
-          throw new Error('Failed to create class');
-        }
-      };
 
     const login = async (formState) => {
       const res = await fetch(`${fetchURL}/login`, {
