@@ -1,8 +1,8 @@
-@import url('https://fonts.cdnfonts.com/css/proxima-nova-2?styles=44818,44817,44816,44820');
+/* @import url('https://fonts.cdnfonts.com/css/proxima-nova-2?styles=44818,44817,44816,44820'); */
 
 .main-container {
-    width: 90vw;
-    height: 90vh;
+    width: 100vw;
+    height: 100vh;
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -50,6 +50,7 @@
     position: relative;
     border-bottom: 2px solid var(--gray);
     bottom: 2px;
+    z-index: 3;
 }
 
 .student-dropdown.mouseover{
@@ -61,6 +62,8 @@
     top: -30px;
     width: 250px;
     right: 30px;
+    z-index: 8;
+    background-color: var(--white);
 }
 
 .student-dropdown div{
@@ -102,6 +105,12 @@
     border-top: 1px solid var(--gray);
     display: flex;
     align-items: center;
+}
+
+.triangle{
+    position: relative;
+    width: 12px;
+    top: -5px;
 }
 
 /*first attempt begin*/
@@ -243,6 +252,8 @@
     /* display: flex; */
     /* flex-direction: column; */
     width: 100%;
+    height: 30%;
+    overflow: scroll;
 }
 
 .task {
@@ -257,7 +268,7 @@
 .task-item-container {
     display: flex;
     flex-direction: row;
-    width: 100%
+    width: 100%;
 }
 
 .list-pop {
@@ -274,24 +285,102 @@
 }
 
 .due-date {
-    display: flex;
-    padding: 0 15px;
+    display: inline-flex;
+    padding: 8px 15px;
     width: 50%;
-    justify-content: right;
+    justify-content: center;
 }
 
 .calendar-container {
     padding-left: 10px;
 }
 
+.red {
+    color: red;
+  }
+
+.yellow {
+    color: orange;
+}
+
+.checked {
+    color: green;
+  }
+
 .notes-container {
+    position:relative;
     font-weight: proxima-nova, sans-serif;
-    width: 50%;
-    text-align: left;
-    padding-left: 100px;
+    width: 40%;
+    /* text-align: left; */
     display: flex;
     flex-direction: column;
+    left: 7.5%;
 }
+
+.note-container {
+    position:absolute;
+    left:0;
+    right:0;
+    display:block;
+    width: 100%;
+
+}
+
+.header-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#notes-title {
+    margin-right:2%;
+}
+
+.new-note {
+    position: absolute;
+    right: 0;
+    width: auto;
+    border: 1px solid black; 
+    border-radius: 10px;   
+    cursor: pointer;
+}
+
+.note-btn {
+    margin: 5px 5px;
+}
+
+.note-item {
+    height: 10%;
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.note-actual {
+    padding: 5px;
+}
+
+.delete {
+    position: relative;
+    /* border: 1.5px solid rgb(77, 77, 77);
+    color: rgb(77, 77, 77);
+    text-transform: uppercase; */
+    left: 95%;
+    /* bottom: 10px; */
+    height: 20px;
+    width: 20px;
+  }
+
+  .edit {
+    position: absolute;
+    border: 1.5px solid rgb(77, 77, 77);
+    color: rgb(77, 77, 77);
+    text-transform: uppercase;
+    right: 70px;
+  }
+
+  
 
 
 

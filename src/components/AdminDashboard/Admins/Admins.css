@@ -1,0 +1,50 @@
+.hidden{
+    display: none;
+}
+caption{
+    margin: 20px 20px 10px 40px;
+    text-align: left;
+}
+
+.admin-table{
+    width: 700px;
+    height: 400px;
+    border-radius: 4px;
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.2); 
+    padding: 10px;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: min-content;
+}
+
+.admin-table table{
+    border-collapse: separate;
+    border-spacing: 50px 10px;
+}
+.admin-table input{
+    border: none;
+    outline: none;
+    width: 100%;
+    border-bottom: 1px solid var(--silver);
+}
+
+.admin-table input:focus{
+    border-bottom: 1px solid var(--teal);
+}
+
+/* remove ? */
+tbody tr:last-child td{
+    width: 70%;
+}
+
+tr:not(:last-child) td{
+    cursor: pointer;
+} 
+
+.hide-input{
+    display: none;
+}
+
+.show-input input{
+    display: block;
+}
