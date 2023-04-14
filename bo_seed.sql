@@ -112,7 +112,7 @@ INSERT INTO messages (to_user, from_user, body, date) VALUES ( 5, 3, 'Hey, have 
 INSERT INTO messages (to_user, from_user, body, date) VALUES ( 1, 2, 'Hi, thanks for offering to help with the algorithm. Can we schedule a time?', '2023-03-21');
 INSERT INTO messages (to_user, from_user, body, date) VALUES ( 3, 4, 'Did you hear about the new game that just came out?', '2023-02-20');
 INSERT INTO messages (to_user, from_user, body, date) VALUES ( 2, 3, 'Can you recommend any good books on programming?', '2023-01-15');
-INSERT INTO messages (to_user, from_user, body, date) VALUES ( 1, 4, 'How was your vacation? I hope you had a good time.', '2023-01-20');
+INSERT INTO messages (to_user, from_user, body, date) VALUES ( 2, 4, 'How was your vacation? I hope you had a good time.', '2023-01-20');
 INSERT INTO messages (to_user, from_user, body, date) VALUES ( 5, 2, 'Do you want to grab lunch this week?', '2023-02-05');
 
 INSERT INTO notes (body, date, author) VALUES ('Gotta layout and clean my gear before turn in. Will take about a week.', '03/21/2023', 3);
