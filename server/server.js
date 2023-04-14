@@ -70,6 +70,20 @@ app.get("/classes", async (req, res) => {
   }
 });
 
+app.get("/getAllUsers", async (req, res) => {
+  try {
+    console.log('fetching Users..');
+    const data = await sql `select users.name, users.admin, users.mcsp, count(tasks.complete) filter (where tasks.complete = true) as completed, count(task) as total from tasks join users ON tasks.user_id = users.id group by users.id;`;
+
+    res.json(data);
+  } catch(err){
+    console.error('Error executing query:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
 app.post("/createNewClass", async (req, res) => {
   const { start_date, end_date, code, mcsp_name } = req.body;
   try {
