@@ -113,6 +113,7 @@ app.post("/makeStudent", async (req, res) => {
     branch,
     hasFamily,
     livesInBarracks,
+    chat_history
   } = req.body;
   const emailsInUse = await sql`
   SELECT email FROM users
@@ -145,8 +146,8 @@ app.post("/makeStudent", async (req, res) => {
           onAuthStateChanged(auth, async (user) => {
             console.log("first");
             const data = await sql`
-                   INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks)
-                   VALUES (${email}, ${name}, false, ${classId}, ${separationDate}, ${branch}, ${hasFamily}, ${livesInBarracks}) returning id, admin, name, email
+                   INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks, chat_history)
+                   VALUES (${email}, ${name}, false, ${classId}, ${separationDate}, ${branch}, ${hasFamily}, ${livesInBarracks}, ${chat_history}) returning id, admin, name, email
                    `;
             const userId = data[0];
             const sixMonths = subtractDays(separationDate, 180);
@@ -371,7 +372,7 @@ app.get("/tasks/:id", async (req, res) => {
     const data = await sql`SELECT * FROM tasks WHERE user_id = ${id}`;
     res.json(data);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({error: 'server error'})
   }
 });
 
@@ -386,7 +387,7 @@ app.get('/messages/:to/:from', async (req, res) => {
         ORDER BY date DESC`;
       res.json(data)
   } catch (error) {
-      res.status(500).json(error)
+      res.status(500).json({error: 'server error'})
   }
 })
 
@@ -401,7 +402,7 @@ app.post('/messages', async (req, res) => {
       (${to}, ${from}, ${body}, NOW())`;
     res.json(data)
   } catch (error) {
-    res.status(500).json(error)
+    res.status(500).json({error: 'server error'})
   }
 })
 
@@ -415,6 +416,35 @@ app.post('/usersSearch/', async (req, res) => {
       WHERE name ILIKE ${'%' + search + '%'}`;
 
     res.json(data)
+  } catch (error) {
+    res.status(500).json({error: 'server error'})
+  }
+})
+
+app.get('/chatHistory/:user', async (req, res) => {
+  let { user } = req.params
+
+  try {
+    const [ data ] = await sql
+      `SELECT chat_history FROM users WHERE id = ${user}`
+
+    res.json(data)
+  } catch (error) {
+    res.status(500).json({error: 'server error'})
+  }
+})
+
+app.patch('/chatHistory/:user', async (req, res) => {
+  let { user } = req.params
+  let { chatHistory } = req.body
+
+  try {
+    const data = await sql
+      `UPDATE users
+      SET chat_history = ${chatHistory}
+      WHERE id = ${user}`
+
+    res.send(`successfully updated chat history for user ${user}`)
   } catch (error) {
     res.status(500).json({error: 'server error'})
   }

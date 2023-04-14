@@ -18,6 +18,7 @@ CREATE TABLE users(
     branch VARCHAR(255),
     family BOOLEAN,
     barracks BOOLEAN,
+    chat_history JSONB,
     FOREIGN KEY (mcsp) REFERENCES mcsps(id)
 
 );

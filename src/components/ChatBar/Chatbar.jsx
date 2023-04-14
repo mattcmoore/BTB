@@ -1,17 +1,19 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import Chat from "./Chat/Chat";
 import ChatSearch from './ChatSearch/ChatSearch'
 import './Chatbar.css'
+import BtbContext from "../../context/BtbContext";
+import ChatHistory from "./ChatHistory/ChatHistory";
 
 export const API_URL = 'http://localhost:3000'
 
 const Chatbar = () => {
    const [ sessions, setSessions ] = useState([])
 
-   const currentUser = '1'
+   const { user } = useContext(BtbContext)
 
    const newSession = (userID, name) => {
-      setSessions([...sessions, {to: userID, from: currentUser, name}])
+      setSessions([...sessions, {to: userID, from: user.userId, name}])
    }
 
    const closeSession = (id) => {
@@ -27,6 +29,7 @@ const Chatbar = () => {
    return (
       <div className="chatbar">
          <ChatSearch newSession={newSession}/>
+         <ChatHistory />
          {sessions.map(session => 
                <Chat to={session.to} 
                from={session.from} 

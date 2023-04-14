@@ -18,6 +18,10 @@ const SignUpForm = () => {
     branch: "",
     hasFamily: false,
     livesInBarracks: false,
+    chat_history: {
+      chatHist: [],
+      chatActive: []
+    }
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
