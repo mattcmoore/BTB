@@ -61,7 +61,7 @@ export const BtbProvider = ({children}) =>{
 
     useEffect(()=>{
       // should be set to 'classes' in production
-      setAdminModal('admins')
+      setAdminModal('classes')
       getAdmins()
     },[])
 
