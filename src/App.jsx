@@ -42,12 +42,6 @@ function App() {
                 </ProtectedUser>
               }
             />
-            <Route
-              path="/chat-test"
-              element={
-                <Chatbar/>
-              }
-            />
           </Routes>
         </Router>
       </BtbProvider>

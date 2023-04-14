@@ -425,26 +425,17 @@ app.get('/chatHistory/:user', async (req, res) => {
   let { user } = req.params
 
   try {
-    const [ data ] = await sql
-      `SELECT chat_history FROM users WHERE id = ${user}`
+    const data = await sql
+      `SELECT users.name, messages.to_user 
+      FROM messages 
+      JOIN users ON messages.to_user = users.id 
+      WHERE from_user = ${user} 
+      UNION SELECT users.name, messages.from_user 
+      FROM messages 
+      JOIN users ON messages.from_user = users.id 
+      WHERE to_user = ${user};`
 
     res.json(data)
-  } catch (error) {
-    res.status(500).json({error: 'server error'})
-  }
-})
-
-app.patch('/chatHistory/:user', async (req, res) => {
-  let { user } = req.params
-  let { chatHistory } = req.body
-
-  try {
-    const data = await sql
-      `UPDATE users
-      SET chat_history = ${chatHistory}
-      WHERE id = ${user}`
-
-    res.send(`successfully updated chat history for user ${user}`)
   } catch (error) {
     res.status(500).json({error: 'server error'})
   }

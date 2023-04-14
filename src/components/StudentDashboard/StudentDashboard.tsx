@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import BTBlogo from '../../assets/blue-ocean-logo-2.png'
-
+import Chatbar from '../ChatBar/Chatbar'
 
 export function StudentChecklist () {
     const checkList = ["Get separation orders", "Turn in gear", "Separation physical", "Separation brief", "Pick up DD214", "Clear installation", "Clear unit"];
@@ -26,6 +26,7 @@ export function StudentChecklist () {
     }
 
     return (
+        <>
         <div className="main-container">
             <div className="navbar-main-container">
                     <div className="student-navbar-container" onMouseLeave={()=>setMouseover(false)}>
@@ -106,6 +107,8 @@ export function StudentChecklist () {
                 </div>
             </div>
         </div>
+        <Chatbar />
+        </>
     )
 }
 

@@ -8,7 +8,8 @@ export const BtbProvider = ({ children }) => {
   const fetchURL = "http://localhost:3000";
   const [classes, setClasses] = useState(["this"]);
   const [user, setUser] = useState(null);
-
+  const [ chatSessions, setChatSessions ] = useState([])
+  
   const createNewClass = async (formData) => {
     const res = await fetch(`${fetchURL}/createNewClass`, {
       method: "POST",
@@ -103,7 +104,6 @@ export const BtbProvider = ({ children }) => {
   },[]);
 
 
-
   return (
     <BtbContext.Provider
       value={{
@@ -115,6 +115,8 @@ export const BtbProvider = ({ children }) => {
         logOut,
         createNewClass,
         fetchURL,
+        chatSessions,
+        setChatSessions
       }}
     >
       {children}

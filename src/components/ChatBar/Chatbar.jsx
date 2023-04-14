@@ -8,34 +8,36 @@ import ChatHistory from "./ChatHistory/ChatHistory";
 export const API_URL = 'http://localhost:3000'
 
 const Chatbar = () => {
-   const [ sessions, setSessions ] = useState([])
-
-   const { user } = useContext(BtbContext)
+   const { user, chatSessions, setChatSessions } = useContext(BtbContext)
 
    const newSession = (userID, name) => {
-      setSessions([...sessions, {to: userID, from: user.userId, name}])
+      setChatSessions([...chatSessions, {to: userID, name}])
    }
 
    const closeSession = (id) => {
-      let sessionsDupe = [...sessions]
-      for (let i = sessions.length -1; i >= 0; i--){
-         if (sessions[i].to === id){
+      let sessionsDupe = [...chatSessions]
+      for (let i = chatSessions.length -1; i >= 0; i--){
+         if (chatSessions[i].to === id){
             sessionsDupe.splice(i, 1)
-            setSessions(sessionsDupe)
+            setChatSessions(sessionsDupe)
          }
       }
    }
 
    return (
       <div className="chatbar">
-         <ChatSearch newSession={newSession}/>
-         <ChatHistory />
-         {sessions.map(session => 
-               <Chat to={session.to} 
-               from={session.from} 
-               name={session.name}
-               closeSession={closeSession}/>
-            )}
+         <div className="sidebar">
+            <ChatSearch newSession={newSession}/>
+            <ChatHistory user={user} newSession={newSession}/>
+         </div>
+         {chatSessions.map(session => 
+            <Chat 
+            key={session.to}
+            to={session.to} 
+            from={user.userId} 
+            name={session.name}
+            closeSession={closeSession}/>
+         )}
       </div>
    )
 }
