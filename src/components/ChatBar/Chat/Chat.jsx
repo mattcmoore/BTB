@@ -39,17 +39,19 @@ const Chat = ({ to, from, name, closeSession }) => {
       const dateObj = new Date(date)
       let dateFormated = dateObj.toDateString()
       let hour = dateObj.getHours()
+         if (hour < 10) hour = `0${hour}`
       let minute = dateObj.getMinutes()
+         if (minute < 10) minute = `0${minute}`
 
       return `${hour}:${minute} | ${dateFormated}`
    }
 
    return (
-      <div className="chat-bottom-nav">
+      <div className="chat-bottom-nav btb-content-box">
          <div className="chat-name" onClick={()=>setActive(!active)}>{name}</div>
-         <div className="close" onClick={()=>closeSession(to)}>X</div>
-         <div className="chat-container" style={{visibility: active ? 'visible' : 'hidden'}}>
-            <button onClick={getChats}>REFRESH</button>
+         <div className="close btb-btn" onClick={()=>closeSession(to)}>X</div>
+         <div className="chat-container btb-content-box" style={{visibility: active ? 'visible' : 'hidden'}}>
+            <button className="btb-btn" onClick={getChats}>REFRESH</button>
             <div className="chatbox">
                {messages.map( msg => 
                   <div key={msg.id} className={'msg ' + (msg.from_user == from ? 'msgFrom' : 'msgTo')}>
@@ -61,12 +63,12 @@ const Chat = ({ to, from, name, closeSession }) => {
                }
             </div>
             <form onSubmit={handleSendMessage}>
-               <textarea className="chat-input"
+               <textarea className="chat-input btb-input"
                   type='text'
                   value={newMessage} 
                   onChange={(e)=>{setNewMessage(e.target.value)}}
                   placeholder='Write a message...' ></textarea>
-               <input className="submit" type='submit' value='Send'></input>
+               <input className="submit btb-btn" type='submit' value='Send'></input>
             </form>
          </div>
       </div>

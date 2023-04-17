@@ -48,13 +48,8 @@ body {
 
   /* Box */
   border: 0px none rgb(255, 255, 255);
-  border-top: 0px none rgb(255, 255, 255);
-  border-right: 0px none rgb(255, 255, 255);
-  border-bottom: 0px none rgb(255, 255, 255);
-  border-left: 0px none rgb(255, 255, 255);
   overflow: visible;
   cursor: pointer;
-  visibility: visible;
   color: var(--white);
   /* Effects */
   transform: none;
