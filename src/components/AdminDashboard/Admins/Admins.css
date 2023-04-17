@@ -12,7 +12,6 @@ caption{
     border-radius: 4px;
     box-shadow: 0px 3px 15px rgba(0,0,0,0.2); 
     padding: 10px;
-
     display: grid;
     grid-template-columns: auto;
     grid-template-rows: min-content;
