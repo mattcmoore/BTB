@@ -168,8 +168,8 @@ export function StudentChecklist () {
                             <p>{user.name}</p><p><svg className="triangle" viewBox="0 0 232.72 115"><path className="cls-1" d="M116.02,120.76L1.17,.5H230.88L116.02,120.76Z"/></svg></p>
                         </div>
                         <div className={mouseover ? 'student-dropdown-account' : 'hidden' }>
-                            <p>MY ACCOUNT</p>
-                            <p>email address</p>
+                            <p>{user.name}'s Account</p>
+                            <p>{user.email}</p>
                         </div>
                         <div className={mouseover ? 'student-dropdown-sign-out' : 'hidden'}>SIGN OUT</div>
                     </div>
