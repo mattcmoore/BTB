@@ -12,15 +12,16 @@ caption{
     border-radius: 4px;
     box-shadow: 0px 3px 15px rgba(0,0,0,0.2); 
     padding: 10px;
-    display: grid;
-    grid-template-columns: auto;
-    grid-template-rows: min-content;
 }
 
 .admin-table table{
-    border-collapse: separate;
-    border-spacing: 50px 10px;
+    display: grid;
+    grid-template-columns: auto ;
+    grid-template-rows: auto ;
+    border-collapse: separate; 
+    border-spacing: 20px 5px;
 }
+
 .admin-table input{
     border: none;
     outline: none;
@@ -30,11 +31,6 @@ caption{
 
 .admin-table input:focus{
     border-bottom: 1px solid var(--teal);
-}
-
-/* remove ? */
-tbody tr:last-child td{
-    width: 70%;
 }
 
 tr:not(:last-child) td{
@@ -47,4 +43,10 @@ tr:not(:last-child) td{
 
 .show-input input{
     display: block;
+}
+
+.trashcan {
+    height: 20px;
+    width: 20px;
+    fill: var(--teal);
 }

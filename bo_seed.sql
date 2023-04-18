@@ -58,6 +58,7 @@ INSERT INTO mcsps (start_date, end_date, code, mcsp_name) VALUES ( '2022-08-10',
 
 INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('jrives@gmail.com', 'Jullian Rives', true, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('emusk@tesla.com', 'Elon Musk', true, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('garrett@gman.com', 'Garrett Ross', true, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('mariajohnson@example.com', 'Maria Johnson', false, 3, '2023-01-11', 'Airforce', true, false);
 INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('davidlee@example.com', 'David Lee', false, 1, '2023-01-11', 'Navy', false, true);
 INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('emilydavis@example.com', 'Emily Davis', false, 1, '2023-01-11', 'Army', true, true);

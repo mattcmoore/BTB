@@ -47,12 +47,16 @@
 
 .admin-dropdown.mouseover{
     box-shadow: 0px 3px 15px rgba(0,0,0,0.2); 
+    background-color: var(--white);
 }
 
 .admin-dropdown{
     position: absolute;
     top: -30px;
-    width: 250px;
+    min-width: 220px;
+    padding: 0 10px;
+    height: 200px;
+    z-index: 8;
     right: 30px;
 }
 
@@ -91,14 +95,29 @@
     margin: 0;
 }
 
+.admin-dropdown-account p:last-child{
+    font-weight: 200;
+    cursor:default;
+}
+
+.admin-dropdown-settings{
+    height: 300px;
+    width: 100%;
+}
 .admin-dropdown-sign-out {
     border-top: 1px solid var(--gray);
     display: flex;
     align-items: center;
 }
 
+.triangle.mouseover{
+    fill: var(--black);
+}
+
 .triangle{
     position: relative;
     width: 12px;
     top: -5px;
+    fill: var(--dove-gray);
 }
+

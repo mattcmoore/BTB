@@ -39,6 +39,7 @@ const Admins = () => {
 
 
     const headers = [
+        {key: "delete", label:""},
         {key: "name", label: "name"},
         {key: "email", label: "email"},
         {key: "mcsp", label: "mcsp"},
@@ -55,7 +56,6 @@ const Admins = () => {
     const handleEnter = (event) => {
         if(event.keyCode === 13){
             if(event.target.parentElement.className === "input-row"){
-                console.log("update")
             }
             if( Object.keys(newAdmin).every(key => newAdmin[key] !== "" && isValid === true) ){
                 makeAdmin(newAdmin)
@@ -84,8 +84,10 @@ const Admins = () => {
                                 return <Row key={row.id} row={row} handleChange={handleChange} handleEnter={handleEnter} />    
                             })}
                             <tr className="input-row" key={tableData.length+1}>
+                                <td name="delete"></td>
                                 <td><input autoFocus type="text" name="name" ref={nameInputRef} value={newAdmin.name} onChange={handleChange} onKeyDown={handleEnter}/></td>
                                 <td><input type="text" name="email" ref={emailInputRef} value={newAdmin.email} onChange={handleChange} onKeyDown={handleEnter}/></td>
+                                <td><input type="text" name="mcsp" value={newAdmin.mcsp} onChange={handleChange} onKeyDown={handleEnter}/></td>
                             </tr>               
                         </tbody>
                 </table>

@@ -332,9 +332,10 @@ app.post("/makeStudent", async (req, res) => {
   }
 });
 
-app.get('/admins', async (req, res) => {
+app.get('/admins/:id', async (req, res) => {
+  const { id } = req.params
   try{
-     const data = await sql `SELECT * FROM users WHERE admin = true`
+     const data = await sql `SELECT * FROM users WHERE admin = true AND id != ${id}`
      res.json(data)
   } catch(error){
      res.json(error)
@@ -377,12 +378,13 @@ app.post("/makeAdmin", async (req, res) => {
 });
 
 app.patch("/updateAdmin", async (req, res) => {
-  const { email, name, id } = req.body;
+  const { email, name, mcsp, id } = req.body;
   try {
     await sql`
             UPDATE users
             SET email = ${email},
-            name = ${name}
+            name = ${name},
+            mcsp = ${mcsp}
             WHERE id = ${id}
             `;
     res.json({ msg: "Admin Edited" });
@@ -390,6 +392,17 @@ app.patch("/updateAdmin", async (req, res) => {
     res.status(500).json({ msg: "Failed" });
   }
 });
+
+app.delete("/updateAdmin/:id", async (req, res) => {
+  const {id} = req.params
+  try{
+    const data = await sql `DELETE FROM users WHERE id = ${id}`
+    // res.json(data)  
+  }catch(error){
+    res.status(500).json({msg: "Failed"})
+  }
+
+})
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -399,16 +412,18 @@ app.post("/login", async (req, res) => {
   let exists = false;
   let admin = null;
   let name = "";
+  let e = "";
   let userId;
   emails.forEach((mail) => {
     if (mail.email === email) {
       exists = true;
       admin = mail.admin;
+      e = mail.email;
       userId = mail.id;
       name = mail.name;
     }
   });
-  const payload = { name: name, userId: userId, admin: admin };
+  const payload = { name: name, email: email, userId: userId, admin: admin };
   if (exists) {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
