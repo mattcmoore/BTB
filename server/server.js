@@ -60,6 +60,32 @@ app.use(cookieParser());
 
 app.use(express.static("../dist"));
 
+app.get("/accordian", async (req, res) => {
+  try {
+    console.log('fetching data..');
+    const data = await sql `
+    SELECT m.mcsp_name AS mcsp_name,
+    u.name AS user_name,
+    u.admin AS admin,
+    u.mcsp AS mcsp,
+    m.start_date AS start_date,
+    m.end_date AS end_date,
+    COUNT(t.complete) FILTER (WHERE t.complete = true) AS task_complete,
+    COUNT(t.task) AS total
+FROM mcsps m
+JOIN users u ON m.id = u.mcsp
+JOIN tasks t ON u.id = t.user_id
+GROUP BY m.mcsp_name, u.name, u.admin, u.mcsp, m.start_date, m.end_date;
+    `
+    res.json(data);
+  } catch(err){
+    console.error('Error executing query:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
 function subtractDays(dateString, days) {
   // Convert the 'yyyy-mm-dd' string to a Date object
   const date = new Date(dateString);
