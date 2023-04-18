@@ -1,9 +1,22 @@
 .wrapper {
-    display: flex;
+    /* display: flex; */
     height: 100vh;
     width: 100vw;
-    justify-content: center;
-    align-items: center;
+    /* justify-content: center;
+    align-items: center; */
+    text-align: center;
+}
+
+.add {
+    position: absolute; /* Add position absolute */
+    top: 0; /* Position from top */
+    right: 0; /* Position from right */
+    margin: 10px; /* Add margin for spacing */
+    /* Additional styles for the "add" button */
+    background-color: #007bff; /* Example background color */
+    color: #fff; /* Example text color */
+    padding: 10px; /* Example padding */
+    cursor: pointer; /* Example cursor */
 }
 
 .accordion {
@@ -11,6 +24,31 @@
 }
 
 .item {
+    background-color: white;
     margin-bottom: 5px;
     padding: 10px 20px;
+    
+}
+
+.title{
+    color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.content{
+    color: black;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0,1,0,1);
+    display: inline-block;
+}
+
+.content.show{
+    height: auto;
+    max-height: 9999px;
+    transition: all 0.5s cubic-bezier(0,1,0,1);
+    display: inline-block;
 }
