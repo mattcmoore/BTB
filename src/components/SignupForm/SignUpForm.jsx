@@ -80,6 +80,16 @@ const SignUpForm = () => {
           className="inputSign"
           required
         />
+
+        <label htmlFor="checkPassword">Password:</label>
+        <input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          className="inputSign"
+          required
+        />
         <br />
 
         <label htmlFor="separationDate">Separation Date:</label>
