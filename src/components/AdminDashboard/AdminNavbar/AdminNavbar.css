@@ -38,12 +38,19 @@
     cursor: pointer;
     padding: 10px; 
 }
+
+.admin-navbar-buttons div span.admin-focus{
+    color: var(--teal);
+    font-weight: 400;
+    pointer-events: none;
+}
  
 .admin-navbar-buttons span:hover{
     position: relative;
     border-bottom: 2px solid var(--gray);
     bottom: 2px;
 }
+
 
 .admin-dropdown.mouseover{
     box-shadow: 0px 3px 15px rgba(0,0,0,0.2); 

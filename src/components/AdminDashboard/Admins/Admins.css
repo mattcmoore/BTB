@@ -1,6 +1,6 @@
-.hidden{
+/* .hidden{
     display: none;
-}
+} */
 caption{
     margin: 20px 20px 10px 40px;
     text-align: left;
@@ -46,7 +46,7 @@ tr:not(:last-child) td{
 }
 
 .trashcan {
-    height: 20px;
-    width: 20px;
+    height: 17px;
+    width: 17px;
     fill: var(--teal);
 }
