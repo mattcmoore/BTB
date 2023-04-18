@@ -12,8 +12,9 @@ const Row = (props) => {
         const name = event.target.getAttribute("name")
         if(event.target.parentElement.getAttribute("name") === "delete" ){
             let userId = parseInt(event.target.parentElement.parentElement.getAttribute("name"))
+            console.log(userId)
             deleteAdmin(userId)
-            
+            // console.log(userId)
         }else if(Object.keys(adminUpdate).length === 0){
             setCurrentCell([id, name])
             setAdminUpdate(row)    
@@ -42,7 +43,7 @@ const Row = (props) => {
                 </svg>
             </td>
             <td name="name" onClick={handleClick}> {currentCell[0] === row.id && currentCell[1] === "name" ? (<input name="name" value={adminUpdate.name} onChange={handleChange} onKeyDown={handleEnter} />) : (row.name) }</td>
-            <td name="email">{row.email }</td>
+            <td name="email" className="email-cell">{row.email }</td>
             <td name="mcsp" onClick={handleClick}> {currentCell[0] === row.id && currentCell[1] === "mcsp" ? (<input name="mcsp" value={adminUpdate.mcsp === null ? "" : adminUpdate.mcsp} onChange={handleChange} onKeyDown={handleEnter} />) : (row.mcsp) }</td>
         </tr>
     ) 

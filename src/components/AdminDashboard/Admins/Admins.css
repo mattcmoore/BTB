@@ -33,9 +33,13 @@ caption{
     border-bottom: 1px solid var(--teal);
 }
 
-tr:not(:last-child) td{
+tr:not(:last-child){
     cursor: pointer;
 } 
+
+.email-cell{
+    cursor: default;
+}
 
 .hide-input{
     display: none;

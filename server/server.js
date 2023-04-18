@@ -370,8 +370,8 @@ app.patch("/updateAdmin", async (req, res) => {
 app.delete("/updateAdmin/:id", async (req, res) => {
   const {id} = req.params
   try{
-    const data = await sql `DELETE FROM users WHERE id = ${id}`
-    // res.json(data)  
+    const data = await sql `Delete FROM users where id = ${id} AND ${id} not IN (SELECT user_id FROM tasks);`
+    res.json(data)  
   }catch(error){
     res.status(500).json({msg: "Failed"})
   }
