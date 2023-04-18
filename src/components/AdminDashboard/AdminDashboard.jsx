@@ -1,3 +1,4 @@
+import NewClassForm from '../NewClassForm/NewClassForm'
 import './AdminDashboard.css'
 import AdminNavbar from './AdminNavbar/AdminNavbar'
 import Admins from './Admins/Admins'
