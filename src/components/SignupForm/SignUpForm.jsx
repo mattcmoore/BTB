@@ -19,6 +19,7 @@ const SignUpForm = () => {
     hasFamily: false,
     livesInBarracks: false,
   });
+  const[passwordError, setPasswordError] = useState(false)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -31,8 +32,13 @@ const SignUpForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        makeUser(formData)
-        setTimeout(()=>{Navigate('/') }, 500)
+        if(formData.password === formData.confirmPassword){
+          makeUser(formData)
+          setTimeout(()=>{Navigate('/') }, 500)  
+          setPasswordError(false)
+        }else{
+          setPasswordError(true)
+        }
     };
 
   return (
@@ -80,6 +86,16 @@ const SignUpForm = () => {
           className="inputSign"
           required
         />
+
+        <label htmlFor="confirmPassword">Confirm Password:</label>
+        <input
+          type="password"
+          name="confirmPassword"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          className="inputSign"
+        />
+        <p className={passwordError ? "password-error" : "hidden" }>Passwords do not match. Please try again.</p>
         <br />
 
         <label htmlFor="separationDate">Separation Date:</label>
