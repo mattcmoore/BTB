@@ -1,6 +1,5 @@
 import { useState, useContext, useEffect } from "react";
 import Chat from "./Chat/Chat";
-import ChatSearch from './ChatSearch/ChatSearch'
 import './Chatbar.css'
 import BtbContext from "../../context/BtbContext";
 import ChatHistory from "./ChatHistory/ChatHistory";
@@ -21,7 +20,6 @@ const Chatbar = () => {
    return (
       <div className="chatbar">
          <div className="sidebar">
-            <ChatSearch newSession={newSession}/>
             <ChatHistory user={user} newSession={newSession}/>
          </div>
          {chatSessions.map((session, i) => 

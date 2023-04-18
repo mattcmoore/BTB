@@ -66,10 +66,12 @@
 .chat-bottom-nav {
    width: 200px;
    height: 50px;
+   padding: 0;
    margin: .5px;
    position: relative;
    display: flex;
-   justify-content: space-between;
+   align-items: center;
+   justify-content: center;
 }
 
 .chat-name {
@@ -79,6 +81,10 @@
    padding: 16px;
    
    transition: background-color 0.25s;
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
 }
 
 .chat-name:hover {
@@ -87,10 +93,16 @@
 }
 
 .close {
-   align-self: center;
-   padding: 3px;
+   height: 25px;
+   width: 25px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
 }
 
 .submit {
-   height: 100%;
+   padding: 5px;
+   font-size: 18px;
+   font-family: inherit;
+   font-weight: inherit;
 }

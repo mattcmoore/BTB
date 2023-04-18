@@ -1,9 +1,11 @@
 import { useContext, useEffect, useState } from "react"
 import BtbContext from "../../../context/BtbContext"
 import './ChatHistory.css'
+import ChatSearch from "./ChatSearch/ChatSearch"
 
 const ChatHistory = ({ user, newSession }) => {
    const [ history, setHistory ] = useState([])
+   const [ active, setActive ] = useState(false)
 
    const { fetchURL } = useContext(BtbContext)
 
@@ -18,9 +20,8 @@ const ChatHistory = ({ user, newSession }) => {
    }, [user])
 
    return (
-      <div className="ChatHistBanner">
-         Conversations
-         <div className="ChatHistory">
+      <div className="ChatHistContainer">
+         <div className={`ChatHistory ${active ? 'show' : 'hide'}`}>
             {history.map(conversation => {
                return (
                   <div className="conversation"
@@ -30,6 +31,11 @@ const ChatHistory = ({ user, newSession }) => {
                   </div>
                )
             })}
+         <ChatSearch newSession={newSession}/>
+         </div>
+         <div className="ChatHistBanner btb-content-box"
+            onClick={()=> setActive(!active)}>
+            <p>Conversations</p>
          </div>
       </div>
    )

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './ChatSearch.css'
 
-import { API_URL } from '../Chatbar'
+import { API_URL } from '../../Chatbar'
 
 const ChatSearch = ({ newSession }) => {
    const [ searchField, setSearchField ] = useState('')
@@ -27,16 +27,20 @@ const ChatSearch = ({ newSession }) => {
    }
 
    return (
-      <div>
+      <div className='search-container'>
          <form>
-            <input type='text' 
+            <input
+               className='search-box'
+               type='text' 
                value={searchField} 
-               placeholder='Search'
+               placeholder='Search Users'
                onChange={handleChange}></input>
          </form>
          <div className='all-suggestions'>
-            {suggestions.map(user=>
-               <div className='search-suggestion'
+            {suggestions.map((user, i)=>
+               <div
+                  key={i} 
+                  className='search-suggestion'
                   onClick={()=>{
                      newSession(user.id, user.name)
                      setSuggestions([])
