@@ -5,7 +5,6 @@ import BtbContext from '../../context/BtbContext.jsx'
 import { useNavigate } from "react-router-dom";
 
 
-
 const SignUpForm = () => {
   const Navigate = useNavigate()
     const {makeUser, user} = useContext(BtbContext)
@@ -33,9 +32,9 @@ const SignUpForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if(formData.password === formData.confirmPassword){
+          setPasswordError(false)
           makeUser(formData)
           setTimeout(()=>{Navigate('/') }, 500)  
-          setPasswordError(false)
         }else{
           setPasswordError(true)
         }
