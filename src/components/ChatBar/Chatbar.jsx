@@ -14,14 +14,8 @@ const Chatbar = () => {
       setChatSessions([...chatSessions, {to: userID, name}])
    }
 
-   const closeSession = (id) => {
-      let sessionsDupe = [...chatSessions]
-      for (let i = chatSessions.length -1; i >= 0; i--){
-         if (chatSessions[i].to === id){
-            sessionsDupe.splice(i, 1)
-            setChatSessions(sessionsDupe)
-         }
-      }
+   const closeSession = (index) => {
+      setChatSessions(prevSessions => prevSessions.filter((_, i) => i !== index))
    }
 
    return (
@@ -30,9 +24,10 @@ const Chatbar = () => {
             <ChatSearch newSession={newSession}/>
             <ChatHistory user={user} newSession={newSession}/>
          </div>
-         {chatSessions.map(session => 
+         {chatSessions.map((session, i) => 
             <Chat 
-            key={session.to}
+            key={i}
+            index={i}
             to={session.to} 
             from={user.userId} 
             name={session.name}
