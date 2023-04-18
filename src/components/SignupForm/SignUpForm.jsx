@@ -85,7 +85,7 @@ const SignUpForm = () => {
         <input
           type="password"
           name="password"
-          value={formData.password}
+          value={formData.checkPassword}
           onChange={handleChange}
           className="inputSign"
           required
