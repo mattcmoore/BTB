@@ -60,6 +60,32 @@ app.use(cookieParser());
 
 app.use(express.static("../dist"));
 
+app.get("/accordian", async (req, res) => {
+  try {
+    console.log('fetching data..');
+    const data = await sql `
+    SELECT m.mcsp_name AS mcsp_name,
+    u.name AS user_name,
+    u.admin AS admin,
+    u.mcsp AS mcsp,
+    m.start_date AS start_date,
+    m.end_date AS end_date,
+    COUNT(t.complete) FILTER (WHERE t.complete = true) AS task_complete,
+    COUNT(t.task) AS total
+FROM mcsps m
+JOIN users u ON m.id = u.mcsp
+JOIN tasks t ON u.id = t.user_id
+GROUP BY m.mcsp_name, u.name, u.admin, u.mcsp, m.start_date, m.end_date;
+    `
+    res.json(data);
+  } catch(err){
+    console.error('Error executing query:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
 function subtractDays(dateString, days) {
   // Convert the 'yyyy-mm-dd' string to a Date object
   const date = new Date(dateString);
@@ -307,9 +333,10 @@ app.post("/makeStudent", async (req, res) => {
   }
 });
 
-app.get('/admins', async (req, res) => {
+app.get('/admins/:id', async (req, res) => {
+  const { id } = req.params
   try{
-     const data = await sql `SELECT * FROM users WHERE admin = true`
+     const data = await sql `SELECT * FROM users WHERE admin = true AND id != ${id}`
      res.json(data)
   } catch(error){
      res.json(error)
@@ -352,12 +379,13 @@ app.post("/makeAdmin", async (req, res) => {
 });
 
 app.patch("/updateAdmin", async (req, res) => {
-  const { email, name, id } = req.body;
+  const { email, name, mcsp, id } = req.body;
   try {
     await sql`
             UPDATE users
             SET email = ${email},
-            name = ${name}
+            name = ${name},
+            mcsp = ${mcsp}
             WHERE id = ${id}
             `;
     res.json({ msg: "Admin Edited" });
@@ -365,6 +393,17 @@ app.patch("/updateAdmin", async (req, res) => {
     res.status(500).json({ msg: "Failed" });
   }
 });
+
+app.delete("/updateAdmin/:id", async (req, res) => {
+  const {id} = req.params
+  try{
+    const data = await sql `DELETE FROM users WHERE id = ${id}`
+    // res.json(data)  
+  }catch(error){
+    res.status(500).json({msg: "Failed"})
+  }
+
+})
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -374,16 +413,18 @@ app.post("/login", async (req, res) => {
   let exists = false;
   let admin = null;
   let name = "";
+  let e = "";
   let userId;
   emails.forEach((mail) => {
     if (mail.email === email) {
       exists = true;
       admin = mail.admin;
+      e = mail.email;
       userId = mail.id;
       name = mail.name;
     }
   });
-  const payload = { name: name, userId: userId, admin: admin };
+  const payload = { name: name, email: email, userId: userId, admin: admin };
   if (exists) {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {

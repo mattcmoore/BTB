@@ -5,6 +5,7 @@ import BtbContext from '../../context/BtbContext.jsx';
 
 const NewClassForm = () => {
   const { createNewClass } = useContext(BtbContext);
+  const { adminModal, setAdminModal } = useContext(BtbContext)
 
   const [formData, setFormData] = useState({
     start_date: '',
@@ -28,6 +29,7 @@ const NewClassForm = () => {
     const code = generateRandomCode();
     console.log(code);
 
+
     try {
       await createNewClass({
         start_date: formData.start_date,
@@ -50,8 +52,13 @@ const NewClassForm = () => {
     const randomNumber = Math.floor(Math.random() * 9) + 1;
     const randomLetters = Array.from({ length: 3 }, () => letters.charAt(Math.floor(Math.random() * letters.length)));
     return `${randomLetters.join('')}${randomNumber}`;
-  };
 
+
+  };
+  if (adminModal === 'newclass') {
+    const handleHomeClick = () => {
+      setAdminModal('classes')
+  }
   return (
     <div id="contCont">
       <form onSubmit={handleSubmit} className="signCont">
@@ -116,11 +123,12 @@ const NewClassForm = () => {
           </button>
         )}
         {isSubmitDisabled && (
-          <button onClick={() => window.location.href = "/admindashboard"}>Return Home</button>
+          <button onClick={handleHomeClick}>Return Home</button>
         )}
       </form>
     </div>
   );
+  }
 };
 
 export default NewClassForm;

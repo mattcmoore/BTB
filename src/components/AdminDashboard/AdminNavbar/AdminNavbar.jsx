@@ -23,15 +23,15 @@ const AdminNavbar = () => {
           <div className="admin-dropdown-btn" onMouseEnter={()=>setMouseover(true)}>
               <p className="admin-dropdown-avatar">{user.name.match(/\b\w/g).join("")}</p>
               <p>{user.name}</p>
-                  <svg className="triangle" viewBox="0 0 232.72 115">
+                  <svg className={`triangle ${mouseover ? 'mouseover' : ''}`} viewBox="0 0 232.72 115">
                       <path className="cls-1" d="M116.02,120.76L1.17,.5H230.88L116.02,120.76Z"/>
                   </svg>
           </div>
           <div className={mouseover ? 'admin-dropdown-account' : 'hidden' }>
-              <p>MY ACCOUNT</p>
-              <p>email address</p>
+              <p onClick={()=>{setAdminModal('settings')}}>MY ACCOUNT</p>
+              <p>{user.email}</p>
           </div>
-          <div className={mouseover ? 'admin-dropdown-sign-out' : 'hidden'}>SIGN OUT</div>
+          <div className={mouseover ? 'admin-dropdown-sign-out' : 'hidden'} onClick={logOut}>SIGN OUT</div>
       </div>
      </div>
   );
