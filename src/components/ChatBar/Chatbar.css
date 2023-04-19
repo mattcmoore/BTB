@@ -1,0 +1,14 @@
+.chatbar {
+   position: fixed;
+   bottom: 0;
+   right: 0;
+
+   display: flex;
+   flex-direction: row-reverse;
+   align-items: flex-end;
+}
+
+.sidebar {
+   display: flex;
+   flex-direction: column-reverse;
+}

@@ -60,6 +60,45 @@ app.use(cookieParser());
 
 app.use(express.static("../dist"));
 
+app.get("/accordian", async (req, res) => {
+  try {
+    console.log('fetching data..');
+    const data = await sql `
+    SELECT 
+      m.mcsp_name AS mcsp_name,
+      u.name AS user_name,
+      u.admin AS admin,
+      u.mcsp AS mcsp,
+      m.start_date AS start_date,
+      m.end_date AS end_date,
+      COUNT(t.complete) FILTER (WHERE t.complete = true) AS task_complete,
+      COUNT(t.task) AS total
+    FROM mcsps m
+    JOIN users u ON m.id = u.mcsp
+    JOIN tasks t ON u.id = t.user_id
+    GROUP BY m.mcsp_name, u.name, u.admin, u.mcsp, m.start_date, m.end_date;
+    `
+
+    const formattedData = data.map(item => ({
+      ...item,
+      task_complete: Number(item.task_complete),
+      total: Number(item.total)
+    }));
+    
+    res.json(formattedData);
+    console.log(formattedData);
+    
+  } catch(err){
+
+    
+    console.error('Error executing query:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
+
 function subtractDays(dateString, days) {
   // Convert the 'yyyy-mm-dd' string to a Date object
   const date = new Date(dateString);
@@ -185,6 +224,7 @@ app.post("/makeStudent", async (req, res) => {
     branch,
     hasFamily,
     livesInBarracks,
+    chat_history
   } = req.body;
   const emailsInUse = await sql`
   SELECT email FROM users
@@ -217,8 +257,8 @@ app.post("/makeStudent", async (req, res) => {
           onAuthStateChanged(auth, async (user) => {
             console.log("first");
             const data = await sql`
-                   INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks)
-                   VALUES (${email}, ${name}, false, ${classId}, ${separationDate}, ${branch}, ${hasFamily}, ${livesInBarracks}) returning id, admin, name, email
+                   INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks, chat_history)
+                   VALUES (${email}, ${name}, false, ${classId}, ${separationDate}, ${branch}, ${hasFamily}, ${livesInBarracks}, ${chat_history}) returning id, admin, name, email
                    `;
             const userId = data[0];
             const sixMonths = subtractDays(separationDate, 180);
@@ -306,9 +346,10 @@ app.post("/makeStudent", async (req, res) => {
   }
 });
 
-app.get('/admins', async (req, res) => {
+app.get('/admins/:id', async (req, res) => {
+  const { id } = req.params
   try{
-     const data = await sql `SELECT * FROM users WHERE admin = true`
+     const data = await sql `SELECT * FROM users WHERE admin = true AND id != ${id}`
      res.json(data)
   } catch(error){
      res.json(error)
@@ -351,12 +392,13 @@ app.post("/makeAdmin", async (req, res) => {
 });
 
 app.patch("/updateAdmin", async (req, res) => {
-  const { email, name, id } = req.body;
+  const { email, name, mcsp, id } = req.body;
   try {
     await sql`
             UPDATE users
             SET email = ${email},
-            name = ${name}
+            name = ${name},
+            mcsp = ${mcsp}
             WHERE id = ${id}
             `;
     res.json({ msg: "Admin Edited" });
@@ -364,6 +406,17 @@ app.patch("/updateAdmin", async (req, res) => {
     res.status(500).json({ msg: "Failed" });
   }
 });
+
+app.delete("/updateAdmin/:id", async (req, res) => {
+  const {id} = req.params
+  try{
+    const data = await sql `DELETE FROM users WHERE id = ${id}`
+    // res.json(data)  
+  }catch(error){
+    res.status(500).json({msg: "Failed"})
+  }
+
+})
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -373,16 +426,18 @@ app.post("/login", async (req, res) => {
   let exists = false;
   let admin = null;
   let name = "";
+  let e = "";
   let userId;
   emails.forEach((mail) => {
     if (mail.email === email) {
       exists = true;
       admin = mail.admin;
+      e = mail.email;
       userId = mail.id;
       name = mail.name;
     }
   });
-  const payload = { name: name, userId: userId, admin: admin };
+  const payload = { name: name, email: email, userId: userId, admin: admin };
   if (exists) {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -452,10 +507,75 @@ app.get("/tasks/:id", async (req, res) => {
     const data = await sql`SELECT * FROM tasks WHERE user_id = ${id}`;
     res.json(data);
   } catch (error) {
-    res.json(error);
+    res.status(500).json({error: 'server error'})
   }
 });
 
+app.get('/messages/:to/:from', async (req, res) => {
+  let { to, from } = req.params
+
+  try {
+      const data = await sql
+        `SELECT * FROM messages
+        WHERE (to_user = ${to} AND from_user = ${from}) 
+        OR (to_user = ${from} AND from_user = ${to})
+        ORDER BY date DESC`;
+      res.json(data)
+  } catch (error) {
+      res.status(500).json({error: 'server error'})
+  }
+})
+
+app.post('/messages', async (req, res) => {
+  let { to, from, body } = req.body
+
+  try {
+    const data = await sql
+      `INSERT INTO messages
+      (to_user, from_user, body, date)
+      VALUES 
+      (${to}, ${from}, ${body}, NOW())`;
+    res.json(data)
+  } catch (error) {
+    res.status(500).json({error: 'server error'})
+  }
+})
+
+app.post('/usersSearch/', async (req, res) => {
+  let { search } = req.body
+
+  try {
+    const data = await sql
+      `SELECT name, id 
+      FROM users 
+      WHERE name ILIKE ${'%' + search + '%'}`;
+
+    res.json(data)
+  } catch (error) {
+    res.status(500).json({error: 'server error'})
+  }
+})
+
+app.get('/chatHistory/:user', async (req, res) => {
+  let { user } = req.params
+
+  try {
+    const data = await sql
+      `SELECT users.name, messages.to_user 
+      FROM messages 
+      JOIN users ON messages.to_user = users.id 
+      WHERE from_user = ${user} 
+      UNION SELECT users.name, messages.from_user 
+      FROM messages 
+      JOIN users ON messages.from_user = users.id 
+      WHERE to_user = ${user};`
+
+    res.json(data)
+  } catch (error) {
+    res.status(500).json({error: 'server error'})
+  }
+})
+
 app.listen(PORT, () => {
-  console.log(`listening on port ${PORT}`);
-});
+   console.log(`listening on port ${PORT}`)
+})

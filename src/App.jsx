@@ -12,6 +12,8 @@ import ProtectedUser from "./components/ProtectedRoutes/ProtectedUser";
 import {BtbProvider} from './context/BtbContext'
 import ProtectedHome from './components/ProtectedHome/ProtectedHome'
 
+import Chatbar from "./components/ChatBar/Chatbar";
+
 function App() {
 
   return (

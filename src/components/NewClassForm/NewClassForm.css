@@ -6,6 +6,8 @@
     align-content: center;
     align-self: center;
     justify-self: center;
+    position: absolute;
+    top: 0;
 }
 .signCont{
     display: flex;
@@ -14,11 +16,12 @@
     flex-direction: column;
     align-content: center;
     width: 400px;
-    height: 750px;
+    height: 800px;
     box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
     align-self: center;
     justify-self: center;
-    padding-bottom: 10px;
+    position: absolute;
+    top: 0px;
 }
 #contCont{
     display: flex;
@@ -27,7 +30,6 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
-    padding-top: 20px;
 }
 #imgSign{
     padding-bottom: 10px;

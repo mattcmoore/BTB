@@ -17,9 +17,11 @@ export const BtbProvider = ({children}) =>{
   const emptyAdmin = {
       name: "",
       email: "",
+      mcsp: "",
   }
   const [adminUpdate, setAdminUpdate] = useState({})
   const [newAdmin, setNewAdmin] = useState(emptyAdmin)
+  const [ chatSessions, setChatSessions ] = useState([])
 
   const fetchNotes = async () => {
     const response = await fetch(`${fetchURL}/notes/${user.userId}`);
@@ -42,7 +44,7 @@ export const BtbProvider = ({children}) =>{
   const closeNoteModal = () => {
       setAddNewNote(false)
   }
-
+  
   const createNewClass = async (formData) => {
       const res = await fetch(`${fetchURL}/createNewClass`, {
         method: 'POST',
@@ -61,9 +63,14 @@ export const BtbProvider = ({children}) =>{
 
     useEffect(()=>{
       // should be set to 'classes' in production
-      setAdminModal('admins')
+      setAdminModal('classes')
       getAdmins()
     },[])
+
+    useEffect(()=>{
+      // should be set to 'classes' in production
+      getAdmins()
+    },[user])
 
     const login = async (formState) => {
       const res = await fetch(`${fetchURL}/login`, {
@@ -74,7 +81,7 @@ export const BtbProvider = ({children}) =>{
         body: JSON.stringify(formState),
       });
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
       if (data.msg === "Email or password does not exist") {
         console.log("Make alert");
       } else {
@@ -142,14 +149,17 @@ export const BtbProvider = ({children}) =>{
     }
   },[]);
 
-    const getAdmins = async () => {
-        const res = await fetch(`${fetchURL}/admins`)
-        const data = await res.json()
-        if(data.msg === 'Email or password does not exist'){
-            console.log('Make alert')
-        }
-        setAdmins([...data])
+  const getAdmins = async () => {
+    if(user){
+      const res = await fetch(`${fetchURL}/admins/${user.userId}`);
+      const data = await res.json()
+      if(data.msg === 'Email or password does not exist'){
+        console.log('Make alert')
     }
+    setAdmins([...data])
+
+    }
+  }
 
     const makeAdmin = async (admin) => {
         const req = admin
@@ -164,6 +174,7 @@ export const BtbProvider = ({children}) =>{
     }
 
     const updateAdmin = async (update) => {
+        update.mcsp = parseInt(update.mcsp)
         const req = update
         const res = await fetch(`${fetchURL}/updateAdmin`, {
             method: 'PATCH',
@@ -171,10 +182,19 @@ export const BtbProvider = ({children}) =>{
                 'Content-Type':'application/json'
             },
             body: JSON.stringify(req)})
+            console.log(res.json())
             getAdmins()
             setAdminUpdate({})
         }     
-
+    const deleteAdmin = async (id) => {
+      console.log(typeof id)
+      const res = await fetch(`${fetchURL}/updateAdmin/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type':'application/json'
+      }})
+      getAdmins()
+    }
     return(
         <BtbContext.Provider value={{
           classes,
@@ -202,7 +222,10 @@ export const BtbProvider = ({children}) =>{
           makeAdmin,
           adminUpdate,
           setAdminUpdate,
+          chatSessions,
+          setChatSessions,
           updateAdmin,
+          deleteAdmin,
         }}>
             {children}
         </BtbContext.Provider>
