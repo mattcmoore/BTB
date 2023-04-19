@@ -80,19 +80,21 @@ const Classes = () => {
                   <div className='item_wrapper'>
                     {userNames.map((user, j) => (
                       <div className='item_card' key={j}>
-                        <span>
-                          <span>{user.name}</span>
-                          <span> ({user.task_complete}/{user.total})</span>
-                          <div style={{ width: 100, height: 100 }}>
+                        <p>
+                          <p className='user_name'>{user.name}</p>
+                          <p className='user_progress'> Task Completion:</p>
+                          <div className='progressbar'>
                             <CircularProgressbar
-                              value={user.total}
+                              value={(user.task_complete)/(user.total)*100}
                               text={`${(user.task_complete)/(user.total)*100}%`}
                               styles={buildStyles({
                                 textSize: '10px',
+                                height:'100px',
+                                width:'100px'
                               })}
                             />
                           </div>
-                        </span>
+                        </p>
                       </div>
                     ))}
                   </div>
