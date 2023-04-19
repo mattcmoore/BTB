@@ -3,10 +3,11 @@ import './AdminDashboard.css'
 import AdminNavbar from './AdminNavbar/AdminNavbar'
 import Admins from './Admins/Admins'
 import Settings from './Settings/Settings'
-import Classes from './Classes/Classes'
+import Chatbar from '../ChatBar/Chatbar'
 
 export const AdminDashboard = () => {
     return(
+        <>
         <div className="admin-dashboard-container">
             <AdminNavbar />
             <div className="admin-dashboard-container-body"> 
@@ -15,6 +16,8 @@ export const AdminDashboard = () => {
                 <Classes />
             </div>
         </div>
+        <Chatbar/>
+        </>
     )
 }
 

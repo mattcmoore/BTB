@@ -224,6 +224,7 @@ app.post("/makeStudent", async (req, res) => {
     branch,
     hasFamily,
     livesInBarracks,
+    chat_history
   } = req.body;
   const emailsInUse = await sql`
   SELECT email FROM users
@@ -256,8 +257,8 @@ app.post("/makeStudent", async (req, res) => {
           onAuthStateChanged(auth, async (user) => {
             console.log("first");
             const data = await sql`
-                   INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks)
-                   VALUES (${email}, ${name}, false, ${classId}, ${separationDate}, ${branch}, ${hasFamily}, ${livesInBarracks}) returning id, admin, name, email
+                   INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks, chat_history)
+                   VALUES (${email}, ${name}, false, ${classId}, ${separationDate}, ${branch}, ${hasFamily}, ${livesInBarracks}, ${chat_history}) returning id, admin, name, email
                    `;
             const userId = data[0];
             const sixMonths = subtractDays(separationDate, 180);
@@ -506,10 +507,75 @@ app.get("/tasks/:id", async (req, res) => {
     const data = await sql`SELECT * FROM tasks WHERE user_id = ${id}`;
     res.json(data);
   } catch (error) {
-    res.json(error);
+    res.status(500).json({error: 'server error'})
   }
 });
 
+app.get('/messages/:to/:from', async (req, res) => {
+  let { to, from } = req.params
+
+  try {
+      const data = await sql
+        `SELECT * FROM messages
+        WHERE (to_user = ${to} AND from_user = ${from}) 
+        OR (to_user = ${from} AND from_user = ${to})
+        ORDER BY date DESC`;
+      res.json(data)
+  } catch (error) {
+      res.status(500).json({error: 'server error'})
+  }
+})
+
+app.post('/messages', async (req, res) => {
+  let { to, from, body } = req.body
+
+  try {
+    const data = await sql
+      `INSERT INTO messages
+      (to_user, from_user, body, date)
+      VALUES 
+      (${to}, ${from}, ${body}, NOW())`;
+    res.json(data)
+  } catch (error) {
+    res.status(500).json({error: 'server error'})
+  }
+})
+
+app.post('/usersSearch/', async (req, res) => {
+  let { search } = req.body
+
+  try {
+    const data = await sql
+      `SELECT name, id 
+      FROM users 
+      WHERE name ILIKE ${'%' + search + '%'}`;
+
+    res.json(data)
+  } catch (error) {
+    res.status(500).json({error: 'server error'})
+  }
+})
+
+app.get('/chatHistory/:user', async (req, res) => {
+  let { user } = req.params
+
+  try {
+    const data = await sql
+      `SELECT users.name, messages.to_user 
+      FROM messages 
+      JOIN users ON messages.to_user = users.id 
+      WHERE from_user = ${user} 
+      UNION SELECT users.name, messages.from_user 
+      FROM messages 
+      JOIN users ON messages.from_user = users.id 
+      WHERE to_user = ${user};`
+
+    res.json(data)
+  } catch (error) {
+    res.status(500).json({error: 'server error'})
+  }
+})
+
 app.listen(PORT, () => {
-  console.log(`listening on port ${PORT}`);
-});
+   console.log(`listening on port ${PORT}`)
+})

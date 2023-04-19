@@ -21,6 +21,7 @@ export const BtbProvider = ({children}) =>{
   }
   const [adminUpdate, setAdminUpdate] = useState({})
   const [newAdmin, setNewAdmin] = useState(emptyAdmin)
+  const [ chatSessions, setChatSessions ] = useState([])
 
   const fetchNotes = async () => {
     const response = await fetch(`${fetchURL}/notes/${user.userId}`);
@@ -43,7 +44,7 @@ export const BtbProvider = ({children}) =>{
   const closeNoteModal = () => {
       setAddNewNote(false)
   }
-
+  
   const createNewClass = async (formData) => {
       const res = await fetch(`${fetchURL}/createNewClass`, {
         method: 'POST',
@@ -185,7 +186,6 @@ export const BtbProvider = ({children}) =>{
             getAdmins()
             setAdminUpdate({})
         }     
-
     const deleteAdmin = async (id) => {
       console.log(typeof id)
       const res = await fetch(`${fetchURL}/updateAdmin/${id}`, {
@@ -222,6 +222,8 @@ export const BtbProvider = ({children}) =>{
           makeAdmin,
           adminUpdate,
           setAdminUpdate,
+          chatSessions,
+          setChatSessions,
           updateAdmin,
           deleteAdmin,
         }}>

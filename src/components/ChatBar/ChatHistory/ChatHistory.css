@@ -1,0 +1,44 @@
+.ChatHistContainer {
+   position: relative;
+   width: 200px;
+   border: 1px solid black;
+}
+
+.ChatHistBanner {
+   height: 50px;
+   padding: 0;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.ChatHistBanner:hover {
+   cursor: pointer;
+}
+
+.ChatHistory {
+   background-color: lightgray;
+   width: 250px;
+   display: flex;
+   flex-direction: column;
+}
+
+.conversation {
+   border: 1px black solid;
+   margin: 5px;
+   padding: 5px;
+   transition: background-color 0.2s;
+}
+
+.conversation:hover {
+   background-color: grey;
+   cursor: pointer;
+}
+
+.show {
+   visibility: visible;
+}
+
+.hide {
+   visibility: hidden;
+}
