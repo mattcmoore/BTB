@@ -2,6 +2,7 @@ import NewClassForm from '../NewClassForm/NewClassForm'
 import './AdminDashboard.css'
 import AdminNavbar from './AdminNavbar/AdminNavbar'
 import Admins from './Admins/Admins'
+import Settings from './Settings/Settings'
 import Classes from './Classes/Classes'
 
 export const AdminDashboard = () => {
@@ -10,8 +11,8 @@ export const AdminDashboard = () => {
             <AdminNavbar />
             <div className="admin-dashboard-container-body"> 
                 <Admins />
+                <Settings />
                 <Classes />
-                <NewClassForm />
             </div>
         </div>
     )

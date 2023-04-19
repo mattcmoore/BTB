@@ -19,8 +19,8 @@ const Classes = () => {
           if (existingItem) {
             existingItem.user_names.push({
               name: item.user_name,
-              task_complete: parseInt(item.task_complete),
-              total: parseInt(item.total),
+              task_complete: (item.task_complete),
+              total: (item.total),
               start_date: item.start_date,
               end_date: item.end_date
             });
@@ -39,6 +39,7 @@ const Classes = () => {
           return acc;
         }, []);
         setClasses(groupedData);
+        console.log(groupedData)
       } catch (err) {
         console.error('Error fetching classes:', err);
       }
@@ -64,7 +65,8 @@ const Classes = () => {
         <button className='add' onClick={handleAddClick}> Add New Class </button>
         <div className='accordion'>
           {classes.map((item, i) => {
-            const percentage = item.total !== 0 ? (item.task_complete / item.total) * 100 : 0;
+            const percentage = (Number(item.task_complete) / Number(item.total)) * 100;
+            console.log(percentage)
             const userNames = item.user_names;
             const mcsp_name = item.mcsp_name;
 
@@ -83,8 +85,8 @@ const Classes = () => {
                           <span> ({user.task_complete}/{user.total})</span>
                           <div style={{ width: 100, height: 100 }}>
                             <CircularProgressbar
-                              value={percentage}
-                              text={`${percentage}%`}
+                              value={user.total}
+                              text={`${(user.task_complete)/(user.total)*100}%`}
                               styles={buildStyles({
                                 textSize: '10px',
                               })}
