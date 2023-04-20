@@ -5,21 +5,46 @@
     /* justify-content: center;
     align-items: center; */
     /* align-items: center; */
-    margin-top: 150px;
+    margin-top: 115px;
+    position: relative;
 }
 
-.add {
-    position: top; /* Add position absolute */
-    background-color: #007bff; /* Example background color */
-    color: #fff; /* Example text color */
-    padding: 10px; /* Example padding */
-    cursor: pointer; /* Example cursor */
+.title_wrapper{
+    position: relative;
+}
+
+.title{
+    position: relative;
+    left: 100px;
+}
+
+.description{
+    position:relative;
+    left:100px;
+    color: rgb(84, 82, 82);
+}
+
+
+.btn_wrapper{
+    position: relative;
+}
+
+.btb-btn {
+    position: absolute;
+    top: 80px;
+    right: 100px;
+    font-size: medium;
+    line-height: normal;
+    height: 35px;
+    width: 150px;
+    border-radius: 3px;
 }
 
 .accordion {
     position: absolute;
     margin-left: 100px;
     margin-right: 100px;
+    
 }
 
 .item {
@@ -27,14 +52,21 @@
     margin-bottom: 5px;
     padding: 10px 20px;
     /* align-items: center; */
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.1); 
 }
 
-.title{
+.class{
     color: black;
     display: flex;
     justify-content: space-between;
     /* align-items: center; */
     cursor: pointer;
+    
+    
+}
+.trashcan {
+    position: absolute;
+    right: 60px;
 }
 
 .content{
@@ -44,6 +76,7 @@
     transition: all 0.5s cubic-bezier(0,1,0,1);
     /* display: inline-block; */
     /* align-items: center; */
+    
 }
 
 .content.show{
@@ -55,7 +88,7 @@
 .item_wrapper{
     display: grid;
 
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5, 2fr);
     
     grid-auto-rows: auto;
     
@@ -71,3 +104,9 @@
     
     padding: .5rem;
   }
+
+.item_card:hover{
+    border: 2px solid #a9a7a7;
+    cursor: pointer;
+    transition: 1s;
+}

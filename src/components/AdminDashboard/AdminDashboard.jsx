@@ -15,6 +15,7 @@ export const AdminDashboard = () => {
                 <Admins />
                 <Settings />
                 <Classes />
+                <NewClassForm />
             </div>
         </div>
         <Chatbar/>
