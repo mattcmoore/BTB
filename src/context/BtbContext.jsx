@@ -7,10 +7,10 @@ const BtbContext = createContext()
 export const BtbProvider = ({children}) =>{
   const fetchURL = 'http://localhost:3000'
   const [classes, setClasses] = useState(['this']);
-  const [notes, setNotes] = useState([]);
-  const [addNewNote, setAddNewNote] = useState(false);
+  const [ notes, setNotes ] = useState([]);
+  const [ addNewNote, setAddNewNote ] = useState(false);
   const [user, setUser] = useState(null);
-  const [tasks, setTasks] = useState([]);
+  const [ tasks, setTasks ] = useState([]);
   // const userId = user.userId;
   const [adminModal, setAdminModal] = useState('classes')
   const [admins, setAdmins] = useState([])
@@ -18,10 +18,13 @@ export const BtbProvider = ({children}) =>{
       name: "",
       email: "",
       mcsp: "",
-  }
-  const [adminUpdate, setAdminUpdate] = useState({})
-  const [newAdmin, setNewAdmin] = useState(emptyAdmin)
-  const [ chatSessions, setChatSessions ] = useState([])
+    }
+    const [adminUpdate, setAdminUpdate] = useState({})
+    const [newAdmin, setNewAdmin] = useState(emptyAdmin)
+    const [ chatSessions, setChatSessions ] = useState([])
+    const [individualUser, setIndividualUser] = useState([])
+    const [ openStudentInterface, setOpenStudentInterface ] = useState(false)
+
 
   const fetchNotes = async () => {
     const response = await fetch(`${fetchURL}/notes/${user.userId}`);
@@ -34,7 +37,14 @@ export const BtbProvider = ({children}) =>{
     const response = await fetch(`${fetchURL}/tasks/${user.userId}`);
     const data = await response.json();
     setTasks(data);
-    console.log(tasks);
+    // console.log(tasks);
+  }
+
+  const fetchIndividualUser = async () => {
+    const response = await fetch(`${fetchURL}/users/${id}`)
+    const data = await response.json();
+    setIndividualUser(data)
+    console.log(individualUser)
   }
 
   const openNoteModal = () => {
@@ -43,6 +53,14 @@ export const BtbProvider = ({children}) =>{
 
   const closeNoteModal = () => {
       setAddNewNote(false)
+  }
+
+  const openStudentModal = () => {
+    setOpenStudentInterface(true)
+  }
+
+  const closeStudentModal = () => {
+    setOpenStudentInterface(false)
   }
   
   const createNewClass = async (formData) => {
@@ -226,6 +244,12 @@ export const BtbProvider = ({children}) =>{
           setChatSessions,
           updateAdmin,
           deleteAdmin,
+          individualUser,
+          fetchIndividualUser,
+          openStudentInterface,
+          setOpenStudentInterface,
+          openStudentModal,
+          closeStudentModal,
         }}>
             {children}
         </BtbContext.Provider>

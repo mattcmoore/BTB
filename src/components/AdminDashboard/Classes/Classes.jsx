@@ -3,9 +3,10 @@ import BtbContext from '../../../context/BtbContext';
 import './Classes.css';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import AdminStudentInterface from '../AdminStudentInterface/AdminStudentInterface';
 
 const Classes = () => {
-  const { adminModal, setAdminModal } = useContext(BtbContext);
+  const { adminModal, setAdminModal, openStudentModal, openStudentInterface } = useContext(BtbContext);
   const [selected, setSelected] = useState(null);
   const [classes, setClasses] = useState([]);
 
@@ -81,7 +82,7 @@ const Classes = () => {
                     {userNames.map((user, j) => (
                       <div className='item_card' key={j}>
                         <p>
-                          <p className='user_name'>{user.name}</p>
+                          <p className='user_name' onClick={openStudentModal}>{user.name}</p>
                           <p className='user_progress'> Task Completion:</p>
                           <div className='progressbar'>
                             <CircularProgressbar
@@ -103,6 +104,7 @@ const Classes = () => {
             );
           })}
         </div>
+        {openStudentInterface && (<AdminStudentInterface/>)}
       </div>
     );
   }

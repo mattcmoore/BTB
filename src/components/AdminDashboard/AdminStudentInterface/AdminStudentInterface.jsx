@@ -12,7 +12,7 @@ const AdminStudentInterface = () => {
     const [startDate, setStartDate] = useState(new Date());
     const [mouseover, setMouseover] = useState(false);
 
-    const { notes, addNewNote, openNoteModal, closeNoteModal, fetchNotes, user, tasks, fetchTasks } = useContext(BtbContext)
+    const { notes, addNewNote, openNoteModal, closeNoteModal, fetchNotes, user, tasks, fetchTasks, closeStudentModal } = useContext(BtbContext)
 
     const handleMouseover = () => {
         setMouseover(false)
@@ -149,103 +149,86 @@ const AdminStudentInterface = () => {
 
     return (
         <div className = 'admin-student-main-container'>
-             <div className="navbar-main-container">
-                    <div className="student-navbar-container" onMouseLeave={()=>setMouseover(false)}>
-                    <div className="student-navbar-buttons">
-                        <img className="student-navbar-logo" src={BTBlogo}></img>
-                        <div><span className="student-classes-btn"></span></div>
-                        <div><span className="student-btn"></span></div>
-                        <div><span className="student-archives-btn"></span></div>
+            <div className="admin-student-modal-container">
+                <div className="admin-student-modal">
+                    <div className="back-button">
+                        <button onClick={closeStudentModal}>
+                            <svg viewBox="0 0 32 32">
+                                <g fill="none">
+                                    <path d="m20 28-11.29289322-11.2928932c-.39052429-.3905243-.39052429-1.0236893 0-1.4142136l11.29289322-11.2928932">
+                                    </path>
+                                </g>
+                            </svg>
+                        </button>
                     </div>
-                    <div className={`student-dropdown ${mouseover ? 'mouseover' : ''}`}>
-                        <div className="student-dropdown-btn" onMouseEnter={()=>setMouseover(true)}>
-                            <p className="student-dropdown-avatar">{user.name.match(/\b\w/g).join("")}</p>
-                            <p>{user.name}</p><p><svg className="triangle" viewBox="0 0 232.72 115"><path className="cls-1" d="M116.02,120.76L1.17,.5H230.88L116.02,120.76Z"/></svg></p>
-                        </div>
-                        <div className={mouseover ? 'student-dropdown-account' : 'hidden' }>
-                            <p>{user.name}'s Account</p>
-                            <p>{user.email}</p>
-                        </div>
-                        <div className={mouseover ? 'student-dropdown-sign-out' : 'hidden'}>SIGN OUT</div>
-                    </div>
-                </div>
-            </div>
-            <div className="student-container">
-                <div className="outprocessing-container">
-                    <h2 className="column-title">
-                        Outprocessing Progress
-                    </h2>
-                    <div className="student-section">
-                        <h3 
-                            id="student-name"
-                            className="student-info"
-                        >
-                            {user.name}
-                        </h3>
-                        <h3 
-                            id="branch"
-                            className="student-info"
-                        >
-                            Branch: Army
-                        </h3>
-                        <h3 
-                            id="sep-date"
-                            className="student-info"
-                        >
-                            Separation Date: 06 June 2023
-                        </h3>
-                    </div>
-                    <div className="checklist-container">
-                        <ul className="task">
-                        {tasks.map((item, index) => (
-                            <div className="task-item-container">
-                                <div className="list-pop">
-                                    <div className="task-item" key={index}>
-                                        <input value={item} type="checkbox" onChange={(e) => handleCheck(e, item.id)}  />
-                                        <span className={checked.includes(item) ? 'checked' : (daysLeft(item.due) <= 14 ? 'red' : daysLeft(item.due) <= 30 ? 'yellow' : '')}>{item.task}</span>
-                                        {/* className={checked.includes(item) ? 'checked' : ''} */}
-                                        {/* checked.includes(item) ? 'checked' : (daysLeft(item.due) <= 14 ? 'red' : daysLeft(item.due) <= 30 ? 'yellow' : '') */}
+                    <div className="student-container">
+                        <div className="outprocessing-container">
+                            <h2 className="column-title">
+                                Outprocessing Progress
+                            </h2>
+                            <div className="student-section">
+                                <h3 
+                                    id="student-name"
+                                    className="student-info"
+                                >
+                                    {user.name}
+                                </h3>
+                                <h3 
+                                    id="branch"
+                                    className="student-info"
+                                >
+                                    Branch: Army
+                                </h3>
+                                <h3 
+                                    id="sep-date"
+                                    className="student-info"
+                                >
+                                    Separation Date: 06 June 2023
+                                </h3>
+                            </div>
+                            <div className="checklist-container">
+                                <ul className="task">
+                                {tasks.map((item, index) => (
+                                    <div className="task-item-container">
+                                        <div className="list-pop">
+                                            <div className="task-item" key={index}>
+                                                <input value={item} type="checkbox" onChange={(e) => handleCheck(e, item.id)}  />
+                                                <span className={checked.includes(item) ? 'checked' : (daysLeft(item.due) <= 14 ? 'red' : daysLeft(item.due) <= 30 ? 'yellow' : '')}>{item.task}</span>
+                                                {/* className={checked.includes(item) ? 'checked' : ''} */}
+                                                {/* checked.includes(item) ? 'checked' : (daysLeft(item.due) <= 14 ? 'red' : daysLeft(item.due) <= 30 ? 'yellow' : '') */}
+                                            </div>
+                                        </div>
+                                        <div className="due-date">
+                                            Date due: {formatDate(item.due)}
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="due-date">
-                                    Date due: {formatDate(item.due)}
+                                ))}
+                                </ul>
+                            </div>
+                        </div>
+                        <div className="notes-container">
+                            <div className="header-btn">
+                                <h2 className="column-title" id="notes-title">
+                                    Notes
+                                </h2>
+                            </div>
+                            <div className="notes-section">
+                                <div className="note-container">
+                                    {notes.map((note) => (
+                                        <div className="note-item">
+                                            <p>
+                                                <span className="note-actual">{note.body}</span>
+                                                {/* <button className="edit">Edit</button> */}
+                                                <div className="delete" onClick={() => deleteNote(note.id)}><svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110.61 122.88"><title>trash</title><path d="M39.27,58.64a4.74,4.74,0,1,1,9.47,0V93.72a4.74,4.74,0,1,1-9.47,0V58.64Zm63.6-19.86L98,103a22.29,22.29,0,0,1-6.33,14.1,19.41,19.41,0,0,1-13.88,5.78h-45a19.4,19.4,0,0,1-13.86-5.78l0,0A22.31,22.31,0,0,1,12.59,103L7.74,38.78H0V25c0-3.32,1.63-4.58,4.84-4.58H27.58V10.79A10.82,10.82,0,0,1,38.37,0H72.24A10.82,10.82,0,0,1,83,10.79v9.62h23.35a6.19,6.19,0,0,1,1,.06A3.86,3.86,0,0,1,110.59,24c0,.2,0,.38,0,.57V38.78Zm-9.5.17H17.24L22,102.3a12.82,12.82,0,0,0,3.57,8.1l0,0a10,10,0,0,0,7.19,3h45a10.06,10.06,0,0,0,7.19-3,12.8,12.8,0,0,0,3.59-8.1L93.37,39ZM71,20.41V12.05H39.64v8.36ZM61.87,58.64a4.74,4.74,0,1,1,9.47,0V93.72a4.74,4.74,0,1,1-9.47,0V58.64Z"></path></svg></div>
+                                            </p>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
-                        ))}
-                        </ul>
-                    </div>
-                </div>
-                <div className="notes-container">
-                    <div className="header-btn">
-                        <h2 className="column-title" id="notes-title">
-                            Notes
-                        </h2>
-                        {/* <div className="new-note" onClick={openNoteModal}>
-                            <div className="note-btn">
-                                New note
-                            </div>
-                        </div> */}
-                    </div>
-                    <div className="notes-section">
-                        {/* <form onSubmit={handleSubmit}>
-                            <input type="text" value={text} onChange={handleChange} />
-                            <input type="text" />
-                        </form> */}
-                        <div className="note-container">
-                            {notes.map((note) => (
-                                <div className="note-item">
-                                    <p>
-                                        <span className="note-actual">{note.body}</span>
-                                        {/* <button className="edit">Edit</button> */}
-                                        <div className="delete" onClick={() => deleteNote(note.id)}><svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110.61 122.88"><title>trash</title><path d="M39.27,58.64a4.74,4.74,0,1,1,9.47,0V93.72a4.74,4.74,0,1,1-9.47,0V58.64Zm63.6-19.86L98,103a22.29,22.29,0,0,1-6.33,14.1,19.41,19.41,0,0,1-13.88,5.78h-45a19.4,19.4,0,0,1-13.86-5.78l0,0A22.31,22.31,0,0,1,12.59,103L7.74,38.78H0V25c0-3.32,1.63-4.58,4.84-4.58H27.58V10.79A10.82,10.82,0,0,1,38.37,0H72.24A10.82,10.82,0,0,1,83,10.79v9.62h23.35a6.19,6.19,0,0,1,1,.06A3.86,3.86,0,0,1,110.59,24c0,.2,0,.38,0,.57V38.78Zm-9.5.17H17.24L22,102.3a12.82,12.82,0,0,0,3.57,8.1l0,0a10,10,0,0,0,7.19,3h45a10.06,10.06,0,0,0,7.19-3,12.8,12.8,0,0,0,3.59-8.1L93.37,39ZM71,20.41V12.05H39.64v8.36ZM61.87,58.64a4.74,4.74,0,1,1,9.47,0V93.72a4.74,4.74,0,1,1-9.47,0V58.64Z"></path></svg></div>
-                                    </p>
-                                </div>
-                            ))}
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
 
         

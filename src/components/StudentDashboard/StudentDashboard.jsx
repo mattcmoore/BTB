@@ -16,7 +16,7 @@ export function StudentChecklist () {
     const [startDate, setStartDate] = useState(new Date());
     const [mouseover, setMouseover] = useState(false);
 
-    const { notes, addNewNote, openNoteModal, closeNoteModal, fetchNotes, user, tasks, fetchTasks } = useContext(BtbContext)
+    const { notes, addNewNote, openNoteModal, closeNoteModal, fetchNotes, user, tasks, fetchTasks, logOut, individualUser, fetchIndividualUser } = useContext(BtbContext)
 
     const handleMouseover = () => {
         setMouseover(false)
@@ -24,12 +24,10 @@ export function StudentChecklist () {
 
     useEffect(() => {
         fetchNotes()
-        console.log(notes)
-    },[])
-
-    useEffect(() => {
+        fetchIndividualUser()
+        console.log(individualUser)
+        // console.log(notes)
         fetchTasks()
-        console.log(tasks)
     },[])
 
     const deleteNote = async (id) => {
@@ -171,7 +169,7 @@ export function StudentChecklist () {
                             <p>{user.name}'s Account</p>
                             <p>{user.email}</p>
                         </div>
-                        <div className={mouseover ? 'student-dropdown-sign-out' : 'hidden'}>SIGN OUT</div>
+                        <div className={mouseover ? 'student-dropdown-sign-out' : 'hidden'} onClick={logOut}>SIGN OUT</div>
                     </div>
                 </div>
             </div>
@@ -191,13 +189,13 @@ export function StudentChecklist () {
                             id="branch"
                             className="student-info"
                         >
-                            Branch: Army
+                            Branch: {individualUser.branch}
                         </h3>
                         <h3 
                             id="sep-date"
                             className="student-info"
                         >
-                            Separation Date: 06 June 2023
+                            Separation Date: {individualUser.sep_date}
                         </h3>
                     </div>
                     <div className="checklist-container">
