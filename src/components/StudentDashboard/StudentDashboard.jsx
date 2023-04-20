@@ -23,11 +23,11 @@ export function StudentChecklist () {
     }
 
     useEffect(() => {
-        fetchNotes()
-        fetchIndividualUser()
+        fetchNotes(user.userId)
+        fetchIndividualUser(user.userId)
+        fetchTasks(user.userId)
         console.log(individualUser)
         // console.log(notes)
-        fetchTasks()
     },[])
 
     const deleteNote = async (id) => {
@@ -36,13 +36,22 @@ export function StudentChecklist () {
                 method: 'DELETE'
             })
             if (response.status === 200) {
-                fetchNotes()
+                fetchNotes(user.userId)
                 console.log('successfully deleted')
             }
         } catch(err) {
             console.error(err)
         }
     }
+
+    function capitalizeFirstChar(str) {
+        const arr = [];
+        if (typeof str === string) {
+            arr.push(str)
+        }
+        return arr.charAt(0).toUpperCase()
+    }
+
     const [checked, setChecked] = useState([]); 
     const handleCheck = async (e, id) => {
         let updatedList = [...checked];
@@ -195,7 +204,7 @@ export function StudentChecklist () {
                             id="sep-date"
                             className="student-info"
                         >
-                            Separation Date: {individualUser.sep_date}
+                            Separation Date: {formatDate(individualUser.sep_date)}
                         </h3>
                     </div>
                     <div className="checklist-container">

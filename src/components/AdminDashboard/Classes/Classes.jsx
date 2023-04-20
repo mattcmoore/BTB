@@ -6,7 +6,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import AdminStudentInterface from '../AdminStudentInterface/AdminStudentInterface';
 
 const Classes = () => {
-  const { adminModal, setAdminModal, openStudentModal, openStudentInterface } = useContext(BtbContext);
+  const { adminModal, setAdminModal, openStudentModal, openStudentInterface, } = useContext(BtbContext);
   const [selected, setSelected] = useState(null);
   const [classes, setClasses] = useState([]);
 
@@ -19,18 +19,22 @@ const Classes = () => {
           const existingItem = acc.find(i => i.mcsp_name === item.mcsp_name);
           if (existingItem) {
             existingItem.user_names.push({
+              id: item.user_id,
               name: item.user_name,
               task_complete: (item.task_complete),
+              tasks: item.tasks,
               total: (item.total),
               start_date: item.start_date,
-              end_date: item.end_date
+              end_date: item.end_date,
             });
           } else {
             acc.push({
               mcsp_name: item.mcsp_name,
               user_names: [{
+                id: item.user_id,
                 name: item.user_name,
                 task_complete: item.task_complete,
+                tasks: item.tasks,
                 total: item.total,
                 start_date: item.start_date,
                 end_date: item.end_date
@@ -45,6 +49,7 @@ const Classes = () => {
         console.error('Error fetching classes:', err);
       }
     };
+    console.log(classes)
     fetchClasses();
   }, []);
 
@@ -80,9 +85,9 @@ const Classes = () => {
                 <div className={selected === i ? 'content show' : 'content'}>
                   <div className='item_wrapper'>
                     {userNames.map((user, j) => (
-                      <div className='item_card' key={j}>
+                        <div className='item_card' key={j} onClick={openStudentModal} name={user.id} id="bluh">
                         <p>
-                          <p className='user_name' onClick={openStudentModal}>{user.name}</p>
+                          <p className='user_name' >{user.name}</p>
                           <p className='user_progress'> Task Completion:</p>
                           <div className='progressbar'>
                             <CircularProgressbar
