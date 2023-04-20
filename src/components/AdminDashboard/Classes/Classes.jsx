@@ -3,9 +3,10 @@ import BtbContext from '../../../context/BtbContext';
 import './Classes.css';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import AdminStudentInterface from '../AdminStudentInterface/AdminStudentInterface';
 
 const Classes = () => {
-  const { adminModal, setAdminModal } = useContext(BtbContext);
+  const { adminModal, setAdminModal, openStudentModal, openStudentInterface, } = useContext(BtbContext);
   const [selected, setSelected] = useState(null);
   const [classes, setClasses] = useState([]);
   const [deletedMcspNames, setDeletedMcspNames] = useState([]);
@@ -32,20 +33,30 @@ const Classes = () => {
       try {
         const response = await fetch(`http://localhost:3000/accordian`);
         const data = await response.json();
-        const allMcspNames = [...new Set(data.map(item => item.mcsp_name))];
-        const groupedData = allMcspNames.map(mcspName => ({
-          mcsp_name: mcspName,
-          user_names: [],
-        }));
-        data.forEach(item => {
-          const group = groupedData.find(g => g.mcsp_name === item.mcsp_name);
-          if (group) {
-            group.user_names.push({
+        const groupedData = data.reduce((acc, item) => {
+          const existingItem = acc.find(i => i.mcsp_name === item.mcsp_name);
+          if (existingItem) {
+            existingItem.user_names.push({
+              id: item.user_id,
               name: item.user_name,
-              task_complete: item.task_complete,
-              total: item.total,
+              task_complete: (item.task_complete),
+              tasks: item.tasks,
+              total: (item.total),
               start_date: item.start_date,
               end_date: item.end_date,
+            });
+          } else {
+            acc.push({
+              mcsp_name: item.mcsp_name,
+              user_names: [{
+                id: item.user_id,
+                name: item.user_name,
+                task_complete: item.task_complete,
+                tasks: item.tasks,
+                total: item.total,
+                start_date: item.start_date,
+                end_date: item.end_date
+              }],
             });
           }
         });
@@ -55,6 +66,7 @@ const Classes = () => {
         console.error('Error fetching classes:', err);
       }
     };
+    console.log(classes)
     fetchClasses();
   }, [deletedMcspNames]);
   
@@ -122,6 +134,7 @@ const Classes = () => {
             );
           })}
         </div>
+        {openStudentInterface && (<AdminStudentInterface/>)}
       </div>
     );
   }

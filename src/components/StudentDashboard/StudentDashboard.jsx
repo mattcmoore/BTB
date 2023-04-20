@@ -16,20 +16,18 @@ export function StudentChecklist () {
     const [startDate, setStartDate] = useState(new Date());
     const [mouseover, setMouseover] = useState(false);
 
-    const { notes, addNewNote, openNoteModal, closeNoteModal, fetchNotes, user, tasks, fetchTasks } = useContext(BtbContext)
+    const { notes, addNewNote, openNoteModal, closeNoteModal, fetchNotes, user, tasks, fetchTasks, logOut, individualUser, fetchIndividualUser } = useContext(BtbContext)
 
     const handleMouseover = () => {
         setMouseover(false)
     }
 
     useEffect(() => {
-        fetchNotes()
-        console.log(notes)
-    },[])
-
-    useEffect(() => {
-        fetchTasks()
-        console.log(tasks)
+        fetchNotes(user.userId)
+        fetchIndividualUser(user.userId)
+        fetchTasks(user.userId)
+        console.log(individualUser)
+        // console.log(notes)
     },[])
 
     const deleteNote = async (id) => {
@@ -38,13 +36,22 @@ export function StudentChecklist () {
                 method: 'DELETE'
             })
             if (response.status === 200) {
-                fetchNotes()
+                fetchNotes(user.userId)
                 console.log('successfully deleted')
             }
         } catch(err) {
             console.error(err)
         }
     }
+
+    function capitalizeFirstChar(str) {
+        const arr = [];
+        if (typeof str === string) {
+            arr.push(str)
+        }
+        return arr.charAt(0).toUpperCase()
+    }
+
     const [checked, setChecked] = useState([]); 
     const handleCheck = async (e, id) => {
         let updatedList = [...checked];
@@ -164,14 +171,14 @@ export function StudentChecklist () {
                     </div>
                     <div className={`student-dropdown ${mouseover ? 'mouseover' : ''}`}>
                         <div className="student-dropdown-btn" onMouseEnter={()=>setMouseover(true)}>
-                            <p className="student-dropdown-avatar">CD</p>
-                            <p>Student Name</p><p><svg className="triangle" viewBox="0 0 232.72 115"><path className="cls-1" d="M116.02,120.76L1.17,.5H230.88L116.02,120.76Z"/></svg></p>
+                            <p className="student-dropdown-avatar">{user.name.match(/\b\w/g).join("")}</p>
+                            <p>{user.name}</p><p><svg className="triangle" viewBox="0 0 232.72 115"><path className="cls-1" d="M116.02,120.76L1.17,.5H230.88L116.02,120.76Z"/></svg></p>
                         </div>
                         <div className={mouseover ? 'student-dropdown-account' : 'hidden' }>
-                            <p>MY ACCOUNT</p>
-                            <p>email address</p>
+                            <p>{user.name}'s Account</p>
+                            <p>{user.email}</p>
                         </div>
-                        <div className={mouseover ? 'student-dropdown-sign-out' : 'hidden'}>SIGN OUT</div>
+                        <div className={mouseover ? 'student-dropdown-sign-out' : 'hidden'} onClick={logOut}>SIGN OUT</div>
                     </div>
                 </div>
             </div>
@@ -191,13 +198,13 @@ export function StudentChecklist () {
                             id="branch"
                             className="student-info"
                         >
-                            Branch: Army
+                            Branch: {individualUser.branch}
                         </h3>
                         <h3 
                             id="sep-date"
                             className="student-info"
                         >
-                            Separation Date: 06 June 2023
+                            Separation Date: {formatDate(individualUser.sep_date)}
                         </h3>
                     </div>
                     <div className="checklist-container">

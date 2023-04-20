@@ -200,6 +200,19 @@ app.route('/tasks/:id').put( async (req, res) => {
   }
 })
 
+app.route('/users/:id').get( async ( req, res ) => {
+  const { id } = req.params;
+  const parseUserId = parseInt(id, 10)
+  try {
+    const data = await sql`SELECT * FROM users WHERE id = ${parseUserId}`
+    res.json(data)
+    console.log('student user fetched')
+    console.log(data)
+  } catch(error) {
+    console.error(error)
+    console.log('unable to fetch student user')
+  }
+})
 
 app.get("/classes", async (req, res) => {
   try {

@@ -7,10 +7,10 @@ const BtbContext = createContext()
 export const BtbProvider = ({children}) =>{
   const fetchURL = 'http://localhost:3000'
   const [classes, setClasses] = useState(['this']);
-  const [notes, setNotes] = useState([]);
-  const [addNewNote, setAddNewNote] = useState(false);
+  const [ notes, setNotes ] = useState([]);
+  const [ addNewNote, setAddNewNote ] = useState(false);
   const [user, setUser] = useState(null);
-  const [tasks, setTasks] = useState([]);
+  const [ tasks, setTasks ] = useState([]);
   // const userId = user.userId;
   const [adminModal, setAdminModal] = useState('classes')
   const [admins, setAdmins] = useState([])
@@ -18,24 +18,42 @@ export const BtbProvider = ({children}) =>{
       name: "",
       email: "",
       mcsp: "",
-  }
-  const [adminUpdate, setAdminUpdate] = useState({})
-  const [newAdmin, setNewAdmin] = useState(emptyAdmin)
-  const [ chatSessions, setChatSessions ] = useState([])
+    }
+    const [adminUpdate, setAdminUpdate] = useState({})
+    const [newAdmin, setNewAdmin] = useState(emptyAdmin)
+    const [ chatSessions, setChatSessions ] = useState([])
+    const [individualUser, setIndividualUser] = useState([])
+    const [ openStudentInterface, setOpenStudentInterface ] = useState(false)
 
-  const fetchNotes = async () => {
-    const response = await fetch(`${fetchURL}/notes/${user.userId}`);
+
+  const fetchNotes = async (id) => {
+    const response = await fetch(`${fetchURL}/notes/${id}`);
     const data = await response.json();
     setNotes(data);
     console.log(notes)
   };
 
-  const fetchTasks = async () => {
-    const response = await fetch(`${fetchURL}/tasks/${user.userId}`);
+  const fetchTasks = async (id) => {
+    const response = await fetch(`${fetchURL}/tasks/${id}`);
     const data = await response.json();
     setTasks(data);
     console.log(tasks);
   }
+  
+  const fetchIndividualUser = async (id) => {
+      const response = await fetch(`${fetchURL}/users/${id}`)
+      const data = await response.json();
+      setIndividualUser(data[0])
+      console.log(individualUser)
+    }
+    
+    const openStudentModal = (event) => {
+        const id = event.target.getAttribute('name')
+        fetchIndividualUser(id)
+        fetchTasks(id)
+        fetchNotes(id)
+        setOpenStudentInterface(true)
+    }
 
   const openNoteModal = () => {
       setAddNewNote(true)
@@ -43,6 +61,11 @@ export const BtbProvider = ({children}) =>{
 
   const closeNoteModal = () => {
       setAddNewNote(false)
+  }
+
+
+  const closeStudentModal = () => {
+    setOpenStudentInterface(false)
   }
   
   const createNewClass = async (formData) => {
@@ -226,6 +249,12 @@ export const BtbProvider = ({children}) =>{
           setChatSessions,
           updateAdmin,
           deleteAdmin,
+          individualUser,
+          fetchIndividualUser,
+          openStudentInterface,
+          setOpenStudentInterface,
+          openStudentModal,
+          closeStudentModal,
         }}>
             {children}
         </BtbContext.Provider>
