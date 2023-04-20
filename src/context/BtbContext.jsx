@@ -26,26 +26,34 @@ export const BtbProvider = ({children}) =>{
     const [ openStudentInterface, setOpenStudentInterface ] = useState(false)
 
 
-  const fetchNotes = async () => {
-    const response = await fetch(`${fetchURL}/notes/${user.userId}`);
+  const fetchNotes = async (id) => {
+    const response = await fetch(`${fetchURL}/notes/${id}`);
     const data = await response.json();
     setNotes(data);
     console.log(notes)
   };
 
-  const fetchTasks = async () => {
-    const response = await fetch(`${fetchURL}/tasks/${user.userId}`);
+  const fetchTasks = async (id) => {
+    const response = await fetch(`${fetchURL}/tasks/${id}`);
     const data = await response.json();
     setTasks(data);
-    // console.log(tasks);
+    console.log(tasks);
   }
-
-  const fetchIndividualUser = async () => {
-    const response = await fetch(`${fetchURL}/users/${id}`)
-    const data = await response.json();
-    setIndividualUser(data)
-    console.log(individualUser)
-  }
+  
+  const fetchIndividualUser = async (id) => {
+      const response = await fetch(`${fetchURL}/users/${id}`)
+      const data = await response.json();
+      setIndividualUser(data[0])
+      console.log(individualUser)
+    }
+    
+    const openStudentModal = (event) => {
+        const id = event.target.getAttribute('name')
+        fetchIndividualUser(id)
+        fetchTasks(id)
+        fetchNotes(id)
+        setOpenStudentInterface(true)
+    }
 
   const openNoteModal = () => {
       setAddNewNote(true)
@@ -55,9 +63,6 @@ export const BtbProvider = ({children}) =>{
       setAddNewNote(false)
   }
 
-  const openStudentModal = () => {
-    setOpenStudentInterface(true)
-  }
 
   const closeStudentModal = () => {
     setOpenStudentInterface(false)

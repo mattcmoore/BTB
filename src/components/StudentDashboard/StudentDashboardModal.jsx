@@ -32,7 +32,7 @@ const StudentDashboardModal = ({}) => {
             })
             if (response.status === 200) {
                 closeNoteModal()
-                fetchNotes()
+                fetchNotes(user.userId)
               }
         } catch(err) {
             console.log(err)

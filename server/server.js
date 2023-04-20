@@ -65,18 +65,20 @@ app.get("/accordian", async (req, res) => {
     console.log('fetching data..');
     const data = await sql `
     SELECT 
-      m.mcsp_name AS mcsp_name,
-      u.name AS user_name,
-      u.admin AS admin,
-      u.mcsp AS mcsp,
-      m.start_date AS start_date,
-      m.end_date AS end_date,
-      COUNT(t.complete) FILTER (WHERE t.complete = true) AS task_complete,
-      COUNT(t.task) AS total
-    FROM mcsps m
-    JOIN users u ON m.id = u.mcsp
-    JOIN tasks t ON u.id = t.user_id
-    GROUP BY m.mcsp_name, u.name, u.admin, u.mcsp, m.start_date, m.end_date;
+          m.mcsp_name AS mcsp_name,
+          u.id AS user_id,
+          u.name AS user_name,
+          u.admin AS admin,
+          u.mcsp AS mcsp,
+          m.start_date AS start_date,
+          m.end_date AS end_date,
+          COUNT(t.complete) FILTER (WHERE t.complete = true) AS task_complete,
+          COUNT(t.task) AS total_tasks,
+          array_agg(t.task) AS tasks
+      FROM mcsps m
+      LEFT JOIN users u ON m.id = u.mcsp
+      LEFT JOIN tasks t ON u.id = t.user_id
+      GROUP BY m.mcsp_name, u.id, u.name, u.admin, u.mcsp, m.start_date, m.end_date;
     `
 
     const formattedData = data.map(item => ({
@@ -192,6 +194,7 @@ app.route('/users/:id').get( async ( req, res ) => {
     const data = await sql`SELECT * FROM users WHERE id = ${parseUserId}`
     res.json(data)
     console.log('student user fetched')
+    console.log(data)
   } catch(error) {
     console.error(error)
     console.log('unable to fetch student user')
