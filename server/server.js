@@ -64,21 +64,22 @@ app.get("/accordian", async (req, res) => {
   try {
     console.log('fetching data..');
     const data = await sql `
-    SELECT 
-          m.mcsp_name AS mcsp_name,
-          u.id AS user_id,
-          u.name AS user_name,
-          u.admin AS admin,
-          u.mcsp AS mcsp,
-          m.start_date AS start_date,
-          m.end_date AS end_date,
-          COUNT(t.complete) FILTER (WHERE t.complete = true) AS task_complete,
-          COUNT(t.task) AS total_tasks,
-          array_agg(t.task) AS tasks
-      FROM mcsps m
-      LEFT JOIN users u ON m.id = u.mcsp
-      LEFT JOIN tasks t ON u.id = t.user_id
-      GROUP BY m.mcsp_name, u.id, u.name, u.admin, u.mcsp, m.start_date, m.end_date;
+SELECT 
+    m.mcsp_name AS mcsp_name,
+    u.id AS user_id,
+    u.name AS user_name,
+    u.admin AS admin,
+    u.mcsp AS mcsp,
+    m.start_date AS start_date,
+    m.end_date AS end_date,
+    COUNT(t.complete) FILTER (WHERE t.complete = true) AS task_complete,
+    COUNT(t.task) AS total,
+    array_agg(t.task) AS tasks
+FROM mcsps m
+LEFT JOIN users u ON m.id = u.mcsp
+LEFT JOIN tasks t ON u.id = t.user_id
+GROUP BY m.mcsp_name, u.id, u.name, u.admin, u.mcsp, m.start_date, m.end_date;
+
     `
 
     const formattedData = data.map(item => ({
@@ -126,6 +127,18 @@ app.route('/notes/:id').get( async (req, res) => {
        res.json(error)
    }
 })
+
+app.route('/accordian/:mcspName').delete( async (req, res) => {
+  const {mcspName} = req.params;
+  try {
+    // Use your database connection to delete the mcsp_name from the mscps table
+    const deleteMSCP = await sql `DELETE FROM mcsps WHERE mcsp_name = ${mcspName} RETURNING id`
+    res.json(mcspName); // Send a successful response with status code 204 (No Content)
+  } catch (err) {
+    console.error('Error deleting mcsp:', err);
+    res.sendStatus(500); // Send an error response with status code 500 (Internal Server Error)
+  }
+});
 
 app.route('/tasks/:id').get( async (req, res) => {
   console.log('tasks hit')
