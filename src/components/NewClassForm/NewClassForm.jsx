@@ -43,6 +43,7 @@ const NewClassForm = () => {
       setIsSubmitDisabled(true);
     } catch (error) {
       console.error(error);
+      alert('Failed to create class');
     }
   };
 
@@ -56,16 +57,12 @@ const NewClassForm = () => {
   };
   if (adminModal === 'newclass') {
     const handleHomeClick = () => {
-      // setAdminModal('classes')
-      location.reload()
+      setAdminModal('classes')
   }
   return (
     <div id="contCont">
-      {/* <img src={BTBLogo} id="imgSign" alt="BTB Logo" /> */}
       <form onSubmit={handleSubmit} className="signCont">
-        <div className='image_wrapper'>
         <img src={BTBLogo} id="imgSign" alt="BTB Logo" />
-        </div>
         <div id="hide" style={{ display: formSubmitted ? 'none' : 'block' }}>
           <label htmlFor="mcsp_name">Class Name:</label>
           <input
