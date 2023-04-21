@@ -1,27 +1,18 @@
 import './Admins.css'
 import Row from './Row'
 import BtbContext from "../../../context/BtbContext"
-import React, {useState, useContext, useEffect, useRef} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 
 const Admins = () => {
     const {adminModal, admins, newAdmin, setNewAdmin, makeAdmin, options, getOptions} = useContext(BtbContext)
 
-    // const {mcsps, getMCSPs} = useContext(BtbContext)
-    // useEffect(()=>{
-    //     getMCSPs()
-    // },[])
-
     const [tableData, setTableData] = useState([])
     const [isAsc, setIsAsc] = useState(true)
     const [sortValue, setSortValue] = useState('name')
     const [isValid, setIsValid] = useState(true)
     const [defaultOption, setDefaultOption] = useState("")
-
-    const nameInputRef = useRef(null)
-    const emailInputRef = useRef(null)
-    const passwordInputRef = useRef(null)
 
     const sorted = async () => {
             const val = sortValue
@@ -48,16 +39,16 @@ const Admins = () => {
         {key: "delete", label:""},
         {key: "name", label: "name"},
         {key: "email", label: "email"},
-        {key: "mcsp", label: "mcsp"},
+        // {key: "mcsp", label: "mcsp"},
 
     ]
 
     const handleChange = (event) => {
         console.log(event.target)
-        // const {name, value} = event.target
-        // setNewAdmin(prev => {
-        //     return {...prev, [name] : value }
-        // })
+        const {name, value} = event.target
+        setNewAdmin(prev => {
+            return {...prev, [name] : value }
+        })
     }
 
     const handleEnter = (event) => {
@@ -75,10 +66,9 @@ const Admins = () => {
     if(adminModal==='admins'){
         return(
             <div className="admin-table">
+                <h1>Current Admins</h1>
+                <h3>(Add New Admin Or Click To Edit)</h3>
                 <table>
-                        <caption>
-                           (Add New Admin Or Click To Edit)
-                        </caption>
                         <thead>
                             <tr>
                                 {headers.map( row => {
@@ -92,19 +82,8 @@ const Admins = () => {
                             })}
                             <tr className="input-row" key={tableData.length+1}>
                                 <td name="delete"></td>
-                                <td><input autoFocus type="text" name="name" ref={nameInputRef} value={newAdmin.name} onChange={handleChange} onKeyDown={handleEnter}/></td>
-                                <td><input type="text" name="email" ref={emailInputRef} value={newAdmin.email} onChange={handleChange} onKeyDown={handleEnter}/></td>
-                                <td>
-                                    {/* <Dropdown 
-                                        className="mcsp-dropdown" 
-                                        name="mcsp"
-                                        controlClassName='mcsp-dropdown-control' 
-                                        arrowClassName='mcsp-dropdown-arrow' 
-                                        options={values} 
-                                        value={defaultOption}
-                                        onChange={e=>{handleChange(e)}}
-                                    /> */}
-                                </td>
+                                <td><input autoFocus type="text" name="name"  value={newAdmin.name} onChange={handleChange} onKeyDown={handleEnter}/></td>
+                                <td><input type="text" name="email" value={newAdmin.email} onChange={handleChange} onKeyDown={handleEnter}/></td>
                             </tr>               
                         </tbody>
                 </table>

@@ -6,54 +6,57 @@ const BtbContext = createContext()
 
 export const BtbProvider = ({children}) =>{
   const fetchURL = 'http://localhost:3000'
-  // const [classes, setClasses] = useState(['this']);
+  const [classes, setClasses] = useState(['this']);
+  const [ notes, setNotes ] = useState([]);
+  const [ addNewNote, setAddNewNote ] = useState(false);
   const [incorrectLogin, setIncorrectLogin] = useState(false)
-  const [classes, setClasses] = useState([]);
-  const [notes, setNotes] = useState([]);
-  const [addNewNote, setAddNewNote] = useState(false);
   const [user, setUser] = useState(null);
-  const [tasks, setTasks] = useState([]);
+  const [ tasks, setTasks ] = useState([]);
   // const userId = user.userId;
   const [adminModal, setAdminModal] = useState('classes')
   const [admins, setAdmins] = useState([])
   const emptyAdmin = {
       name: "",
       email: "",
-      mcsp: "",
-  }
-  const [adminUpdate, setAdminUpdate] = useState({})
-  const [newAdmin, setNewAdmin] = useState(emptyAdmin)
-  const [options, setOptions] = useState([])
-
-  const fetchNotes = async () => {
-    if(user){
-      const response = await fetch(`${fetchURL}/notes/${user.userId}`);
-      const data = await response.json();
-      setNotes(data);
-      console.log(notes)
+      // mcsp: "",
     }
+    const [adminUpdate, setAdminUpdate] = useState({})
+    const [newAdmin, setNewAdmin] = useState(emptyAdmin)
+    const [ chatSessions, setChatSessions ] = useState([])
+    const [options, setOptions] = useState([]) 
+    const [individualUser, setIndividualUser] = useState([])
+    const [ openStudentInterface, setOpenStudentInterface ] = useState(false)
 
+
+  const fetchNotes = async (id) => {
+    const response = await fetch(`${fetchURL}/notes/${id}`);
+    const data = await response.json();
+    setNotes(data);
+    console.log(notes)
   };
 
-  const fetchTasks = async () => {
-    if(user){
-      const response = await fetch(`${fetchURL}/tasks/${user.userId}`);
-      const data = await response.json();
-      setTasks(data);
-      console.log(tasks);  
-    }
+  const fetchTasks = async (id) => {
+    const response = await fetch(`${fetchURL}/tasks/${id}`);
+    const data = await response.json();
+    setTasks(data);
+    console.log(tasks);
   }
-
-  useEffect(() => {
-    fetchNotes()
-    console.log(notes)
-  },[user])
-
-  useEffect(() => {
-    fetchTasks()
-    console.log(tasks)
-  },[user])
   
+  const fetchIndividualUser = async (id) => {
+      const response = await fetch(`${fetchURL}/users/${id}`)
+      const data = await response.json();
+      setIndividualUser(data[0])
+      console.log(individualUser)
+    }
+    
+    const openStudentModal = (event) => {
+        const id = event.target.getAttribute('name')
+        fetchIndividualUser(id)
+        fetchTasks(id)
+        fetchNotes(id)
+        setOpenStudentInterface(true)
+    }
+
   const openNoteModal = () => {
       setAddNewNote(true)
   }
@@ -62,6 +65,11 @@ export const BtbProvider = ({children}) =>{
       setAddNewNote(false)
   }
 
+
+  const closeStudentModal = () => {
+    setOpenStudentInterface(false)
+  }
+  
   const createNewClass = async (formData) => {
       const res = await fetch(`${fetchURL}/createNewClass`, {
         method: 'POST',
@@ -207,9 +215,7 @@ export const BtbProvider = ({children}) =>{
             getAdmins()
             setAdminUpdate({})
         }     
-
     const deleteAdmin = async (id) => {
-      console.log(typeof id)
       const res = await fetch(`${fetchURL}/updateAdmin/${id}`, {
         method: 'DELETE',
         headers: {
@@ -221,10 +227,12 @@ export const BtbProvider = ({children}) =>{
     const getOptions = async () => {
         const response = await fetch(`${fetchURL}/mcsps`);
         const data = await response.json();
-        const mcsps = data.map(mcsp =>{
-          return {value: mcsp.mcsp_name, label:mcsp.mcsp_name}
+        console.log(data)
+        const mcsps = data.map((mcsp, index) =>{
+          return {value: index+1, label:mcsp.mcsp_name}
         })
-        setOptions(mcsps)
+        const reverse = mcsps.reverse()
+        setOptions(reverse)
     }
 
     return(
@@ -255,8 +263,16 @@ export const BtbProvider = ({children}) =>{
           makeAdmin,
           adminUpdate,
           setAdminUpdate,
+          chatSessions,
+          setChatSessions,
           updateAdmin,
           deleteAdmin,
+          individualUser,
+          fetchIndividualUser,
+          openStudentInterface,
+          setOpenStudentInterface,
+          openStudentModal,
+          closeStudentModal,
           getOptions,
           options,
         }}>

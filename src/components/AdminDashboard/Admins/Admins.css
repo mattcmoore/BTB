@@ -15,17 +15,24 @@ caption{
 }
 
 .admin-table table{
-    display: grid;
-    grid-template-columns: auto ;
-    grid-template-rows: auto ;
-    border-collapse: separate; 
-    border-spacing: 20px 5px;
+    width: 100%;
+    position: relative;
+    left: 10px;
+    top: 25px;
+}
+
+.admin-table th{
+    text-align: left;
+}
+
+td {
+    padding: 5px;
 }
 
 .admin-table input{
     border: none;
     outline: none;
-    width: 100%;
+    width:70%;
     border-bottom: 1px solid var(--silver);
 }
 
@@ -50,41 +57,14 @@ tr:not(:last-child){
 }
 
 .trashcan {
+    display: block;
     height: 17px;
     width: 17px;
     fill: var(--teal);
 }
 
-.mcsp-dropdown{
-    height: 18.5px;
-    min-width: 100px;
-    font-size: 14px;
-}
-
-.Dropdown-placeholder{
-    font-size: 15px;
-}
-.mcsp-dropdown-control{
-    font-size: 10px;
-    height: 100%;
-    padding: 0;
-
-}
-
-.Dropdown-option:hover{
-    background-color: var(--teal);
-}
-.Dropdown-control.mcsp-dropdown-control{
-    padding: 0;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-.mcsp-dropdown-placeholder{
-    padding: 0;
-    margin: 0;
-}
-
-.Dropdown-arrow.mcsp-dropdown-arrow{
-    top: 35%;    
+.admin-table h1, .admin-table h3  {
+    margin: 0 5px;
+    position: relative;
+    left: 30px;
 }

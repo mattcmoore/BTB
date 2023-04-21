@@ -3,28 +3,26 @@ import React, {useState, useContext, useEffect, useRef} from 'react'
 import Select from 'react-select';
 
 const Row = (props) => {
-    const {options} = useContext(BtbContext)
     const {row, values} = props
     const [currentCell, setCurrentCell] = useState([])
+    const [hoveredOption, setHoveredOption] = useState(null)
+    const [hoveredValue, setHoveredValue] = useState(null)
+    const [dropdown, setDropdown] = useState(true)
 
-    const {admins, adminUpdate, setAdminUpdate, updateAdmin, deleteAdmin}= useContext(BtbContext)
+    const {admins, adminUpdate, setAdminUpdate, updateAdmin, deleteAdmin, options}= useContext(BtbContext)
 
     const handleClick = (event) => {
         const id = parseInt(event.target.parentElement.getAttribute("name"))
         const name = event.target.getAttribute("name")
         if(event.target.parentElement.getAttribute("name") === "delete" ){
             let userId = parseInt(event.target.parentElement.parentElement.getAttribute("name"))
-            console.log(userId)
             deleteAdmin(userId)
-            // console.log(userId)
-        // }else if(event.target.getAttribute("className") === "Dropdown-option" ){
-        //     console.log("click")
         }else if(Object.keys(adminUpdate).length === 0){
             setCurrentCell([id, name])
             setAdminUpdate(row)    
         }
     }
-
+    
     const handleChange = (event) => {
         const {name, value} = event.target
         setAdminUpdate(prev => {
@@ -32,20 +30,21 @@ const Row = (props) => {
         })
     }
 
-    const handleSelect = (option) =>{
-        const {value} = option
-        const number = parseInt((value.match(/\d+$/))[0])
+    const handleSelectChange = (option) => {
+        const {value, label} = option
+        setHoveredOption(value)
+        setHoveredValue(label)
         setAdminUpdate(prev => {
-            return {...prev, mcsp : 18 } 
+            return {...prev, mcsp : value} 
         })
-        updateAdmin(adminUpdate)
+        setDropdown(false)
     }
-    console.log(adminUpdate)
 
     const handleEnter = (event) => {
         if(event.keyCode === 13){
             updateAdmin(adminUpdate)
             setCurrentCell([])
+            setSelected(false)
         }
     }
 
@@ -58,7 +57,7 @@ const Row = (props) => {
             </td>
             <td name="name" onClick={handleClick}> {currentCell[0] === row.id && currentCell[1] === "name" ? (<input name="name" value={adminUpdate.name} onChange={handleChange} onKeyDown={handleEnter} />) : (row.name) }</td>
             <td name="email" className="email-cell">{row.email }</td>
-            <td name="mcsp" onClick={handleClick}> {currentCell[0] === row.id && currentCell[1] === "mcsp" ?  <Select className="mcsp-dropdown" onChange={handleSelect} options={options} /> : row.mcsp === null ? "*" : row.mcsp } </td>
+            {/* <td name="mcsp" onClick={handleClick}> {currentCell[0] === row.id && currentCell[1] === "mcsp" ? dropdown ?  <Select className="mcsp-dropdown" onChange={handleSelectChange} value={options[0]} options={options} />  : <input value={hoveredValue} onKeyDown={handleEnter} ></input> : row.mcsp === null ? "*" : row.mcsp }</td> */}
         </tr>
     ) 
     

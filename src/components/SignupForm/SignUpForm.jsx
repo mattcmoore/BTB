@@ -17,6 +17,10 @@ const SignUpForm = () => {
     branch: "",
     hasFamily: false,
     livesInBarracks: false,
+    chat_history: {
+      chatHist: [],
+      chatActive: []
+    }
   });
   const[passwordError, setPasswordError] = useState(false)
   const handleChange = (e) => {
