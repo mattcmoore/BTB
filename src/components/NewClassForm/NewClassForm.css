@@ -7,7 +7,9 @@
     align-self: center;
     justify-self: center;
     position: absolute;
-    top: 0;
+    top: 40px;
+    left: 10px;
+    right: 10px;
 }
 .signCont{
     display: flex;
@@ -118,6 +120,12 @@
     text-align: center;
 }
 #codediv h1{
-    letter-spacing: 8px;
+    position: absolute;
+    top: 150px;
+    text-align: center;
+    border: 1px ;
+    font-size:40px;
+    letter-spacing: 20px;
     padding-bottom: 10px;
+    text-shadow: 1px 1px 1px;
 }

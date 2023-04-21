@@ -32,7 +32,7 @@ const StudentDashboardModal = ({}) => {
             })
             if (response.status === 200) {
                 closeNoteModal()
-                fetchNotes()
+                fetchNotes(user.userId)
               }
         } catch(err) {
             console.log(err)
@@ -67,6 +67,7 @@ const StudentDashboardModal = ({}) => {
                         <div className="submit-container">
                             <form>
                                 <input 
+                                    className="btb-input"
                                     required
                                     placeholder="enter new note"
                                     // className="new-note"
@@ -74,7 +75,11 @@ const StudentDashboardModal = ({}) => {
                                     value={newNote.body}
                                     onChange={handleChange}
                                 />
-                                <input type="submit" onClick={postNote} />
+                                <input 
+                                    className ='btb-btn' 
+                                    type="submit" 
+                                    onClick={postNote} />
+                                    Add information regarding your outprocessing progress
                             </form>
                         </div>
                     </div>
