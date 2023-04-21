@@ -79,7 +79,6 @@ FROM mcsps m
 LEFT JOIN users u ON m.id = u.mcsp
 LEFT JOIN tasks t ON u.id = t.user_id
 GROUP BY m.mcsp_name, u.id, u.name, u.admin, u.mcsp, m.start_date, m.end_date;
-
     `
 
     const formattedData = data.map(item => ({
