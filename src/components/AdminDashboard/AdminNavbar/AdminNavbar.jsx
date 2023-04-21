@@ -4,7 +4,7 @@ import BtbContext from '../../../context/BtbContext'
 import { useState, useContext } from "react";
 
 const AdminNavbar = () => {
-    const {setAdminModal, user, logOut} = useContext(BtbContext)
+    const {setAdminModal, adminModal, user, logOut} = useContext(BtbContext)
     const [mouseover, setMouseover] = useState(false)
 
   const handleMouseover = () => {
@@ -15,9 +15,9 @@ const AdminNavbar = () => {
     <div className="admin-navbar-container" onMouseLeave={()=>setMouseover(false)}>
       <div className="admin-navbar-buttons">
           <img className="admin-navbar-logo" src={BTBlogo}></img>
-          <div><span className="classes-btn" onClick={()=>setAdminModal('classes')}>Classes</span></div>
-          <div><span className="admins-btn" onClick={()=>setAdminModal('admins')}>Admins</span></div>
-          <div><span className="archives-btn" onClick={()=>setAdminModal('archives')}>Archives</span></div>
+          <div><span className={adminModal === "classes" ? "admin-focus" : "classes-btn"} onClick={()=>setAdminModal('classes')}>Classes</span></div>
+          <div><span className={adminModal === "admins" ? "admin-focus" : "admins-btn"} onClick={()=>setAdminModal('admins')}>Admins</span></div>
+          <div><span className={adminModal === "archives" ? "admin-focus" : "archives-btn"} onClick={()=>setAdminModal('archives')}>Archives</span></div>
       </div>
       <div className={`admin-dropdown ${mouseover ? 'mouseover' : ''}`}>
           <div className="admin-dropdown-btn" onMouseEnter={()=>setMouseover(true)}>

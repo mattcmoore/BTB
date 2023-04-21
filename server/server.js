@@ -89,7 +89,7 @@ GROUP BY m.mcsp_name, u.id, u.name, u.admin, u.mcsp, m.start_date, m.end_date, a
     }));
     
     res.json(formattedData);
-    console.log(formattedData);
+    // console.log(formattedData);
     
   } catch(err){
 
@@ -176,8 +176,6 @@ app.route('/notes/:id').put(async (req, res) => {
 
 app.route('/notes/:id').delete( async (req, res) => {
   const { id } = req.params
-
-  console.log(typeof id)
   try{
     const deleteNote = await sql`DELETE FROM notes WHERE id = ${id} RETURNING id`
     res.json(deleteNote)
@@ -421,6 +419,7 @@ app.post("/makeAdmin", async (req, res) => {
 
 app.patch("/updateAdmin", async (req, res) => {
   const { email, name, mcsp, id } = req.body;
+  console.log(req.body)
   try {
     await sql`
             UPDATE users
@@ -437,9 +436,10 @@ app.patch("/updateAdmin", async (req, res) => {
 
 app.delete("/updateAdmin/:id", async (req, res) => {
   const {id} = req.params
+  // console.log(typeof id)
   try{
-    const data = await sql `DELETE FROM users WHERE id = ${id}`
-    // res.json(data)  
+    const data = await sql `Delete FROM users where id = ${id} AND ${id} not IN (SELECT user_id FROM tasks) returning *;`
+    res.json(data)  
   }catch(error){
     res.status(500).json({msg: "Failed"})
   }
@@ -538,6 +538,15 @@ app.get("/tasks/:id", async (req, res) => {
     res.status(500).json({error: 'server error'})
   }
 });
+
+app.get("/mcsps", async (req, res) => {
+  try {
+     const data = await sql`SELECT mcsp_name FROM mcsps`
+     res.json(data)
+  } catch(err) {
+     console.log(err)
+  }
+})
 
 app.get('/messages/:to/:from', async (req, res) => {
   let { to, from } = req.params

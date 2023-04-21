@@ -9,6 +9,7 @@ export const BtbProvider = ({children}) =>{
   const [classes, setClasses] = useState(['this']);
   const [ notes, setNotes ] = useState([]);
   const [ addNewNote, setAddNewNote ] = useState(false);
+  const [incorrectLogin, setIncorrectLogin] = useState(false)
   const [user, setUser] = useState(null);
   const [ tasks, setTasks ] = useState([]);
   // const userId = user.userId;
@@ -17,11 +18,12 @@ export const BtbProvider = ({children}) =>{
   const emptyAdmin = {
       name: "",
       email: "",
-      mcsp: "",
+      // mcsp: "",
     }
     const [adminUpdate, setAdminUpdate] = useState({})
     const [newAdmin, setNewAdmin] = useState(emptyAdmin)
     const [ chatSessions, setChatSessions ] = useState([])
+    const [options, setOptions] = useState([]) 
     const [individualUser, setIndividualUser] = useState([])
     const [ openStudentInterface, setOpenStudentInterface ] = useState(false)
 
@@ -107,8 +109,10 @@ export const BtbProvider = ({children}) =>{
       // console.log(data);
       if (data.msg === "Email or password does not exist") {
         console.log("Make alert");
+        setIncorrectLogin(true)
       } else {
         localStorage.setItem("jwt", data.token);
+        setIncorrectLogin(false)
         setUser(data);
       }
   };
@@ -123,9 +127,10 @@ export const BtbProvider = ({children}) =>{
     });
     const data = await res.json();
     if (data.msg === "logged in") {
+      localStorage.setItem("jwt", data.token);
       setUser(data);
     } else {
-      console.log(data.msg);
+      console.log(data);
     }
   };
 
@@ -138,6 +143,7 @@ export const BtbProvider = ({children}) =>{
     const token = localStorage.getItem("jwt");  
     if(token){
         const decoded = jwtDecode(token);
+        console.log(decoded)
         setUser(decoded)
     }  
   };
@@ -210,7 +216,6 @@ export const BtbProvider = ({children}) =>{
             setAdminUpdate({})
         }     
     const deleteAdmin = async (id) => {
-      console.log(typeof id)
       const res = await fetch(`${fetchURL}/updateAdmin/${id}`, {
         method: 'DELETE',
         headers: {
@@ -218,6 +223,18 @@ export const BtbProvider = ({children}) =>{
       }})
       getAdmins()
     }
+
+    const getOptions = async () => {
+        const response = await fetch(`${fetchURL}/mcsps`);
+        const data = await response.json();
+        console.log(data)
+        const mcsps = data.map((mcsp, index) =>{
+          return {value: index+1, label:mcsp.mcsp_name}
+        })
+        const reverse = mcsps.reverse()
+        setOptions(reverse)
+    }
+
     return(
         <BtbContext.Provider value={{
           classes,
@@ -229,6 +246,7 @@ export const BtbProvider = ({children}) =>{
           openNoteModal, 
           closeNoteModal,
           login,
+          incorrectLogin,
           logOut,
           user,
           makeUser,
@@ -255,6 +273,8 @@ export const BtbProvider = ({children}) =>{
           setOpenStudentInterface,
           openStudentModal,
           closeStudentModal,
+          getOptions,
+          options,
         }}>
             {children}
         </BtbContext.Provider>

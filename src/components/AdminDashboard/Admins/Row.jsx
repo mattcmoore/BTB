@@ -1,11 +1,15 @@
 import BtbContext from "../../../context/BtbContext"
 import React, {useState, useContext, useEffect, useRef} from 'react'
+import Select from 'react-select';
 
 const Row = (props) => {
-    const {row} = props
+    const {row, values} = props
     const [currentCell, setCurrentCell] = useState([])
+    const [hoveredOption, setHoveredOption] = useState(null)
+    const [hoveredValue, setHoveredValue] = useState(null)
+    const [dropdown, setDropdown] = useState(true)
 
-    const {admins, adminUpdate, setAdminUpdate, updateAdmin, deleteAdmin}= useContext(BtbContext)
+    const {admins, adminUpdate, setAdminUpdate, updateAdmin, deleteAdmin, options}= useContext(BtbContext)
 
     const handleClick = (event) => {
         const id = parseInt(event.target.parentElement.getAttribute("name"))
@@ -13,13 +17,12 @@ const Row = (props) => {
         if(event.target.parentElement.getAttribute("name") === "delete" ){
             let userId = parseInt(event.target.parentElement.parentElement.getAttribute("name"))
             deleteAdmin(userId)
-            
         }else if(Object.keys(adminUpdate).length === 0){
             setCurrentCell([id, name])
             setAdminUpdate(row)    
         }
     }
-
+    
     const handleChange = (event) => {
         const {name, value} = event.target
         setAdminUpdate(prev => {
@@ -27,19 +30,34 @@ const Row = (props) => {
         })
     }
 
+    const handleSelectChange = (option) => {
+        const {value, label} = option
+        setHoveredOption(value)
+        setHoveredValue(label)
+        setAdminUpdate(prev => {
+            return {...prev, mcsp : value} 
+        })
+        setDropdown(false)
+    }
+
     const handleEnter = (event) => {
         if(event.keyCode === 13){
             updateAdmin(adminUpdate)
             setCurrentCell([])
+            setSelected(false)
         }
     }
 
     return(
         <tr className="input-row" name={row.id} key={row.id}>
-            <td name="delete"><svg className="trashcan" onClick={handleClick} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0c-4.992 0-10 1.242-10 3.144 0 .406 3.556 18.488 3.633 18.887 1.135 1.313 3.735 1.969 6.334 1.969 2.601 0 5.199-.656 6.335-1.969.081-.404 3.698-18.468 3.698-18.882 0-2.473-7.338-3.149-10-3.149zm0 1.86c4.211 0 7.625.746 7.625 1.667 0 .92-3.414 1.667-7.625 1.667s-7.625-.746-7.625-1.667 3.414-1.667 7.625-1.667zm4.469 19.139c-.777.532-2.418 1.001-4.502 1.001-2.081 0-3.721-.467-4.498-.998l-.004-.021c-1.552-7.913-2.414-12.369-2.894-14.882 3.55 1.456 11.304 1.455 14.849-.002-.868 4.471-2.434 12.322-2.951 14.902zm-7.872-7.418l-.492-.323 1.824-.008.78 1.667-.506-.32c-.723 1.146-1.027 1.764-.796 2.481-1.823-1.798-1.622-2.182-.81-3.497zm.622-1.304l.781-1.418c.195-.38 1.251-.075 1.688.899l-.797 1.445-1.672-.926zm2.673 5.175h-1.729c-.427.013-.672-1.061-.031-1.915h1.761v1.915zm.058-4.886l.524-.289c-.652-1.188-1.044-1.753-1.781-1.898 2.451-.729 2.593-.41 3.445.981l.521-.275-.79 1.654-1.919-.173zm3.059.005l.911 1.474c.236.355-.546 1.129-1.607 1.035l-.928-1.501 1.624-1.008zm-1.549 4.846l-.004.583-1.028-1.616 1.054-1.47-.006.6c1.354.011 2.037-.055 2.524-.63-.565 2.5-.942 2.533-2.54 2.533z"/></svg></td>
+            <td name="delete">
+                <svg className="trashcan" onClick={handleClick} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                    <path d="M 15 4 C 14.476563 4 13.941406 4.183594 13.5625 4.5625 C 13.183594 4.941406 13 5.476563 13 6 L 13 7 L 7 7 L 7 9 L 8 9 L 8 25 C 8 26.644531 9.355469 28 11 28 L 23 28 C 24.644531 28 26 26.644531 26 25 L 26 9 L 27 9 L 27 7 L 21 7 L 21 6 C 21 5.476563 20.816406 4.941406 20.4375 4.5625 C 20.058594 4.183594 19.523438 4 19 4 Z M 15 6 L 19 6 L 19 7 L 15 7 Z M 10 9 L 24 9 L 24 25 C 24 25.554688 23.554688 26 23 26 L 11 26 C 10.445313 26 10 25.554688 10 25 Z M 12 12 L 12 23 L 14 23 L 14 12 Z M 16 12 L 16 23 L 18 23 L 18 12 Z M 20 12 L 20 23 L 22 23 L 22 12 Z"></path>
+                </svg>
+            </td>
             <td name="name" onClick={handleClick}> {currentCell[0] === row.id && currentCell[1] === "name" ? (<input name="name" value={adminUpdate.name} onChange={handleChange} onKeyDown={handleEnter} />) : (row.name) }</td>
-            <td name="email">{row.email }</td>
-            <td name="mcsp" onClick={handleClick}> {currentCell[0] === row.id && currentCell[1] === "mcsp" ? (<input name="mcsp" value={adminUpdate.mcsp === null ? "" : adminUpdate.mcsp} onChange={handleChange} onKeyDown={handleEnter} />) : (row.mcsp) }</td>
+            <td name="email" className="email-cell">{row.email }</td>
+            {/* <td name="mcsp" onClick={handleClick}> {currentCell[0] === row.id && currentCell[1] === "mcsp" ? dropdown ?  <Select className="mcsp-dropdown" onChange={handleSelectChange} value={options[0]} options={options} />  : <input value={hoveredValue} onKeyDown={handleEnter} ></input> : row.mcsp === null ? "*" : row.mcsp }</td> */}
         </tr>
     ) 
     
