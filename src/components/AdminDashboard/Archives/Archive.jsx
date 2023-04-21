@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
 import BtbContext from '../../../context/BtbContext';
-import './Classes.css';
+import './Archives.css';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import AdminStudentInterface from '../AdminStudentInterface/AdminStudentInterface';
 
-const Classes = () => {
+const Archives = () => {
   const { adminModal, setAdminModal, openStudentModal, openStudentInterface, } = useContext(BtbContext);
   const [selected, setSelected] = useState(null);
   const [classes, setClasses] = useState([]);
@@ -34,10 +34,10 @@ const Classes = () => {
         const response = await fetch(`http://localhost:3000/accordian`);
         const data = await response.json();
 
-        const unarchiveData = data.filter(item => !item.archive)
-        console.log(unarchiveData)
+        const archiveData = data.filter(item => item.archive)
+        console.log(archiveData)
 
-        const allMcspNames = [...new Set(unarchiveData.map(item => item.mcsp_name))];
+        const allMcspNames = [...new Set(archiveData.map(item => item.mcsp_name))];
         const groupedData = allMcspNames.map(mcspName => ({
           mcsp_name: mcspName,
           user_names: [],
@@ -73,7 +73,7 @@ const Classes = () => {
     setSelected(i);
   };
 
-  if (adminModal === 'classes') {
+  if (adminModal === 'archives') {
     const handleAddClick = () => {
       setAdminModal('newclass')
       console.log(adminModal)
@@ -82,12 +82,12 @@ const Classes = () => {
       <div className='wrapper'>
         <div className='btn_wrapper'>
           <div className='title_wrapper'>
-            <h1 className='title'>Current Classes</h1>
+            <h1 className='title'>Archived Classes</h1>
           </div>
-        <h3 className='description'>View all student's task progress</h3>
+        <h3 className='description'>View all past Alumni</h3>
         </div>
         <div>
-        <button className='btb-btn' onClick={handleAddClick}> Add New Class </button>
+        {/* <button className='btb-btn' onClick={handleAddClick}> Add New Class </button> */}
         </div>
         <div className='accordion'>
           {classes.map((item, i) => {
@@ -110,8 +110,8 @@ const Classes = () => {
                           <p className='user_progress'> Task Completion:</p>
                           <div className='progressbar'>
                             <CircularProgressbar
-                              value={Math.ceil((user.task_complete)/(user.total)*100)}
-                              text={`${Math.ceil((user.task_complete)/(user.total)*100)}%`}
+                              value={100}
+                              text={'graduated!'}
                               styles={buildStyles({
                                 textSize: '10px',
                                 textColor: '#00808C',
@@ -135,4 +135,4 @@ const Classes = () => {
   }
 };
 
-export default Classes;
+export default Archives;

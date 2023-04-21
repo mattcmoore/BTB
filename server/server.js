@@ -64,7 +64,7 @@ app.get("/accordian", async (req, res) => {
   try {
     console.log('fetching data..');
     const data = await sql `
-SELECT 
+    SELECT 
     m.mcsp_name AS mcsp_name,
     u.id AS user_id,
     u.name AS user_name,
@@ -72,13 +72,14 @@ SELECT
     u.mcsp AS mcsp,
     m.start_date AS start_date,
     m.end_date AS end_date,
+    CASE WHEN m.end_date < CURRENT_DATE THEN true ELSE false END AS archive,
     COUNT(t.complete) FILTER (WHERE t.complete = true) AS task_complete,
     COUNT(t.task) AS total,
     array_agg(t.task) AS tasks
 FROM mcsps m
 LEFT JOIN users u ON m.id = u.mcsp
 LEFT JOIN tasks t ON u.id = t.user_id
-GROUP BY m.mcsp_name, u.id, u.name, u.admin, u.mcsp, m.start_date, m.end_date;
+GROUP BY m.mcsp_name, u.id, u.name, u.admin, u.mcsp, m.start_date, m.end_date, archive;
     `
 
     const formattedData = data.map(item => ({

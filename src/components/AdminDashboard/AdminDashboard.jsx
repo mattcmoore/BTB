@@ -6,6 +6,7 @@ import AdminStudentInterface from './AdminStudentInterface/AdminStudentInterface
 import Settings from './Settings/Settings'
 import Chatbar from '../ChatBar/Chatbar'
 import Classes from './Classes/Classes'
+import Archives from './Archives/Archive'
 
 export const AdminDashboard = () => {
     return(
@@ -17,6 +18,7 @@ export const AdminDashboard = () => {
                 <Settings />
                 <Classes />
                 <NewClassForm />
+                <Archives />
             </div>
         </div>
         <Chatbar/>
