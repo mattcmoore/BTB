@@ -50,14 +50,14 @@ CREATE TABLE notes(
     FOREIGN KEY (author) REFERENCES users(id)
 );
 
-
+TRUNCATE TABLE mcsps, users, tasks, messages RESTART IDENTITY CASCADE;
 INSERT INTO mcsps (start_date, end_date, code, mcsp_name) VALUES ( '2022-12-10', '2023-04-20', 'AAA1', 'MCSP-18');
 INSERT INTO mcsps (start_date, end_date, code, mcsp_name) VALUES ( '2022-02-10', '2023-06-20', 'BBB2', 'MCSP-19');
 INSERT INTO mcsps (start_date, end_date, code, mcsp_name) VALUES ( '2022-10-10', '2023-02-20', 'BAA3', 'MCSP-17');
 INSERT INTO mcsps (start_date, end_date, code, mcsp_name) VALUES ( '2022-08-10', '2022-12-20', 'BBA4', 'MCSP-16');
 
-INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('jrives@gmail.com', 'Jullian Rives', true, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('emusk@tesla.com', 'Elon Musk', true, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('jrives@gmail.com', 'Jullian Rives', true, 0, NULL, NULL, NULL, NULL);
+INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('emusk@tesla.com', 'Elon Musk', true, 0, NULL, NULL, NULL, NULL);
 INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('garrett@gman.com', 'Garrett Ross', true, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('mariajohnson@example.com', 'Maria Johnson', false, 3, '2023-01-11', 'Airforce', true, false);
 INSERT INTO users (email, name, admin, mcsp, sep_date, branch, family, barracks) VALUES ('davidlee@example.com', 'David Lee', false, 1, '2023-01-11', 'Navy', false, true);

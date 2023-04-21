@@ -27,8 +27,10 @@
     "react-circular-progressbar": "^2.1.0",
     "react-datepicker": "^4.11.0",
     "react-dom": "^18.2.0",
+    "react-dropdown": "^1.11.0",
     "react-flickity-component": "^4.0.5",
-    "react-router-dom": "^6.10.0"
+    "react-router-dom": "^6.10.0",
+    "react-select": "^5.7.2"
   },
   "devDependencies": {
     "@types/cypress": "^1.1.3",

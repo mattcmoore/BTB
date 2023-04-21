@@ -148,8 +148,6 @@ app.route('/notes/:id').put(async (req, res) => {
 
 app.route('/notes/:id').delete( async (req, res) => {
   const { id } = req.params
-
-  console.log(typeof id)
   try{
     const deleteNote = await sql`DELETE FROM notes WHERE id = ${id} RETURNING id`
     res.json(deleteNote)
@@ -171,7 +169,6 @@ app.route('/tasks/:id').put( async (req, res) => {
     console.error(err)
   }
 })
-
 
 app.get("/classes", async (req, res) => {
   try {
@@ -379,6 +376,7 @@ app.post("/makeAdmin", async (req, res) => {
 
 app.patch("/updateAdmin", async (req, res) => {
   const { email, name, mcsp, id } = req.body;
+  console.log(req.body)
   try {
     await sql`
             UPDATE users
@@ -395,8 +393,9 @@ app.patch("/updateAdmin", async (req, res) => {
 
 app.delete("/updateAdmin/:id", async (req, res) => {
   const {id} = req.params
+  // console.log(typeof id)
   try{
-    const data = await sql `Delete FROM users where id = ${id} AND ${id} not IN (SELECT user_id FROM tasks);`
+    const data = await sql `Delete FROM users where id = ${id} AND ${id} not IN (SELECT user_id FROM tasks) returning *;`
     res.json(data)  
   }catch(error){
     res.status(500).json({msg: "Failed"})
@@ -496,6 +495,15 @@ app.get("/tasks/:id", async (req, res) => {
     res.json(error);
   }
 });
+
+app.get("/mcsps", async (req, res) => {
+  try {
+     const data = await sql`SELECT mcsp_name FROM mcsps`
+     res.json(data)
+  } catch(err) {
+     console.log(err)
+  }
+})
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);

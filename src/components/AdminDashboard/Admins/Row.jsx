@@ -1,8 +1,10 @@
 import BtbContext from "../../../context/BtbContext"
 import React, {useState, useContext, useEffect, useRef} from 'react'
+import Select from 'react-select';
 
 const Row = (props) => {
-    const {row} = props
+    const {options} = useContext(BtbContext)
+    const {row, values} = props
     const [currentCell, setCurrentCell] = useState([])
 
     const {admins, adminUpdate, setAdminUpdate, updateAdmin, deleteAdmin}= useContext(BtbContext)
@@ -15,6 +17,8 @@ const Row = (props) => {
             console.log(userId)
             deleteAdmin(userId)
             // console.log(userId)
+        // }else if(event.target.getAttribute("className") === "Dropdown-option" ){
+        //     console.log("click")
         }else if(Object.keys(adminUpdate).length === 0){
             setCurrentCell([id, name])
             setAdminUpdate(row)    
@@ -27,6 +31,16 @@ const Row = (props) => {
             return {...prev, [name] : value} 
         })
     }
+
+    const handleSelect = (option) =>{
+        const {value} = option
+        const number = parseInt((value.match(/\d+$/))[0])
+        setAdminUpdate(prev => {
+            return {...prev, mcsp : 18 } 
+        })
+        updateAdmin(adminUpdate)
+    }
+    console.log(adminUpdate)
 
     const handleEnter = (event) => {
         if(event.keyCode === 13){
@@ -44,7 +58,7 @@ const Row = (props) => {
             </td>
             <td name="name" onClick={handleClick}> {currentCell[0] === row.id && currentCell[1] === "name" ? (<input name="name" value={adminUpdate.name} onChange={handleChange} onKeyDown={handleEnter} />) : (row.name) }</td>
             <td name="email" className="email-cell">{row.email }</td>
-            <td name="mcsp" onClick={handleClick}> {currentCell[0] === row.id && currentCell[1] === "mcsp" ? (<input name="mcsp" value={adminUpdate.mcsp === null ? "" : adminUpdate.mcsp} onChange={handleChange} onKeyDown={handleEnter} />) : (row.mcsp) }</td>
+            <td name="mcsp" onClick={handleClick}> {currentCell[0] === row.id && currentCell[1] === "mcsp" ?  <Select className="mcsp-dropdown" onChange={handleSelect} options={options} /> : row.mcsp === null ? "*" : row.mcsp } </td>
         </tr>
     ) 
     

@@ -6,7 +6,9 @@ const BtbContext = createContext()
 
 export const BtbProvider = ({children}) =>{
   const fetchURL = 'http://localhost:3000'
-  const [classes, setClasses] = useState(['this']);
+  // const [classes, setClasses] = useState(['this']);
+  const [incorrectLogin, setIncorrectLogin] = useState(false)
+  const [classes, setClasses] = useState([]);
   const [notes, setNotes] = useState([]);
   const [addNewNote, setAddNewNote] = useState(false);
   const [user, setUser] = useState(null);
@@ -21,21 +23,37 @@ export const BtbProvider = ({children}) =>{
   }
   const [adminUpdate, setAdminUpdate] = useState({})
   const [newAdmin, setNewAdmin] = useState(emptyAdmin)
+  const [options, setOptions] = useState([])
 
   const fetchNotes = async () => {
-    const response = await fetch(`${fetchURL}/notes/${user.userId}`);
-    const data = await response.json();
-    setNotes(data);
-    console.log(notes)
+    if(user){
+      const response = await fetch(`${fetchURL}/notes/${user.userId}`);
+      const data = await response.json();
+      setNotes(data);
+      console.log(notes)
+    }
+
   };
 
   const fetchTasks = async () => {
-    const response = await fetch(`${fetchURL}/tasks/${user.userId}`);
-    const data = await response.json();
-    setTasks(data);
-    console.log(tasks);
+    if(user){
+      const response = await fetch(`${fetchURL}/tasks/${user.userId}`);
+      const data = await response.json();
+      setTasks(data);
+      console.log(tasks);  
+    }
   }
 
+  useEffect(() => {
+    fetchNotes()
+    console.log(notes)
+  },[user])
+
+  useEffect(() => {
+    fetchTasks()
+    console.log(tasks)
+  },[user])
+  
   const openNoteModal = () => {
       setAddNewNote(true)
   }
@@ -83,8 +101,10 @@ export const BtbProvider = ({children}) =>{
       // console.log(data);
       if (data.msg === "Email or password does not exist") {
         console.log("Make alert");
+        setIncorrectLogin(true)
       } else {
         localStorage.setItem("jwt", data.token);
+        setIncorrectLogin(false)
         setUser(data);
       }
   };
@@ -99,9 +119,10 @@ export const BtbProvider = ({children}) =>{
     });
     const data = await res.json();
     if (data.msg === "logged in") {
+      localStorage.setItem("jwt", data.token);
       setUser(data);
     } else {
-      console.log(data.msg);
+      console.log(data);
     }
   };
 
@@ -114,6 +135,7 @@ export const BtbProvider = ({children}) =>{
     const token = localStorage.getItem("jwt");  
     if(token){
         const decoded = jwtDecode(token);
+        console.log(decoded)
         setUser(decoded)
     }  
   };
@@ -195,6 +217,16 @@ export const BtbProvider = ({children}) =>{
       }})
       getAdmins()
     }
+
+    const getOptions = async () => {
+        const response = await fetch(`${fetchURL}/mcsps`);
+        const data = await response.json();
+        const mcsps = data.map(mcsp =>{
+          return {value: mcsp.mcsp_name, label:mcsp.mcsp_name}
+        })
+        setOptions(mcsps)
+    }
+
     return(
         <BtbContext.Provider value={{
           classes,
@@ -206,6 +238,7 @@ export const BtbProvider = ({children}) =>{
           openNoteModal, 
           closeNoteModal,
           login,
+          incorrectLogin,
           logOut,
           user,
           makeUser,
@@ -224,6 +257,8 @@ export const BtbProvider = ({children}) =>{
           setAdminUpdate,
           updateAdmin,
           deleteAdmin,
+          getOptions,
+          options,
         }}>
             {children}
         </BtbContext.Provider>
